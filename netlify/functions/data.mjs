@@ -156,7 +156,14 @@ function psiBand(v) {
 }
 
 async function psi() {
+  // 1-hour PM2.5 by region: NEA's "right now" reading, reacts to haze much faster than the 24-hr PSI
+  const pmReq = getJSON('https://api.data.gov.sg/v1/environment/pm25').catch(() => null);
   const j = await getJSON('https://api.data.gov.sg/v1/environment/psi');
+  const pj = await pmReq;
+  const pr = pj?.items?.[0]?.readings?.pm25_one_hourly || {};
+  const pmRegions = Object.fromEntries(['north', 'south', 'east', 'west', 'central'].filter((k) => Number.isFinite(pr[k])).map((k) => [k, pr[k]]));
+  const pmVals = Object.values(pmRegions);
+  const pm1h = pmVals.length ? { max: Math.max(...pmVals), regions: pmRegions, timestamp: pj?.items?.[0]?.timestamp || null } : null;
   const r = j?.items?.[0]?.readings || {};
   const psi24 = r.psi_twenty_four_hourly || {};
   const pm25 = r.pm25_twenty_four_hourly || {};
@@ -170,6 +177,7 @@ async function psi() {
     regions: Object.fromEntries(regions.map((k) => [k, psi24[k]])),
     pm25Max: Object.values(pm25).length ? Math.max(...Object.values(pm25)) : null,
     timestamp: j?.items?.[0]?.timestamp || null,
+    pm1h,
   };
 }
 
