@@ -193,8 +193,8 @@ html[data-theme="dark"] .mode .moon{display:none}
 .news .tag{font-size:11px;padding:0 12px}
 .alert{margin-top:8px;padding:0 16px}
 .alert div{padding:7px 14px;font-size:13px;border-radius:10px;gap:4px 10px}
-main{padding:8px 16px 18px;max-width:1440px}
-.top-in,.alert,footer{max-width:1440px}
+main{padding:8px 16px 18px;max-width:var(--maxw,1440px)}
+.top-in,.alert,footer{max-width:var(--maxw,1440px)}
 .grid{gap:8px}
 @media (min-width:960px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.wide{grid-column:span 2}.tall{grid-row:span 2}}
 .card{padding:11px 14px;border-radius:14px}
@@ -414,7 +414,7 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
 .slg2{margin-left:.3em}@media (max-width:560px){.slg2{margin-left:0}}
-.keep{max-width:1440px;margin:16px auto 14px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 22px;border-radius:18px;background:var(--red);color:#fff}
+.keep{max-width:var(--maxw,1440px);margin:16px auto 14px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 22px;border-radius:18px;background:var(--red);color:#fff}
 main .keep{margin-left:0;margin-right:0}
 .keep b{display:block;font-size:18px;font-weight:800;letter-spacing:-.01em}
 .keep p{margin:3px 0 0;font-size:13px;line-height:1.45;color:#FFE3E0}
@@ -650,16 +650,30 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   // proportionally, like zooming out, so nothing has to scroll. Phones keep their own layout.
   function fitToScreen() {
     const w = window.innerWidth, h = window.innerHeight;
-    if (w < 960) { document.body.style.zoom = ''; return; }
-    document.body.style.zoom = '';
-    const wz = Math.min(1, w / 1280);
-    document.body.style.zoom = wz < 0.995 ? String(wz) : '';
-    // Height of everything down to the end of the boxes, at the current zoom
-    // Measure down to the footer, so the footer links are always on screen too
-    const last = document.querySelector('footer') || document.querySelector('.grid');
-    const natural = last ? last.getBoundingClientRect().bottom / (wz || 1) + 10 : 700;
-    const z = Math.max(0.62, Math.min(1, wz, h / natural));
-    document.body.style.zoom = z < 0.995 ? String(z) : '';
+    const root = document.documentElement, body = document.body;
+    const natural = (z) => {
+      // Height of everything down to the footer, in unzoomed pixels
+      const last = document.querySelector('footer') || document.querySelector('.grid');
+      return last ? last.getBoundingClientRect().bottom / z + 10 : 700;
+    };
+    const apply = (z) => {
+      body.style.zoom = z < 0.995 ? String(z) : '';
+      // When the page is shrunk to fit the height, let it use the full width too,
+      // so there are no empty columns on the left and right
+      root.style.setProperty('--maxw', z < 0.995 ? Math.floor(w / z) + 'px' : '1440px');
+    };
+    if (w < 960) { body.style.zoom = ''; root.style.removeProperty('--maxw'); return; }
+    let z = Math.min(1, w / 1280);
+    apply(z);
+    // Widening makes the boxes a bit taller, so settle the size over a few rounds
+    for (let i = 0; i < 4; i++) {
+      const next = Math.max(0.55, Math.min(1, w / 1280, h / natural(z)));
+      if (Math.abs(next - z) < 0.004) { z = next; break; }
+      z = next; apply(z);
+    }
+    // Final safety: never let the footer drop below the screen
+    const fin = Math.max(0.55, Math.min(z, h / natural(z)));
+    if (fin < z - 0.001) body.style.zoom = String(fin);
   }
   fitToScreen();
   window.addEventListener('resize', fitToScreen);
