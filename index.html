@@ -623,11 +623,34 @@ body.measuring #air .bars{flex:none!important}
   #wx .later div{font-size:14px}
   #wx .later b{font-size:12.5px}
   #wx .later svg{width:50px;height:50px;margin:0 auto}
-  .coe .ch{width:54px!important}
+  .coe .ch{width:auto!important;min-width:50px;white-space:nowrap;padding-left:8px}
 }
 .aq3{text-align:center}
 .aq3 small{min-height:0}
 #mv .it-more-btn{display:block;width:max-content;margin-left:auto}
+/* Air tiles: one-line labels so the three numbers line up */
+.aq3{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.aq3 small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;min-height:0!important}
+/* Headings: one size everywhere (not enlarged per box), bold */
+.card h2{font-weight:700}
+.card h2 small{font-weight:400}
+@media (min-width:960px){ .card h2{font-size:13.5px!important;letter-spacing:.08em} .card h2 small{font-size:11.5px!important} #date{font-size:16px} }
+/* Phone: full weather box instead of the compact one */
+@media (max-width:600px){
+  #now{display:none!important}
+  #wx{display:block!important}
+  #wx .big,#wx .wx-top .feels b{font-size:44px}
+  #wx .hum,#wx .wind{font-size:14px}
+  #wx .wind b{font-size:14px}
+  #wx .sub{font-size:15px}
+  #wx .later div{font-size:13px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  #wx .later svg{width:34px;height:34px;margin:2px auto}
+}
+/* Dark header band at the top of each box */
+.grid > .card{overflow:hidden}
+.grid > .card > h2{background:#14231F;color:#FFFFFF;margin:-11px -14px 10px!important;padding:9px 14px;border-bottom:3px solid #E1251B}
+.grid > .card > h2 small{color:#9FB3AC!important}
+html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
 </style>
 </head>
 <body>
@@ -719,7 +742,7 @@ body.measuring #air .bars{flex:none!important}
     'Starter (10 numbers)': '入围奖（10个号码）', 'Consolation (10 numbers)': '安慰奖（10个号码）',
     'What each bet costs': '各类投注费用', 'Bet type': '投注方式', 'Numbers picked': '选号数', 'Cost': '费用', 'Ordinary': '普通', 'System 7': '系统7', 'System 8': '系统8', 'System 9': '系统9', 'System 10': '系统10', 'System 11': '系统11', 'System 12': '系统12',
     TOTO_NOTE: '每组6个号码的组合收费$1。系统投注包含所选号码的所有组合，例如系统8共28组。详情请参阅新加坡博彩公司网站。',
-    'Singapore averages': '全岛平均', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
+    'Singapore averages': '全岛平均', '1-hr PM2.5': '1小时PM2.5', 'JB AQI': '新山AQI', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
     AIR_NOTE: '1小时PM2.5反映当前空气（正常≤55，偏高56至150，高151至250，非常高>250）。24小时PSI是NEA的每日健康指标（良好≤50，中等51至100，不健康101至200）。新山数据来自Open-Meteo的美国AQI模型估算。',
     PZ4_NOTE: '以上为每$1注的奖金。“大”可中全部23个号码；“小”只中前三奖，但奖金较高。iBet 包含4个数字的所有排列，奖金按比例分配。详情请参阅新加坡博彩公司网站。',
     '4D &amp; TOTO': '4D与多多', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
@@ -787,7 +810,7 @@ body.measuring #air .bars{flex:none!important}
     'MRT status not available right now.': '暂时无法获取地铁状况。', 'Train service disruption': '列车服务中断',
     'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
     'Live · {t}': '实时 · {t}',
-    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'See all': '查看全部', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
+    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'round {n}': '第{n}轮', 'Updated {t}': '{t}更新', 'See all': '查看全部', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
     'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
   };
   // Longer English texts for the footer pop-ups
@@ -856,7 +879,7 @@ body.measuring #air .bars{flex:none!important}
     const grew = () => document.querySelector('main').getBoundingClientRect().height > mainH + 1 || !fits();
     for (let k = 0; k < 5; k++) {
       const shrink = k === 4 ? 0 : Math.pow(0.6, k);
-      plan.forEach(([c, f]) => { const z = 1 + (f - 1) * shrink; if (c.id === 'd4' && alm && alm.dataset.pt0) alm.style.paddingTop = (parseFloat(alm.dataset.pt0) / z) + 'px'; [...c.children].forEach((kid) => { kid.style.zoom = z > 1.01 ? z.toFixed(3) : ''; }); });
+      plan.forEach(([c, f]) => { const z = 1 + (f - 1) * shrink; const hz = c.querySelector(':scope > h2'); if (hz) hz.style.zoom = z > 1.01 ? (1 / 1).toFixed(3) : ''; if (c.id === 'd4' && alm && alm.dataset.pt0) alm.style.paddingTop = (parseFloat(alm.dataset.pt0) / z) + 'px'; [...c.children].forEach((kid) => { kid.style.zoom = z > 1.01 && kid.tagName !== 'H2' ? z.toFixed(3) : ''; }); });
       if (!grew()) break;
     }
     if (grew()) extras.forEach((e) => { e.hidden = true; });
@@ -903,6 +926,13 @@ body.measuring #air .bars{flex:none!important}
       apply(z);
     }
     fillBoxes();
+    // Last check after the boxes are filled: shrink slightly if anything still spills over
+    for (let i = 0; i < 4; i++) {
+      const over = document.documentElement.scrollHeight - h;
+      if (over <= 0) break;
+      z = Math.max(0.55, z * (h - 2) / (h + over));
+      apply(z);
+    }
   }
   fitToScreen();
   window.addEventListener('resize', fitToScreen);
@@ -1113,9 +1143,9 @@ body.measuring #air .bars{flex:none!important}
     }).join('');
     const pa = psiAvg(p); const [plv, plabel] = psiBandOf(pa);
     const tile = (lab, v, band, col) => `<div class="aq3"><small>${lab}</small><div class="big">${v}</div><em style="color:${col}">${band}</em></div>`;
-    const jbT = ja && ja.aqi != null ? tile(T('Johor Bahru, US AQI'), ja.aqi, T(ja.band ? ja.band.label : ''), PSI_FG[ja.band ? ja.band.level : 0]) : '';
+    const jbT = ja && ja.aqi != null ? tile(T('JB AQI'), ja.aqi, T(ja.band ? ja.band.label : ''), PSI_FG[ja.band ? ja.band.level : 0]) : '';
     el.innerHTML = `<h2>${T('Air quality')} <small>${T('Singapore averages')}</small></h2>
-      <div class="aq-row">${tile(T('Right now, 1-hr PM2.5'), avg, T(label), PSI_FG[lv])}${tile(T('24-hr PSI'), pa, T(plabel), PSI_FG[plv])}${jbT}</div>
+      <div class="aq-row">${tile(T('1-hr PM2.5'), avg, T(label), PSI_FG[lv])}${tile(T('24-hr PSI'), pa, T(plabel), PSI_FG[plv])}${jbT}</div>
       <div class="sub aq-sub">${T('Highest right now: {r} {v}', { v: pm.max, r: T(top[0].toUpperCase() + top.slice(1)) })}</div>
       <div class="bars">${bars}</div>
       <button class="more-btn aq-more" type="button" onclick="airMore()">${T('Show more')} ›</button>`;
@@ -1418,6 +1448,7 @@ body.measuring #air .bars{flex:none!important}
     evList = (ev && ev.list) || [];
     const head = `<h2>${T('Major events')} <small>${T('Concerts, sports &amp; more')}</small></h2>`;
     if (!evList.length) { el.innerHTML = `${head}<p class="muted">${T('Upcoming events will appear here.')}</p>`; return; }
+    setTimeout(applyUpd, 0);
     el.innerHTML = `${head}<div class="evs">${markExtra(evList.slice(0, 7).map((e) => evRow(e, today)).join(''), 5)}</div>
       ${evList.length > 4 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
   }
@@ -1606,11 +1637,36 @@ body.measuring #air .bars{flex:none!important}
       });
       renderToday();
       renderMove(d.lta);
+      buildUpd(d);
       $('upd').textContent = T('Live');
       requestAnimationFrame(fitToScreen);
       $('upd').title = 'Data refreshed ' + sgTime(d.updated);
   }
   let lastData = null;
+  let updMap = {};
+  function applyUpd() {
+    for (const [id, txt] of Object.entries(updMap)) {
+      const h = document.querySelector('#' + id + ' > h2'); if (!h || !txt) continue;
+      let sm = h.querySelector('small'); if (!sm) { sm = document.createElement('small'); h.appendChild(sm); }
+      sm.textContent = txt;
+    }
+  }
+  function buildUpd(d) {
+    const t = (iso) => iso ? T('Updated {t}', { t: sgTime(iso) }) : '';
+    const day = (ymd) => ymd ? T('Updated {t}', { t: sgDate(ymd, { day: 'numeric', month: 'short' }) }) : '';
+    const now = d.updated;
+    const lt = d.lottery || {};
+    const lotDay = lt.fourD && lt.toto ? [lt.fourD.date, lt.toto.date].map((x) => Date.parse(String(x || '').replace(/^\w+,\s*/, ''))).filter(Number.isFinite) : [];
+    updMap = {
+      wx: t(now), now: t(now), td: t(now), mv: t(now), toto: t(now),
+      air: t((d.psi && d.psi.pm1h && d.psi.pm1h.timestamp) || (d.psi && d.psi.timestamp) || now),
+      cp: t((d.crossings && d.crossings.updated) || (d.cams && d.cams[0] && d.cams[0].timestamp) || now),
+      fxc: d.fx ? day(d.fx.date) : '',
+      coe: d.coe ? T('Updated {t}', { t: sgDate(d.coe.month + '-15', { month: 'short', year: 'numeric' }) + (d.coe.round ? ', ' + T('round {n}', { n: d.coe.round }) : '') }) : '',
+      d4: lotDay.length ? T('Updated {t}', { t: new Date(Math.max(...lotDay)).toLocaleDateString(L(), { day: 'numeric', month: 'short' }) }) : t(now),
+    };
+    applyUpd();
+  }
 
   // Static text in the page (header, home tile, ad strip, footer)
   function applyStatic() {
