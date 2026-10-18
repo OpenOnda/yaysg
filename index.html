@@ -320,7 +320,9 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 /* ===== Phones: combined weather + air box, both crossings side by side ===== */
 @media (max-width:600px){
   #now{display:block}
-  #wx,#air{display:none}
+  #wx{display:none}
+  #cp{order:-1}
+  #air .aq3 .big{font-size:30px}
   #now .big{font-size:34px}
   #now .pill{margin-top:6px;padding:5px 9px;font-size:11.5px}
   /* Cameras stacked full width on phones, so the photos are big enough to read */
@@ -379,7 +381,7 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 @media (min-width:960px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
     "wx air cp cp"
-    "wx air d4 toto"
+    "wx air cp cp"
     "td mv d4 toto"
     "fx coe d4 toto";grid-auto-flow:row}
   #wx{grid-area:wx}#air{grid-area:air}#cp{grid-area:cp}#fxc{grid-area:fx}#coe{grid-area:coe}
@@ -551,7 +553,9 @@ body.measuring #air .aq-more{margin-top:0!important}
 #td .row .k{white-space:nowrap}
 /* ===== Desktop: tighter boxes so the page can be shown bigger ===== */
 @media (min-width:960px){
-  .cam{aspect-ratio:2/1;max-height:215px}
+  #cp{display:flex;flex-direction:column}
+  #cp .cams{flex:1;min-height:0}
+  .cam{aspect-ratio:auto;height:100%;min-height:150px}
   .cam .cap b{font-size:15.6px}
   .cam .cap small{font-size:13.2px}
   .cam .cap time{font-size:13px}
@@ -615,6 +619,15 @@ body.measuring #air .aq-more{margin-top:0!important}
   #mv .it-more-btn{display:block;width:max-content;margin-left:auto}
 }
 body.measuring #air .bars{flex:none!important}
+@media (min-width:960px){
+  #wx .later div{font-size:14px}
+  #wx .later b{font-size:12.5px}
+  #wx .later svg{width:50px;height:50px;margin:0 auto}
+  .coe .ch{width:54px!important}
+}
+.aq3{text-align:center}
+.aq3 small{min-height:0}
+#mv .it-more-btn{display:block;width:max-content;margin-left:auto}
 </style>
 </head>
 <body>
@@ -1158,12 +1171,12 @@ body.measuring #air .bars{flex:none!important}
         right = `<div class="nw-r"><small>PSI</small><b>${a}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>`;
       }
     }
-    el.innerHTML = `<h2>${T('Weather &amp; air')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
+    right = '';
+    el.innerHTML = `<h2>${T('Weather')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
       <div class="nw-top">${left}${right}</div>
       ${lines.map((l) => `<div class="sub">${l}</div>`).join('')}
       ${w ? sunLine(w) : ''}
-      ${p && p.max != null ? psi24Line(p) : ''}
-      ${jbLine(ja)}
+
       ${pills}`;
   }
 
@@ -1405,7 +1418,7 @@ body.measuring #air .bars{flex:none!important}
     evList = (ev && ev.list) || [];
     const head = `<h2>${T('Major events')} <small>${T('Concerts, sports &amp; more')}</small></h2>`;
     if (!evList.length) { el.innerHTML = `${head}<p class="muted">${T('Upcoming events will appear here.')}</p>`; return; }
-    el.innerHTML = `${head}<div class="evs">${markExtra(evList.slice(0, 10).map((e) => evRow(e, today)).join(''), 5)}</div>
+    el.innerHTML = `${head}<div class="evs">${markExtra(evList.slice(0, 7).map((e) => evRow(e, today)).join(''), 5)}</div>
       ${evList.length > 4 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
   }
   window.evMore = () => {
