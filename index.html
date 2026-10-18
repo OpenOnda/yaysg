@@ -408,6 +408,19 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
+.it-more-btn{all:unset;cursor:pointer;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--tic)}
+.ti-modal{position:fixed;inset:0;z-index:50;background:rgba(10,20,17,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.ti-sheet{box-sizing:border-box;position:relative;width:min(560px,100%);max-height:85vh;overflow:auto;padding:18px 20px}
+.ti-sheet .ti-groups{grid-template-columns:minmax(0,1fr)}
+.ti-x{all:unset;cursor:pointer;position:absolute;top:10px;right:14px;font-size:22px;line-height:1;color:var(--muted)}
+.ti-sheet h2 small{margin-right:26px}
+.cam-sheet{width:min(1000px,100%);padding:14px}
+.cam-big{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;border-radius:10px;background:#000}
+.cam-big-cap{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding:10px 4px 0}
+.cam-big-cap>span{display:flex;flex-direction:column}
+.cam-big-cap b{font-size:15px}
+.cam-big-cap small,.cam-big-cap time{font-size:12px;color:var(--muted)}
+.cam-sheet .ti-x{top:4px;right:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--card)}
 :root{--tic:#C2410C}
 .mrt{font-size:12.5px}
 .mrt b{color:var(--tic);font-weight:800}
@@ -543,7 +556,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Go easy outdoors. Kids, elderly, heart or lung conditions: take care.': '减少户外活动。儿童、年长者及心肺病患者请多加注意。',
     'Avoid outdoor exercise. Kids, elderly, heart or lung conditions: stay in.': '避免户外运动。儿童、年长者及心肺病患者请留在室内。',
     'Stay indoors where you can.': '尽量留在室内。',
-    'Live cameras': '实时摄像头', ' · tap to enlarge': ' · 点击放大',
+    'Live cameras': '实时摄像头', ' · click photo to enlarge': ' · 点击照片放大',
     'Smooth': '畅通', 'Heavy': '拥堵', 'To JB': '往新山', 'To SG': '往新加坡', '{a}–{b} min': '{a}–{b} 分钟',
     'Woodlands Causeway': '兀兰长堤', 'Tuas Second Link': '大士第二通道', 'Towards Johor': '往柔佛方向',
     'Woodlands Checkpoint': '兀兰关卡', 'Tuas Checkpoint': '大士关卡', 'Checkpoint area': '关卡一带',
@@ -570,7 +583,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'MRT status not available right now.': '暂时无法获取地铁状况。', 'Train service disruption': '列车服务中断',
     'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
     'Live · {t}': '实时 · {t}',
-    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
+    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
     'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
   };
   const T = (key, vars) => {
@@ -820,9 +833,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     }
     const main = c.filter((x) => x.id === '2701' || x.id === '4703');
     const list = (main.length ? main : c).slice(0, 2);
-    el.innerHTML = `<h2>${T('Causeway &amp; Second Link')} <small>${T('Live cameras')}<span class="hide-sm">${T(' · tap to enlarge')}</span></small></h2>
+    el.innerHTML = `<h2>${T('Causeway &amp; Second Link')} <small>${T('Live cameras')}<span class="hide-sm">${T(' · click photo to enlarge')}</span></small></h2>
       <div class="cams">${list.map((x) => `
-        <a class="cam" href="${esc(x.url)}" target="_blank" rel="noopener">
+        <a class="cam" href="${esc(x.url)}" onclick="return camZoom(this)">
           <img src="${esc(x.url)}" alt="Live traffic camera at ${esc(x.label)}, ${esc(x.sub)}" loading="lazy" onerror="this.parentNode.classList.add('off')">
           <span class="cap"><span><b>${esc(T(x.label))}</b><small>${esc(T(x.sub))}</small></span><time>${sgTime(x.timestamp)}</time></span>
           ${est(x.id)}
@@ -1007,6 +1020,28 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     { name: 'Breakdowns', color: 'var(--tic)', test: (k) => k === 'vehicle breakdown' },
     { name: 'Obstacles', color: 'var(--tic)', test: (k) => k === 'obstacle' || k === 'road block' || k === 'unattended vehicle' },
   ];
+  // Pop-up window over the page (full incident list, enlarged camera photo)
+  function popup(html, cls = '') {
+    document.querySelectorAll('.ti-modal').forEach((x) => x.remove());
+    const m = document.createElement('div'); m.className = 'ti-modal';
+    m.innerHTML = `<div class="ti-sheet card ${cls}">${html}<button class="ti-x" aria-label="Close">×</button></div>`;
+    m.onclick = (e) => { if (e.target === m || e.target.classList.contains('ti-x')) m.remove(); };
+    document.body.appendChild(m);
+  }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll('.ti-modal').forEach((x) => x.remove()); });
+  // "+N more, see all": show every incident in a pop-up, the box itself stays the same size
+  window.tiMore = () => {
+    const saved = $('mv').innerHTML; window.TI_OPEN = true; renderMove(lastData.lta);
+    const full = $('mv').innerHTML; window.TI_OPEN = false; $('mv').innerHTML = saved;
+    popup(full);
+  };
+  // Camera photo: enlarge on the page instead of opening the image file (which downloads)
+  window.camZoom = (a) => {
+    const img = a.querySelector('img');
+    const cap = a.querySelector('.cap');
+    popup(`<img class="cam-big" src="${img.src}" alt="${esc(img.alt)}"><div class="cam-big-cap">${cap ? cap.innerHTML : ''}</div>`, 'cam-sheet');
+    return false;
+  };
   function renderMove(l) {
     const el = $('mv');
     if (!l || !l.enabled) { el.hidden = true; $('hs').hidden = false; return; }
@@ -1016,12 +1051,19 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       : `<span class="mrt"><b>${T('MRT &amp; LRT')}:</b> <span class="mrt-ok"><span class="dotg"></span>${T('running normally')}</span></span>`;
     const list = l.incidents || [];
     const groups = GROUPS.map((g) => ({ g, items: list.filter((x) => g.test(x.type.toLowerCase())) })).filter((x) => x.items.length);
+    // Keep the box the same size on busy days: at most 7 lines in total.
+    // Every group gets one line first, then the rest go to the most serious groups.
+    const MAX_LINES = window.TI_OPEN ? 99 : 7;
+    groups.forEach((x) => { x.show = 1; });
+    let left = MAX_LINES - groups.length;
+    for (const x of groups) { const add = Math.min(left, Math.min(window.TI_OPEN ? 99 : 3, x.items.length) - 1); x.show += add; left -= add; }
+    const hidden = groups.reduce((a, x) => a + x.items.length - x.show, 0);
     const body = !l.incidents ? `<p class="muted">${T('Road incidents not available right now.')}</p>`
       : !groups.length ? `<p class="muted">${T('No jams or accidents reported right now.')}</p>`
-      : `<div class="ti-groups">${groups.map(({ g, items }) => `
+      : `<div class="ti-groups">${groups.map(({ g, items, show }) => `
           <div class="ti-g"><div class="gh" style="color:${g.color}">${T(g.name)}<span>${items.length}</span></div>
-          ${items.slice(0, 3).map((x) => `<div class="it" title="${esc(x.message)}"><span>${shortInc(x.message)}</span>${x.time ? `<time>${sgTime(x.time)}</time>` : ''}</div>`).join('')}
-          ${items.length > 3 ? `<div class="muted it-more">${T('+{n} more', { n: items.length - 3 })}</div>` : ''}</div>`).join('')}</div>`;
+          ${items.slice(0, show).map((x) => `<div class="it" title="${esc(x.message)}"><span>${shortInc(x.message)}</span>${x.time ? `<time>${sgTime(x.time)}</time>` : ''}</div>`).join('')}</div>`).join('')}</div>
+          ${hidden ? `<button class="it-more-btn" onclick="tiMore()">${T('+{n} more, see all', { n: hidden })} ›</button>` : ''}`;
     el.innerHTML = `<h2>${T('Traffic incidents')} <small>LTA · live</small></h2><div class="ti-top">${mrt}</div>${body}`;
   }
 
