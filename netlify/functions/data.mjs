@@ -335,6 +335,21 @@ function parseRSS(xml, src) {
   return items;
 }
 
+const WORLD_FEEDS = [
+  { src: 'BBC', url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+  { src: 'CNA', url: 'https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6311' },
+  { src: 'The Straits Times', url: 'https://www.straitstimes.com/news/world/rss.xml' },
+];
+
+async function worldNews() {
+  const results = await Promise.allSettled(WORLD_FEEDS.map((f) => getText(f.url).then((x) => parseRSS(x, f.src))));
+  const perFeed = results.map((r) => (r.status === 'fulfilled' ? r.value : []));
+  const all = perFeed.flatMap((list) => list.slice(0, 4));
+  all.sort((a, b) => (b.time || 0) - (a.time || 0));
+  if (!all.length) throw new Error('no world news');
+  return all.slice(0, 8);
+}
+
 async function news() {
   const results = await Promise.allSettled(FEEDS.map((f) => getText(f.url).then((x) => parseRSS(x, f.src))));
   const perFeed = results.map((r) => (r.status === 'fulfilled' ? r.value : []));
@@ -461,29 +476,61 @@ const INDEXES = [
   { sym: '^GSPC', name: 'S&P 500' },
 ];
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const YAHOO_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';
+
 async function oneIndex(ix) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ix.sym)}?range=5d&interval=1d`;
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36', Accept: 'application/json' },
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!res.ok) throw new Error(`yahoo ${res.status} ${ix.sym}`);
-  const j = await res.json();
-  const m = j?.chart?.result?.[0]?.meta;
-  const price = Number(m?.regularMarketPrice);
-  const prev = Number(m?.previousClose ?? m?.chartPreviousClose);
-  if (!Number.isFinite(price)) return null;
-  return {
-    name: ix.name,
-    price,
-    changePct: Number.isFinite(prev) && prev ? ((price - prev) / prev) * 100 : null,
-    time: m?.regularMarketTime ? m.regularMarketTime * 1000 : null,
-  };
+  let lastErr;
+  for (const host of ['query1', 'query2']) {
+    try {
+      const url = `https://${host}.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ix.sym)}?range=5d&interval=1d`;
+      const res = await fetch(url, { headers: { 'User-Agent': YAHOO_UA, Accept: 'application/json' }, signal: AbortSignal.timeout(3500) });
+      if (!res.ok) throw new Error(`yahoo ${res.status} ${ix.sym}`);
+      const j = await res.json();
+      const r = j?.chart?.result?.[0];
+      const m = r?.meta;
+      const price = Number(m?.regularMarketPrice);
+      if (!Number.isFinite(price)) throw new Error(`no price ${ix.sym}`);
+      // Daily closes for the last few sessions. The change is measured against the
+      // close of the previous trading day, not the start of the 5-day window.
+      const ts = r?.timestamp || [];
+      const closes = r?.indicators?.quote?.[0]?.close || [];
+      const days = ts.map((s, i) => ({ day: new Date((s + (m.gmtoffset || 0)) * 1000).toISOString().slice(0, 10), close: closes[i] }))
+        .filter((d) => Number.isFinite(d.close));
+      const marketDay = m.regularMarketTime ? new Date((m.regularMarketTime + (m.gmtoffset || 0)) * 1000).toISOString().slice(0, 10) : null;
+      const earlier = days.filter((d) => d.day !== marketDay);
+      const prev = earlier.length ? earlier[earlier.length - 1].close : Number(m.previousClose);
+      return {
+        name: ix.name,
+        price,
+        changePct: Number.isFinite(prev) && prev ? ((price - prev) / prev) * 100 : null,
+        time: m.regularMarketTime ? m.regularMarketTime * 1000 : null,
+      };
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr;
 }
 
+// Remember the last good value for each index, so one failed request doesn't drop it from the strip
+const lastGood = new Map();
+
 async function markets() {
-  const results = await Promise.allSettled(INDEXES.map(oneIndex));
-  const list = results.map((r) => (r.status === 'fulfilled' ? r.value : null)).filter(Boolean);
+  // One at a time with a short pause, so Yahoo doesn't block a burst of requests.
+  // Stop after about 7 seconds so the page never waits too long; missing ones keep their last value.
+  const deadline = Date.now() + 7000;
+  for (const ix of INDEXES) {
+    if (Date.now() > deadline) break;
+    try {
+      const v = await oneIndex(ix);
+      if (v) lastGood.set(ix.name, v);
+    } catch (e) {
+      console.error('[markets]', e.message);
+    }
+    await sleep(250);
+  }
+  const list = INDEXES.map((ix) => lastGood.get(ix.name)).filter(Boolean);
   if (!list.length) throw new Error('no market data');
   return list;
 }
@@ -491,7 +538,7 @@ async function markets() {
 // ---------- handler ----------
 
 export default async () => {
-  const [w, p, c, f, co, hk, n, l] = await Promise.all([
+  const [w, p, c, f, co, hk, n, l, x, mk, wn] = await Promise.all([
     cached('weather', 4 * MIN, weather),
     cached('psi', 10 * MIN, psi),
     cached('cams', 2 * MIN, cams),
@@ -500,14 +547,15 @@ export default async () => {
     cached('hawkers', 6 * 60 * MIN, hawkers),
     cached('news', 10 * MIN, news),
     cached('lta', 3 * MIN, lta),
+    cached('crossings', 5 * MIN, crossings),
+    cached('markets', 10 * MIN, markets),
+    cached('world', 10 * MIN, worldNews),
   ]);
-  const x = await cached('crossings', 5 * MIN, crossings);
-  const mk = await cached('markets', 10 * MIN, markets);
 
   const body = {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
-    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk,
+    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn,
   };
 
   return new Response(JSON.stringify(body), {
