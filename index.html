@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yay.sg | Singapore at a glance</title>
-<meta name="description" content="Weather, haze, Causeway and Second Link crossing times, exchange rates, COE prices, 4D and TOTO results, public holidays and world news, all on one screen.">
+<meta name="description" content="Weather, haze, Causeway and Second Link crossing times, exchange rates, COE prices, 4D and TOTO results with the next TOTO jackpot, public holidays and world news, all on one screen.">
 <meta name="theme-color" content="#14231F">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -324,6 +324,34 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
   .cam .cap small{font-size:9.5px}
   .cam .cap time{display:none}
 }
+.tg-r.none b{color:var(--faint);font-weight:500}
+.tg-r.none span:nth-child(3){color:var(--faint)}
+.tg-snow{margin-top:8px;font-size:12px;line-height:1.45;color:var(--ink2)}
+.tg-snow b{color:var(--red);font-weight:800}
+.next{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:10px;padding:9px 11px;border-radius:10px;background:var(--soft);border:1px solid var(--line)}
+.next small{display:block;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.next span{font-size:12.5px;font-weight:600}
+.next .nj{text-align:right}
+.next .nj b{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--red);line-height:1}
+#d4 .ltop b{font-size:18px}
+#d4 .lg span{font-size:12px}
+.balls{gap:4px}
+#toto .tg{margin-top:7px;padding:3px 9px}
+#toto .tg-h,#toto .tg-r{padding:3px 0}
+#toto .tg-snow{margin-top:5px;font-size:11.5px}
+#toto .next{margin-top:7px;padding:6px 10px;align-items:center}
+#toto .next .nj b{font-size:19px}
+#toto .lnote,#d4 .lnote{margin-top:7px}
+/* Fill the first row evenly on laptops and desktops */
+@media (min-width:960px){
+  #wx{display:flex;flex-direction:column}
+  #wx .later{margin-top:auto;padding-top:7px}
+  #cp{display:flex;flex-direction:column}
+  #cp .cams{flex:1 1 auto;min-height:0}
+  #cp .cam{aspect-ratio:auto;height:100%;min-height:150px}
+}
+.wind{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:5px;font-size:12px;color:var(--muted)}
+.wind b{color:var(--ink);font-family:var(--mono);font-weight:600}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -378,7 +406,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card wide tall" id="lot"><h2>4D &amp; TOTO results</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="d4"><h2>4D results</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+
+    <section class="card tall" id="toto"><h2>TOTO results</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
@@ -456,7 +486,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Singapore Pools': '新加坡博彩', ' · Draw {n}': ' · 第{n}期', '1st': '头奖', '2nd': '二奖', '3rd': '三奖',
     'Starter': '入围奖', 'Consolation': '安慰奖', 'Winning numbers · Additional': '中奖号码 · 附加号码',
     'Group 1 prize': '头奖奖金', 'TOTO': '多多',
-    'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
+    'No Group 1 winner, the jackpot snowballs.': '本期头奖无人中，奖金滚入下一期。', '4D results': '4D开彩成绩', 'TOTO results': '多多开彩成绩', 'Next draw': '下期开彩', 'Estimated jackpot': '预计头奖', 'Jackpot': '头奖',
+    'For information only, always verify with Singapore Pools. 18 and above.': '仅供参考，请以新加坡博彩公司公布为准。仅限18岁及以上。', '18 and above. Gamble responsibly. NCPG helpline 1800-6-668-668.': '仅限18岁及以上。理性博彩，NCPG求助热线 1800-6-668-668。', 'Wind': '风', 'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
     '4D results not available right now.': '暂时无法获取4D成绩。', 'TOTO results not available right now.': '暂时无法获取多多成绩。',
     'Results are for information only, always verify with Singapore Pools. 18 and above. Gamble responsibly, NCPG helpline 1800-6-668-668.': '开彩成绩仅供参考，请以新加坡博彩公司公布为准。仅限18岁及以上。理性博彩，NCPG求助热线 1800-6-668-668。',
     "New Year's Day": '元旦', 'Chinese New Year': '农历新年', 'Chinese New Year (Day 2)': '农历新年（第二天）',
@@ -541,6 +572,14 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   }
 
   // ---------- renderers ----------
+  // "Wind  SSE · 10–15 km/h" from NEA's 24-hour forecast
+  function windLine(w) {
+    const wd = w && w.today && w.today.wind;
+    if (!wd || wd.low == null) return '';
+    const dir = wd.dir ? esc(wd.dir) + ' · ' : '';
+    return `<div class="wind"><span>${T('Wind')}</span><b>${dir}${wd.low}–${wd.high} km/h</b></div>`;
+  }
+
   function renderWeather(w) {
     const el = $('wx');
     if (!w) { el.innerHTML = unavailable('Weather'); return; }
@@ -564,6 +603,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
       <div class="sub">${esc(T(cond))}${range ? ' · ' + range : ''}</div>
       ${w.humidity != null ? `<div class="hum"><span>${T('Humidity')}</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
+      ${windLine(w)}
       ${rain}${later ? `<div class="later">${later}</div>` : ''}`;
   }
 
@@ -787,39 +827,54 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       if (!k) return T('No winner');
       return LANG === 'zh' ? `${k}注` : `${k} ${k === 1 ? 'winner' : 'winners'}`;
     };
+    // No Group 1 winner: the jackpot rolls over to the next draw
+    const g1row = rows.find((r) => r.group === 1);
+    const g1none = g1row && !Number(String(g1row.winners).replace(/[^\d]/g, ''));
+    const snow = g1none ? `<div class="tg-snow">${T('No Group 1 winner, the jackpot snowballs.')}</div>` : '';
     return `<div class="tg">
       <div class="tg-h"><span>${T('Prize group')}</span><span>${T('Share amount')}</span><span>${T('Winners')}</span></div>
-      ${rows.map((r) => `<div class="tg-r${r.group === 1 ? ' g1r' : ''}"><span>${T('Group {n}', { n: r.group })}</span><b>${esc(r.amount)}</b><span>${win(r.winners)}</span></div>`).join('')}
-    </div>`;
+      ${rows.map((r) => {
+        const none = !Number(String(r.winners).replace(/[^\d]/g, ''));
+        return `<div class="tg-r${r.group === 1 && !none ? ' g1r' : ''}${none ? ' none' : ''}"><span>${T('Group {n}', { n: r.group })}</span><b>${none ? '–' : esc(r.amount)}</b><span>${win(r.winners)}</span></div>`;
+      }).join('')}
+    </div>${snow}`;
   }
 
-  function renderLottery(lt) {
-    const el = $('lot');
-    if (!lt) { el.innerHTML = unavailable('4D &amp; TOTO results'); return; }
-    const d = lt.fourD, t = lt.toto;
-    const drawDate = (s) => { const t = Date.parse(String(s || '').replace(/^\w+,\s*/, '')); return isNaN(t) ? esc(s || '') : new Date(t).toLocaleDateString(L(), { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); };
+  const drawDate = (s) => { const t = Date.parse(String(s || '').replace(/^\w+,\s*/, '')); return isNaN(t) ? esc(s || '') : new Date(t).toLocaleDateString(L(), { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); };
+
+  const shortDate = (s) => { const t = Date.parse(String(s || '').replace(/^\w+,\s*/, '')); return isNaN(t) ? esc(s || '') : new Date(t).toLocaleDateString(L(), { weekday: 'short', day: 'numeric', month: 'short' }); };
+
+  function render4D(d) {
+    const el = $('d4');
+    if (!d) { el.innerHTML = unavailable('4D results'); return; }
     const grid = (arr) => `<div class="lg">${arr.map((n) => `<span>${esc(n)}</span>`).join('')}</div>`;
-    const four = d ? `
-      <div class="lcol">
-        <div class="lhead"><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
-        <div class="ltop">
-          <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
-          <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
-          <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
-        </div>
-        <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
-        <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
-      </div>` : `<div class="lcol"><p class="muted">${T('4D results not available right now.')}</p></div>`;
-    const tot = t ? `
-      <div class="lcol">
-        <div class="lhead"><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
-        <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
-        <div class="lsub" style="margin-top:6px">${T('Winning numbers · Additional')}</div>
-        ${groupsTable(t)}
-      </div>` : `<div class="lcol"><p class="muted">${T('TOTO results not available right now.')}</p></div>`;
-    el.innerHTML = `<h2>${T('4D &amp; TOTO results')} <small>${T('Singapore Pools')}</small></h2>
-      <div class="lot">${four}${tot}</div>
-      <div class="lnote">${T('Results are for information only, always verify with Singapore Pools. 18 and above. Gamble responsibly, NCPG helpline 1800-6-668-668.')}</div>`;
+    el.innerHTML = `<h2>${T('4D results')} <small>${T('Singapore Pools')}</small></h2>
+      <div class="lhead"><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
+      <div class="ltop">
+        <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
+        <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
+        <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
+      </div>
+      <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
+      <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
+      <div class="lnote">${T('For information only, always verify with Singapore Pools. 18 and above.')}</div>`;
+  }
+
+  function renderToto(t, nx) {
+    const el = $('toto');
+    if (!t && !nx) { el.innerHTML = unavailable('TOTO results'); return; }
+    const last = t ? `
+      <div class="lhead"><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
+      <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
+      <div class="lsub" style="margin-top:6px">${T('Winning numbers · Additional')}</div>
+      ${groupsTable(t)}` : `<p class="muted">${T('TOTO results not available right now.')}</p>`;
+    const next = nx ? `
+      <div class="next">
+        <div><small>${T('Next draw')}</small><span>${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span></div>
+        <div class="nj"><small>${T(nx.estimate ? 'Estimated jackpot' : 'Jackpot')}</small><b>${esc(nx.jackpot)}</b></div>
+      </div>` : '';
+    el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}
+      <div class="lnote">${T('18 and above. Gamble responsibly. NCPG helpline 1800-6-668-668.')}</div>`;
   }
 
   function renderToday() {
@@ -883,7 +938,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderMarkets(d.markets);
       renderCoe(d.coe);
       renderWorld(d.world, d.news);
-      renderLottery(d.lottery);
+      render4D(d.lottery && d.lottery.fourD);
+      renderToto(d.lottery && d.lottery.toto, d.lottery && d.lottery.totoNext);
       renderToday();
       renderMove(d.lta);
       $('upd').textContent = T('Live · {t}', { t: sgTime(d.updated) });
