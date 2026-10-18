@@ -212,13 +212,9 @@ async function fx() {
   return { date: dates[dates.length - 1], rates };
 }
 
-// The ECB doesn't publish the Vietnamese dong, so VND comes from Yahoo Finance,
-// with open.er-api.com as a backup (that one has no daily change).
+// The ECB doesn't publish the Vietnamese dong, so VND comes from open.er-api.com
+// (daily, no change figure). Not from Yahoo: extra Yahoo requests get the index strip blocked.
 async function vnd() {
-  try {
-    const q = await oneIndex({ sym: 'SGDVND=X', name: 'VND' });
-    if (q.price > 1000) return { code: 'VND', rate: q.price, changePct: q.changePct };
-  } catch {}
   try {
     const j = await getJSON('https://open.er-api.com/v6/latest/SGD');
     const r = Number(j?.rates?.VND);
@@ -567,11 +563,22 @@ async function markets() {
   // One at a time with a short pause, so Yahoo doesn't block a burst of requests.
   // Stop after about 7 seconds so the page never waits too long; missing ones keep their last value.
   const deadline = Date.now() + 7000;
+  // A fresh server starts with an empty memory: load the last good prices saved in Netlify Blobs,
+  // so a Yahoo hiccup shows slightly older prices instead of hiding the strip.
+  let store = null;
+  try {
+    store = getStore('yaysg-cache');
+    if (!lastGood.size) {
+      const saved = await store.get('markets', { type: 'json' });
+      (saved || []).forEach((v) => lastGood.set(v.name, v));
+    }
+  } catch (e) { console.error('[blobs]', e.message); }
+  let fresh = 0;
   for (const ix of INDEXES) {
     if (Date.now() > deadline) break;
     try {
       const v = await oneIndex(ix);
-      if (v) lastGood.set(ix.name, v);
+      if (v) { lastGood.set(ix.name, v); fresh++; }
     } catch (e) {
       console.error('[markets]', e.message);
     }
@@ -579,6 +586,7 @@ async function markets() {
   }
   const list = INDEXES.map((ix) => lastGood.get(ix.name)).filter(Boolean);
   if (!list.length) throw new Error('no market data');
+  if (fresh && store) { try { await store.setJSON('markets', list); } catch (e) { console.error('[blobs]', e.message); } }
   return list;
 }
 
@@ -693,7 +701,7 @@ export default async () => {
     cached('news', 10 * MIN, news),
     cached('lta', 3 * MIN, lta),
     cached('crossings', 5 * MIN, crossings),
-    cached('markets', 10 * MIN, markets),
+    cached('markets', 5 * MIN, markets),
     cached('world', 10 * MIN, worldNews),
     cached('lottery', 15 * MIN, lottery),
     cached('jbair', 30 * MIN, jbAir),
