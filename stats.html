@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>yay.sg stats</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8;
+  --ink:#14231F;--ink2:#33453F;--muted:#4A5C56;--faint:#5A6B65;
+  --red:#D7322B;--dark:#14231F;--bar:#2F6F62;--bar-hi:#1E5246;--bad:#B42318;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Schibsted Grotesk',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10201B;--card:#182B25;--line:#24392F;--soft:#203630;--hair:#24392F;
+  --ink:#F1F4F1;--ink2:#C9D6D1;--muted:#9FB3AC;--faint:#93A79F;--bar:#6CC3B1;--bar-hi:#9BE0D2;--bad:#F59A92}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.top{background:var(--dark);color:#fff}
+.top-in{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top-in a{display:flex;align-items:center;gap:10px;color:#9FB3AC;text-decoration:none;font-size:14px}
+.top-in button{all:unset;cursor:pointer;font-size:13px;color:#C9D6D1}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-width:0}
+h2{margin:0 0 10px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+h2 small{font-size:10.5px;letter-spacing:.04em;text-transform:none;color:var(--faint)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile .big{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.tile .lbl{font-size:13px;color:var(--muted);margin-top:4px}
+.tile .pv{font-size:13px;color:var(--ink2);margin-top:8px;padding-top:8px;border-top:1px solid var(--hair)}
+.tile .pv b{font-family:var(--mono)}
+.chart{margin-top:10px}
+.chart svg{display:block;width:100%;height:220px;overflow:visible}
+.chart .grid line{stroke:var(--hair);stroke-width:1}
+.chart .axis text{font-family:var(--mono);font-size:10px;fill:var(--faint)}
+.chart .b{fill:var(--bar)}
+.chart .b.on{fill:var(--bar-hi)}
+.chart rect.hit{fill:transparent;cursor:pointer}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--card);font-size:12px;line-height:1.4;padding:7px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-110%);opacity:0;transition:opacity .12s}
+.tip b{font-size:14px}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.rows{display:flex;flex-direction:column;gap:7px}
+.r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;font-size:13.5px}
+.r span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.r b{font-family:var(--mono);font-weight:600;font-size:13px}
+.r i{grid-column:1/3;height:5px;border-radius:3px;background:var(--soft);overflow:hidden}
+.r i em{display:block;height:100%;background:var(--bar);border-radius:3px}
+.muted{color:var(--muted);font-size:13px}
+.note{margin:14px 2px 30px;font-size:12px;color:var(--faint);line-height:1.6}
+.login{max-width:380px;margin:60px auto}
+.login p{margin:0 0 14px;color:var(--ink2);font-size:14px}
+.login form{display:flex;gap:8px}
+.login input{flex:1;min-width:0;font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink)}
+.login button{font:inherit;font-weight:700;font-size:14px;padding:10px 16px;border-radius:10px;border:0;background:var(--red);color:#fff;cursor:pointer}
+.err{color:var(--bad);font-size:13px;margin-top:10px}
+.sk{height:14px;border-radius:6px;background:var(--soft);margin:8px 0}
+@media (max-width:760px){.tiles,.cols{grid-template-columns:1fr}.tile .big{font-size:34px}.chart svg{height:180px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in"><a href="/"><svg style="display:block;height:26px;width:auto" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="-7.12 -71.57 328.26 99.94" role="img" aria-label="yay.sg"><path d="M11.279296875 19.04296875V6.8359375H20.556640625Q21.630859375 6.8359375 22.16796875 6.4453125Q22.705078125 6.0546875 23.14453125 4.931640625L23.828125 3.125L0.87890625 -52.734375H20.01953125L31.689453125 -14.74609375L43.359375 -52.734375H62.5L38.232421875 9.228515625Q35.986328125 14.990234375 32.1533203125 17.0166015625Q28.3203125 19.04296875 22.94921875 19.04296875Z M79.8515625 1.26953125Q74.919921875 1.26953125 70.5009765625 -0.390625Q66.08203125 -2.05078125 63.34765625 -5.56640625Q60.61328125 -9.08203125 60.61328125 -14.697265625Q60.61328125 -20.751953125 64.1044921875 -24.6826171875Q67.595703125 -28.61328125 73.9677734375 -30.56640625Q80.33984375 -32.51953125 89.12890625 -32.51953125H95.0859375V-34.08203125Q95.0859375 -38.8671875 93.4501953125 -41.064453125Q91.814453125 -43.26171875 88.0546875 -43.26171875Q84.392578125 -43.26171875 82.48828125 -41.30859375Q80.583984375 -39.35546875 79.998046875 -35.595703125L62.908203125 -38.37890625Q63.884765625 -42.822265625 66.8876953125 -46.38671875Q69.890625 -49.951171875 75.3349609375 -52.05078125Q80.779296875 -54.150390625 88.982421875 -54.150390625Q96.208984375 -54.150390625 101.3603515625 -52.001953125Q106.51171875 -49.853515625 109.2705078125 -44.677734375Q112.029296875 -39.501953125 112.029296875 -30.37109375V-14.94140625Q112.029296875 -13.28125 112.4931640625 -12.744140625Q112.95703125 -12.20703125 114.470703125 -12.20703125H116.619140625V0.0H109.001953125Q102.361328125 0.0 99.08984375 -3.22265625Q97.380859375 -4.8828125 96.55078125 -7.373046875Q95.525390625 -5.517578125 93.962890625 -3.857421875Q91.86328125 -1.611328125 88.4208984375 -0.1708984375Q84.978515625 1.26953125 79.8515625 1.26953125ZM84.978515625 -9.86328125Q88.15234375 -9.86328125 90.447265625 -11.279296875Q92.7421875 -12.6953125 94.01171875 -15.380859375Q95.28125 -18.06640625 95.28125 -21.875V-23.291015625H89.958984375Q85.271484375 -23.291015625 82.68359375 -22.0703125Q80.095703125 -20.849609375 79.0947265625 -19.091796875Q78.09375 -17.333984375 78.09375 -15.72265625Q78.09375 -14.6484375 78.630859375 -13.28125Q79.16796875 -11.9140625 80.6328125 -10.888671875Q82.09765625 -9.86328125 84.978515625 -9.86328125Z M125.083984375 19.04296875V6.8359375H134.361328125Q135.435546875 6.8359375 135.97265625 6.4453125Q136.509765625 6.0546875 136.94921875 4.931640625L137.6328125 3.125L114.68359375 -52.734375H133.82421875L145.494140625 -14.74609375L157.1640625 -52.734375H176.3046875L152.037109375 9.228515625Q149.791015625 14.990234375 145.9580078125 17.0166015625Q142.125 19.04296875 136.75390625 19.04296875Z M234.65742187499998 1.318359375Q228.60273437499998 1.318359375 223.06074218749998 -0.341796875Q217.51874999999998 -2.001953125 213.71015624999998 -5.615234375Q209.90156249999998 -9.228515625 208.92499999999998 -15.087890625L224.11054687499998 -18.115234375Q224.50117187499998 -14.35546875 226.84492187499998 -12.40234375Q229.18867187499998 -10.44921875 233.92499999999998 -10.44921875Q238.46601562499998 -10.44921875 240.46796874999998 -12.01171875Q242.46992187499998 -13.57421875 242.46992187499998 -15.625Q242.46992187499998 -17.431640625 240.80976562499998 -18.9697265625Q239.14960937499998 -20.5078125 234.70624999999998 -21.142578125L230.50703124999998 -21.728515625Q227.62617187499998 -22.119140625 224.25703124999998 -22.8515625Q220.88789062499998 -23.583984375 217.86054687499998 -25.1220703125Q214.83320312499998 -26.66015625 212.92890624999998 -29.443359375Q211.02460937499998 -32.2265625 211.02460937499998 -36.71875Q211.02460937499998 -41.9921875 213.85664062499998 -45.8740234375Q216.68867187499998 -49.755859375 221.86445312499998 -51.904296875Q227.04023437499998 -54.052734375 233.97382812499998 -54.052734375Q239.97968749999998 -54.052734375 245.13105468749998 -52.34375Q250.28242187499998 -50.634765625 253.82246093749995 -47.2412109375Q257.36249999999995 -43.84765625 258.38789062499995 -38.76953125L243.39765624999998 -35.693359375Q243.05585937499998 -37.3046875 242.22578124999998 -38.8916015625Q241.39570312499998 -40.478515625 239.61347656249998 -41.5283203125Q237.83124999999998 -42.578125 234.65742187499998 -42.578125Q231.23945312499998 -42.578125 229.43281249999998 -41.2841796875Q227.62617187499998 -39.990234375 227.62617187499998 -37.98828125Q227.62617187499998 -36.279296875 228.94453124999998 -35.2294921875Q230.26289062499998 -34.1796875 232.41132812499998 -33.5693359375Q234.55976562499998 -32.958984375 237.04999999999998 -32.568359375L242.12812499999998 -31.8359375Q246.32734374999998 -31.25 250.23359374999998 -29.541015625Q254.13984374999998 -27.83203125 256.65449218749995 -24.609375Q259.16914062499995 -21.38671875 259.16914062499995 -16.162109375Q259.16914062499995 -10.400390625 255.94648437499995 -6.494140625Q252.72382812499998 -2.587890625 247.15742187499998 -0.634765625Q241.59101562499998 1.318359375 234.65742187499998 1.318359375Z M284.72382812499995 20.361328125Q271.54023437499995 20.361328125 265.11933593749995 16.943359375Q258.69843749999995 13.525390625 258.69843749999995 6.4453125Q258.69843749999995 1.953125 261.01777343749995 -0.5859375Q263.33710937499995 -3.125 266.70624999999995 -4.19921875Q264.89960937499995 -5.56640625 263.89863281249995 -7.4951171875Q262.89765624999995 -9.423828125 262.89765624999995 -11.669921875Q262.89765624999995 -14.74609375 264.82636718749995 -17.0166015625Q266.75507812499995 -19.287109375 270.31953124999995 -20.361328125Q266.46210937499995 -22.802734375 264.31367187499995 -26.611328125Q262.16523437499995 -30.419921875 262.16523437499995 -35.205078125Q262.16523437499995 -40.869140625 265.09492187499995 -45.0927734375Q268.02460937499995 -49.31640625 273.27363281249995 -51.6845703125Q278.52265624999995 -54.052734375 285.40742187499995 -54.052734375Q289.50898437499995 -54.052734375 292.97578124999995 -53.22265625Q293.51289062499995 -57.8125 296.34492187499995 -60.400390625Q299.81171874999995 -63.57421875 306.84296874999995 -63.57421875H311.38398437499995V-51.3671875H305.23164062499995Q303.71796874999995 -51.3671875 303.25410156249995 -50.830078125Q302.79023437499995 -50.29296875 302.79023437499995 -48.6328125V-48.388671875Q304.49921874999995 -46.875 305.76874999999995 -45.068359375Q308.69843749999995 -40.8203125 308.69843749999995 -35.205078125Q308.69843749999995 -29.638671875 305.76874999999995 -25.4150390625Q302.83906249999995 -21.19140625 297.56562499999995 -18.8232421875Q292.29218749999995 -16.455078125 285.35859374999995 -16.455078125H282.23359374999995Q277.93671874999995 -16.455078125 277.93671874999995 -14.2578125Q277.93671874999995 -12.158203125 282.33124999999995 -12.158203125H293.02460937499995Q298.15156249999995 -12.158203125 301.91132812499995 -10.9130859375Q305.67109374999995 -9.66796875 308.16132812499995 -7.4462890625Q310.65156249999995 -5.224609375 311.89667968749995 -2.24609375Q313.14179687499995 0.732421875 313.14179687499995 4.19921875Q313.14179687499995 12.353515625 306.47675781249995 16.357421875Q299.81171874999995 20.361328125 286.13984374999995 20.361328125ZM285.40742187499995 -26.904296875Q288.87421874999995 -26.904296875 290.80292968749995 -29.1015625Q292.73164062499995 -31.298828125 292.73164062499995 -35.205078125Q292.73164062499995 -39.111328125 290.80292968749995 -41.3330078125Q288.87421874999995 -43.5546875 285.40742187499995 -43.5546875Q281.98945312499995 -43.5546875 280.03632812499995 -41.3330078125Q278.08320312499995 -39.111328125 278.08320312499995 -35.205078125Q278.08320312499995 -31.298828125 280.03632812499995 -29.1015625Q281.98945312499995 -26.904296875 285.40742187499995 -26.904296875ZM285.21210937499995 9.9609375H286.48164062499995Q295.85664062499995 9.9609375 295.85664062499995 4.345703125Q295.85664062499995 2.197265625 294.22089843749995 0.7568359375Q292.58515624999995 -0.68359375 288.09296874999995 -0.68359375H282.08710937499995Q279.74335937499995 -0.68359375 277.64374999999995 0.537109375Q275.54414062499995 1.7578125 275.54414062499995 4.638671875Q275.54414062499995 7.32421875 277.88789062499995 8.642578125Q280.23164062499995 9.9609375 285.21210937499995 9.9609375Z" fill="#FFFFFF"/><circle cx="190.63" cy="-11.35" r="11.35" fill="#E1251B"/></svg><span>Stats</span></a><button id="out" type="button" hidden>Log out</button></div></header>
+<main id="app"></main>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const app = $('app');
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const n = (v) => Number(v || 0).toLocaleString('en-SG');
+  const KEY = 'yay-stats-key';
+  const getKey = () => { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
+  const setKey = (k) => { try { k ? localStorage.setItem(KEY, k) : localStorage.removeItem(KEY); } catch (e) {} };
+
+  function login(msg) {
+    $('out').hidden = true;
+    app.innerHTML = `<div class="card login"><h2>Private stats</h2><p>Enter your stats password to see yay.sg visitor numbers.</p>
+      <form id="f"><input id="pw" type="password" autocomplete="current-password" placeholder="Password" required><button>Open</button></form>
+      ${msg ? `<div class="err">${esc(msg)}</div>` : ''}</div>`;
+    $('f').addEventListener('submit', (e) => { e.preventDefault(); setKey($('pw').value); load(); });
+    $('pw').focus();
+  }
+
+  async function load() {
+    const k = getKey();
+    app.innerHTML = `<div class="card"><div class="sk" style="width:40%"></div><div class="sk"></div><div class="sk" style="width:70%"></div></div>`;
+    let res, d;
+    try { res = await fetch('/api/stats', { headers: { 'x-stats-key': k } }); d = await res.json(); }
+    catch (e) { app.innerHTML = `<div class="card"><p class="err">Couldn't reach the stats right now. Try again in a minute.</p></div>`; return; }
+    if (res.status === 401) { setKey(''); return login('Wrong password, try again.'); }
+    if (!res.ok) { $('out').hidden = !k; app.innerHTML = `<div class="card"><h2>Stats</h2><p class="err">${esc(d && d.error)}</p></div>`; return; }
+    $('out').hidden = !k;
+    render(d);
+  }
+
+  const tile = (label, t) => `<div class="card tile"><h2>${label}</h2><div class="big">${n(t.visits)}</div><div class="lbl">visits</div><div class="pv">Page views <b>${n(t.views)}</b></div></div>`;
+
+  function listCard(title, rows, nameOf) {
+    const max = Math.max(1, ...rows.map((r) => r.views));
+    const body = rows.length ? rows.map((r) => `<div class="r"><span>${esc(nameOf(r.name))}</span><b>${n(r.views)}</b><i><em style="width:${(r.views / max) * 100}%"></em></i></div>`).join('')
+      : '<p class="muted">No data yet.</p>';
+    return `<div class="card"><h2>${title} <small>page views, 30 days</small></h2><div class="rows">${body}</div></div>`;
+  }
+
+  function chart(days) {
+    const W = Math.max(300, (app.clientWidth || 1000) - 38), H = window.innerWidth < 760 ? 180 : 220, L = 34, B = 22, T = 8;
+    const max = Math.max(1, ...days.map((d) => d.visits));
+    const step = Math.pow(10, Math.floor(Math.log10(max)));
+    const top = Math.ceil(max / step) * step || 1;
+    const bw = (W - L) / days.length, gap = 2;
+    const y = (v) => T + (H - T - B) * (1 - v / top);
+    const ticks = [0, top / 2, top];
+    let g = ticks.map((t) => `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}"/>`).join('');
+    let ax = ticks.map((t) => `<text x="${L - 6}" y="${y(t) + 3}" text-anchor="end">${n(Math.round(t))}</text>`).join('');
+    let bars = '', hits = '';
+    days.forEach((d, i) => {
+      const x = L + i * bw + gap / 2, w = Math.max(1, bw - gap), yy = y(d.visits), h = Math.max(0, H - B - yy);
+      const r = Math.min(4, w / 2, h);
+      bars += h > 0 ? `<path class="b" data-i="${i}" d="M${x},${H - B} V${yy + r} Q${x},${yy} ${x + r},${yy} H${x + w - r} Q${x + w},${yy} ${x + w},${yy + r} V${H - B} Z" fill="var(--bar)"/>` : '';
+      hits += `<rect class="hit" data-i="${i}" x="${L + i * bw}" y="${T}" width="${bw}" height="${H - T - B}"/>`;
+      if (i % 7 === 0 || (i === days.length - 1 && i % 7 >= 4)) {
+        const lab = new Date(d.date + 'T12:00:00+08:00').toLocaleDateString('en-SG', { day: 'numeric', month: 'short' });
+        ax += `<text x="${x + w / 2}" y="${H - 6}" text-anchor="middle">${lab}</text>`;
+      }
+    });
+    return `<div class="chart" style="position:relative"><svg viewBox="0 0 ${W} ${H}" style="height:${H}px" role="img" aria-label="Visits per day for the last 30 days">
+      <g class="grid">${g}</g><g class="axis">${ax}</g><g>${bars}</g><g>${hits}</g></svg><div class="tip" id="tip"></div></div>`;
+  }
+
+  function render(d) {
+    const devName = (s) => ({ desktop: 'Computer', mobile: 'Phone', tablet: 'Tablet' }[String(s).toLowerCase()] || s || 'Unknown');
+    const srcName = (s) => s ? s : 'Direct (typed in or bookmark)';
+    app.innerHTML = `
+      <div class="tiles">${tile('Today', d.today)}${tile('Last 7 days', d.week)}${tile('Last 30 days', d.month)}</div>
+      <div class="card" style="margin-top:10px"><h2>Visits per day <small>last 30 days</small></h2>${chart(d.daily)}</div>
+      <div class="cols">${listCard('Countries', d.countries, (s) => s || 'Unknown')}${listCard('Devices', d.devices, devName)}${listCard('Sources', d.sources, srcName)}</div>
+      <p class="note">Numbers from Cloudflare Web Analytics, refreshed every 5 minutes. Updated ${new Date(d.updated).toLocaleTimeString('en-SG', { timeZone: 'Asia/Singapore', hour: 'numeric', minute: '2-digit' }).toLowerCase()}.
+      A visit is one person arriving on yay.sg; page views also count refreshes. Cloudflare uses no cookies and may sample busy periods, so treat these as close estimates.</p>`;
+    const tip = $('tip'), svg = app.querySelector('.chart svg');
+    svg.addEventListener('mousemove', (e) => {
+      const h = e.target.closest('.hit'); if (!h) { tip.style.opacity = 0; return; }
+      const i = +h.dataset.i, day = d.daily[i];
+      app.querySelectorAll('.b.on').forEach((b) => b.classList.remove('on'));
+      const bar = app.querySelector(`.b[data-i="${i}"]`); if (bar) bar.classList.add('on');
+      const box = svg.getBoundingClientRect(), hb = h.getBoundingClientRect();
+      tip.innerHTML = `${new Date(day.date + 'T12:00:00+08:00').toLocaleDateString('en-SG', { weekday: 'short', day: 'numeric', month: 'short' })}<br><b>${n(day.visits)}</b> visits · ${n(day.views)} page views`;
+      tip.style.left = (hb.left - box.left + hb.width / 2) + 'px'; tip.style.top = (e.clientY - box.top) + 'px'; tip.style.opacity = 1;
+    });
+    let rz; window.onresize = () => { clearTimeout(rz); rz = setTimeout(() => render(d), 150); };
+    svg.addEventListener('mouseleave', () => { tip.style.opacity = 0; app.querySelectorAll('.b.on').forEach((b) => b.classList.remove('on')); });
+  }
+
+  $('out').addEventListener('click', () => { setKey(''); login(); });
+  load();
+})();
+</script>
+</body>
+</html>
