@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { Solar } from 'lunar-javascript';
 
 // Yay.sg live data function.
 // Fetches every feed on the server, so the page loads with one request
@@ -416,6 +417,97 @@ async function news() {
   return all.slice(0, 10);
 }
 
+
+// ---------- Chinese almanac (通胜 / 黄历), worked out locally for today's date in Singapore ----------
+const ALM_EN = {
+  入宅: 'Moving in', 移徙: 'Moving house', 出行: 'Travel', 进人口: 'New family members', 修造: 'Renovation', 动土: 'Groundbreaking',
+  起基: 'Laying foundations', 上梁: 'Roof beams', 安门: 'Installing doors', 造仓: 'Building storage', 补垣: 'Mending walls', 塞穴: 'Sealing holes',
+  造畜稠: 'Building pens', 嫁娶: 'Weddings', 开市: 'Opening a business', 安床: 'Setting up a bed', 栽种: 'Planting', 安葬: 'Burials',
+  祈福: 'Praying for blessings', 开光: 'Consecration', 掘井: 'Digging wells', 教牛马: 'Training animals', 分居: 'Moving out', 作灶: 'Building a stove',
+  出火: 'Moving the altar', 安香: 'Setting up an altar', 扫舍: 'House cleaning', 造桥: 'Building bridges', 订盟: 'Engagements', 纳采: 'Betrothal gifts',
+  造车器: 'Making vehicles', 祭祀: 'Prayers', 交易: 'Deals', 立券: 'Signing contracts', 会亲友: 'Meeting family and friends', 安机械: 'Installing machines',
+  纳畜: 'Getting pets or livestock', 盖屋: 'Roofing', 破土: 'Breaking ground for graves', 行丧: 'Funerals', 开生坟: 'Preparing a tomb', 竖柱: 'Raising pillars',
+  移柩: 'Moving a coffin', 入殓: 'Encoffining', 启钻: 'Exhumation', 修坟: 'Repairing graves', 立碑: 'Erecting tombstones', 纳财: 'Receiving money',
+  开池: 'Digging ponds', 取渔: 'Fishing', 探病: 'Visiting the sick', 解除: 'Clearing out', 修饰垣墙: 'Repairing walls', 平治道涂: 'Road works',
+  馀事勿取: 'Nothing else', 求嗣: 'Praying for children', 牧养: 'Animal rearing', 开厕: 'Building a toilet', 破屋: 'Demolition', 坏垣: 'Knocking down walls',
+  诸事不宜: 'Everything', 拆卸: 'Dismantling', 除服: 'Ending mourning', 成服: 'Wearing mourning clothes', 伐木: 'Cutting trees', 理发: 'Haircuts',
+  造庙: 'Building temples', 裁衣: 'Tailoring', 置产: 'Buying property', 治病: 'Medical treatment', 针灸: 'Acupuncture', 沐浴: 'Bathing rituals',
+  塑绘: 'Sculpting and painting', 定磉: 'Setting pillar bases', 放水: 'Releasing water', 谢土: 'Thanking the earth', 出货财: 'Paying out money', 词讼: 'Lawsuits',
+  畋猎: 'Hunting', 斋醮: 'Temple rites', 捕捉: 'Pest control', 入学: 'Starting school', 安碓磑: 'Installing mills', 合帐: 'Hanging bed curtains',
+  问名: 'Marriage enquiries', 挂匾: 'Hanging signboards', 作梁: 'Making beams', 开仓: 'Opening storage', 造船: 'Building boats', 整手足甲: 'Nail trimming',
+  结网: 'Making nets', 雇佣: 'Hiring', 经络: 'Weaving', 冠笄: 'Coming-of-age rites', 求医: 'Seeing a doctor', 合寿木: 'Making a coffin',
+  筑堤: 'Building embankments', 架马: 'Setting up scaffolding', 开柱眼: 'Drilling pillar holes', 纳婿: 'Welcoming a son-in-law', 赴任: 'Starting a new job',
+  修门: 'Repairing doors', 开渠: 'Digging channels', 断蚁: 'Pest control', 习艺: 'Learning a skill', 割蜜: 'Harvesting honey', 归岫: 'Returning home',
+  雕刻: 'Carving', 普渡: 'Hungry Ghost rites', 合脊: 'Completing the roof', 乘船: 'Boat trips', 归宁: 'Visiting parents', 无: 'None',
+};
+const FEST_EN = { 春节: 'Chinese New Year', 元宵节: 'Lantern Festival', 龙头节: 'Dragon Head Raising Day', 上巳节: 'Shangsi Festival', 清明节: 'Qingming Festival',
+  端午节: 'Dragon Boat Festival', 七夕节: 'Qixi Festival', 中元节: 'Hungry Ghost Festival', 中秋节: 'Mid-Autumn Festival', 重阳节: 'Double Ninth Festival',
+  腊八节: 'Laba Festival', 小年: 'Little New Year', 除夕: "Chinese New Year's Eve", 寒衣节: 'Winter Clothes Day', 下元节: 'Xiayuan Festival' };
+const ZODIAC_EN = { 鼠: 'Rat', 牛: 'Ox', 虎: 'Tiger', 兔: 'Rabbit', 龙: 'Dragon', 蛇: 'Snake', 马: 'Horse', 羊: 'Goat', 猴: 'Monkey', 鸡: 'Rooster', 狗: 'Dog', 猪: 'Pig' };
+const DIR_EN = { 东: 'East', 南: 'South', 西: 'West', 北: 'North' };
+// Everyday activities first, so the short list shows what people actually plan
+const ALM_PRIORITY = ['嫁娶', '开市', '交易', '入宅', '移徙', '出行', '动土', '修造', '立券', '纳财', '订盟', '求医', '治病', '理发', '入学', '安床', '祈福', '祭祀', '会亲友', '安葬', '置产', '雇佣', '赴任'];
+function almanac() {
+  const [y, m, d] = sgToday().split('-').map(Number);
+  const l = Solar.fromYmd(y, m, d).getLunar();
+  const pick = (list) => [...list].sort((a, b) => {
+    const ia = ALM_PRIORITY.indexOf(a), ib = ALM_PRIORITY.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+  }).slice(0, 4).map((zh) => ({ zh, en: ALM_EN[zh] || '' }));
+  const chong = l.getDayChongShengXiao();
+  const sha = l.getDaySha();
+  const fest = l.getFestivals()[0] || '';
+  return {
+    lunar: `${l.getMonthInChinese()}月${l.getDayInChinese()}`,
+    lunarMonth: Math.abs(l.getMonth()), lunarDay: l.getDay(), leap: l.getMonth() < 0,
+    festival: fest,
+    festivalEn: FEST_EN[fest] || '',
+    good: l.getDayTianShenLuck() === '吉',
+    yi: pick(l.getDayYi()),
+    ji: pick(l.getDayJi()),
+    clash: { zh: chong, en: ZODIAC_EN[chong] || '' },
+    sha: { zh: sha, en: DIR_EN[sha] || '' },
+  };
+}
+
+// ---------- Events (your Google Sheet, published as CSV) ----------
+// Columns: Start date | End date | Event | Venue | Link   (dates as YYYY-MM-DD; End date and Link optional)
+function parseCSV(text) {
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+function normDate(s) {
+  s = String(s || '').trim();
+  let m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s);
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s); // 24/10/2026 (Singapore style)
+  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  return null;
+}
+async function events() {
+  const url = process.env.EVENTS_CSV_URL;
+  if (!url) return { enabled: false, list: [] };
+  const rows = parseCSV(await getText(url));
+  const today = sgToday();
+  const list = rows.slice(1).map((r) => {
+    const start = normDate(r[0]);
+    const end = normDate(r[1]) || start;
+    const name = String(r[2] || '').trim();
+    if (!start || !name) return null;
+    return { start, end, name, venue: String(r[3] || '').trim(), link: /^https?:\/\//.test(String(r[4] || '').trim()) ? String(r[4]).trim() : '' };
+  }).filter((e) => e && e.end >= today).sort((a, b) => a.start.localeCompare(b.start));
+  return { enabled: true, list: list.slice(0, 30) };
+}
+
 // ---------- LTA DataMall (optional, needs a free key) ----------
 
 async function lta() {
@@ -758,7 +850,7 @@ async function jbAir() {
 // ---------- handler ----------
 
 export default async () => {
-  const [w, p, c, f, co, hk, n, l, x, mk, wn, lt, ja, wz] = await Promise.all([
+  const [w, p, c, f, co, hk, n, l, x, mk, wn, lt, ja, wz, ev] = await Promise.all([
     cached('weather', 4 * MIN, weather),
     cached('psi', 10 * MIN, psi),
     cached('cams', 2 * MIN, cams),
@@ -773,12 +865,13 @@ export default async () => {
     cached('lottery', 15 * MIN, lottery),
     cached('jbair', 30 * MIN, jbAir),
     cached('worldzh', 10 * MIN, worldNewsZh),
+    cached('events', 10 * MIN, events),
   ]);
 
   const body = {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
-    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn, worldZh: wz, lottery: lt, jbAir: ja,
+    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn, worldZh: wz, lottery: lt, jbAir: ja, events: ev, almanac: (() => { try { return almanac(); } catch (e) { console.error('[almanac]', e.message); return null; } })(),
     diag: { markets: marketsDiag },
   };
 
