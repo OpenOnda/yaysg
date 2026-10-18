@@ -283,7 +283,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   </div>
 </header>
 
-<div class="ticker fx" aria-label="Exchange rates for one Singapore dollar"><div class="track" id="fxTrack"><span class="it"><span class="pair">Loading rates…</span></span></div></div>
+<div class="ticker fx" id="mkt" aria-label="Stock market indexes" hidden><div class="track" id="mktTrack"></div></div>
 <div class="ticker news" aria-label="Latest Singapore news"><span class="tag">Latest</span><div class="clip"><div class="track" id="newsTrack"><a href="#"><i></i>Loading headlines…</a></div></div></div>
 
 <div class="alert" id="alert" hidden></div>
@@ -322,7 +322,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 </main>
 
 <footer>
-  <span>Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.</span>
+  <span>Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.</span>
   <span>An <a href="https://openonda.com" target="_blank" rel="noopener">OpenOnda</a> project</span>
 </footer>
 
@@ -512,17 +512,24 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   }
   function renderFx(f) {
     const el = $('fxc');
-    if (!f || !f.rates) { el.innerHTML = unavailable('Exchange rate'); $('fxTrack').innerHTML = ''; return; }
+    if (!f || !f.rates) { el.innerHTML = unavailable('Exchange rate'); return; }
     const tiles = f.rates.filter((r) => MAIN_FX.includes(r.code)).map((r) => {
       const c = chg(r.changePct);
       return `<div><span class="h"><b>${r.code}</b><span class="${c.cls}">${c.txt}</span></span><div class="v">${fmtRate(r.rate)}</div></div>`;
     }).join('');
     el.innerHTML = `<h2>Exchange rate · 1 SGD buys <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxg">${tiles}</div>`;
-    const items = f.rates.map((r) => {
-      const c = chg(r.changePct);
-      return `<span class="it"><span class="pair">SGD/${r.code}</span><b>${fmtRate(r.rate)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
+  }
+
+  function renderMarkets(list) {
+    const box = $('mkt');
+    if (!list || !list.length) { box.hidden = true; return; }
+    box.hidden = false;
+    const fmt = (v) => v.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const items = list.map((m) => {
+      const c = chg(m.changePct);
+      return `<span class="it"><span class="pair">${esc(m.name)}</span><b>${fmt(m.price)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
     }).join('');
-    $('fxTrack').innerHTML = items + items;
+    $('mktTrack').innerHTML = items + items;
   }
 
   function renderCoe(c) {
@@ -566,12 +573,15 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const el = $('td');
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
     const days = (ymd) => Math.round((Date.parse(ymd + 'T00:00:00Z') - Date.parse(today + 'T00:00:00Z')) / 86400000);
-    const up = HOLIDAYS.filter(([d]) => d >= today).slice(0, 4);
-    if (!up.length) { el.innerHTML = unavailable('Public holidays'); return; }
+    const yr = Number(today.slice(0, 4));
+    const isDec = today.slice(5, 7) === '12';
+    // This year's holidays only. From December, next year's are added too.
+    const up = HOLIDAYS.filter(([d]) => d >= today && (Number(d.slice(0, 4)) === yr || (isDec && Number(d.slice(0, 4)) === yr + 1))).slice(0, 4);
+    if (!up.length) { el.innerHTML = '<h2>Public holidays</h2><p class="muted">No more public holidays this year.</p>'; return; }
     const when = (n) => n === 0 ? 'Today!' : n === 1 ? 'Tomorrow' : `in ${n} days`;
     const fmt = (d) => sgDate(d, { weekday: 'short', day: 'numeric', month: 'short' });
     const [d0, n0, o0] = up[0];
-    const first = `<div class="hol-next"><div><b>${esc(n0)}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + fmt(o0) + ' off' : ''}</div></div><div class="hol-count"><span>${days(d0)}</span><small>${days(d0) === 1 ? 'day' : 'days'}</small></div></div>`;
+    const first = `<div class="hol-next"><div><b>${esc(n0)}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + fmt(o0) + ' off' : ''}</div></div><div class="hol-count">${days(d0) === 0 ? '<span>Today!</span>' : `<small>in</small><span>${days(d0)}</span><small>${days(d0) === 1 ? 'day' : 'days'}</small>`}</div></div>`;
     const rest = up.slice(1).map(([d, n, o]) => `<div class="row"><span>${esc(n)}<span class="muted"> · ${fmt(d)}${o ? ', ' + fmt(o) + ' off' : ''}</span></span><span class="k">${when(days(d))}</span></div>`).join('');
     el.innerHTML = `<h2>Public holidays</h2>${first}${rest}`;
   }
@@ -605,6 +615,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderAir(d.psi);
       renderCams(d.cams, d.crossings);
       renderFx(d.fx);
+      renderMarkets(d.markets);
       renderCoe(d.coe);
       renderNews(d.news);
       renderToday();
