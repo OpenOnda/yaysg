@@ -449,6 +449,45 @@ async function crossings() {
   return fresh;
 }
 
+// ---------- stock market indexes (Yahoo Finance public chart feed, unofficial) ----------
+const INDEXES = [
+  { sym: '^STI', name: 'STI' },
+  { sym: '^KLSE', name: 'KLCI' },
+  { sym: '^N225', name: 'Nikkei 225' },
+  { sym: '^HSI', name: 'Hang Seng' },
+  { sym: '000001.SS', name: 'Shanghai' },
+  { sym: '^DJI', name: 'Dow Jones' },
+  { sym: '^IXIC', name: 'Nasdaq' },
+  { sym: '^GSPC', name: 'S&P 500' },
+];
+
+async function oneIndex(ix) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ix.sym)}?range=5d&interval=1d`;
+  const res = await fetch(url, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36', Accept: 'application/json' },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) throw new Error(`yahoo ${res.status} ${ix.sym}`);
+  const j = await res.json();
+  const m = j?.chart?.result?.[0]?.meta;
+  const price = Number(m?.regularMarketPrice);
+  const prev = Number(m?.previousClose ?? m?.chartPreviousClose);
+  if (!Number.isFinite(price)) return null;
+  return {
+    name: ix.name,
+    price,
+    changePct: Number.isFinite(prev) && prev ? ((price - prev) / prev) * 100 : null,
+    time: m?.regularMarketTime ? m.regularMarketTime * 1000 : null,
+  };
+}
+
+async function markets() {
+  const results = await Promise.allSettled(INDEXES.map(oneIndex));
+  const list = results.map((r) => (r.status === 'fulfilled' ? r.value : null)).filter(Boolean);
+  if (!list.length) throw new Error('no market data');
+  return list;
+}
+
 // ---------- handler ----------
 
 export default async () => {
@@ -463,11 +502,12 @@ export default async () => {
     cached('lta', 3 * MIN, lta),
   ]);
   const x = await cached('crossings', 5 * MIN, crossings);
+  const mk = await cached('markets', 10 * MIN, markets);
 
   const body = {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
-    holiday: nextHoliday(), news: n, lta: l, crossings: x,
+    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk,
   };
 
   return new Response(JSON.stringify(body), {
