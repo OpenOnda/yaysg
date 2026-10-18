@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yay.sg | Singapore at a glance</title>
-<meta name="description" content="Weather, haze, Causeway and Second Link crossing times, exchange rates, COE prices, public holidays and top Singapore news, all on one screen.">
+<meta name="description" content="Weather, haze, Causeway and Second Link crossing times, exchange rates, COE prices, 4D and TOTO results, public holidays and world news, all on one screen.">
 <meta name="theme-color" content="#14231F">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -260,6 +260,70 @@ footer{padding:0 16px 18px;font-size:11px}
   .fx .it{font-size:11px;padding:4px 14px;gap:6px}
   .ticker.news .track{animation-duration:80s}
 }
+.lot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:560px){.lot{grid-template-columns:1fr}}
+.lcol{min-width:0}
+.lhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.lhead b{font-family:var(--mono);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.lhead span{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.ltop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.ltop div{background:var(--soft);border-radius:9px;padding:6px 8px;text-align:center}
+.ltop small{display:block;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.ltop b{font-size:20px;font-weight:800;letter-spacing:.02em;font-family:var(--mono)}
+.lsub{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:8px 0 4px}
+.lg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.lg span{font-family:var(--mono);font-size:12.5px;font-weight:600;text-align:center;padding:3px 0;border-radius:6px;background:var(--soft)}
+.balls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) auto minmax(0,1fr);align-items:center;gap:5px}
+.balls span{width:100%;max-width:36px;aspect-ratio:1/1;justify-self:center;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:var(--card);font-weight:800;font-size:clamp(11px,1.15vw,15px)}
+@media (max-width:560px){.balls span{font-size:14px}}
+.tg{margin-top:10px;border-radius:9px;background:var(--soft);padding:6px 10px}
+.tg-h,.tg-r{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:6px;align-items:baseline;padding:4px 0}
+.tg-h{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tg-h span:nth-child(2),.tg-r b{text-align:right}
+.tg-h span:nth-child(3),.tg-r span:nth-child(3){text-align:right}
+.tg-r{border-top:1px solid var(--hair);font-size:12.5px}
+.tg-r b{font-weight:800;font-size:14px}
+.tg-r span:nth-child(3){font-size:11.5px;color:var(--muted)}
+.tg-r.g1r b{font-size:17px;color:var(--red)}
+.balls span.add{background:var(--red);color:#fff}
+.balls i{font-style:normal;color:var(--muted);font-weight:700}
+.g1{margin-top:12px;padding:8px 10px;border-radius:9px;background:var(--soft)}
+.g1 small{display:block;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.g1 b{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.lnote{margin-top:10px;font-size:10.5px;color:var(--faint);line-height:1.45}
+.mode.lang{width:auto;padding:0 10px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.02em}
+html[lang^="zh"] body{font-family:'Schibsted Grotesk','PingFang SC','Hiragino Sans GB','Noto Sans SC','Microsoft YaHei',system-ui,sans-serif}
+html[lang^="zh"] .card h2{letter-spacing:.04em}
+.clock span{white-space:nowrap}
+@media (max-width:600px){#date{display:none}.clock{gap:8px}}
+.jbrow{display:flex;align-items:center;gap:8px;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:12px;color:var(--muted)}
+.jbrow b{color:var(--ink);font-family:var(--mono);font-weight:600}
+.jbrow .chip{font-size:10.5px;padding:3px 8px;margin-left:auto}
+#now{display:none}
+.nw-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.nw-l{display:flex;align-items:flex-end;gap:10px}
+.nw-l svg{width:34px;height:34px;align-self:center}
+.nw-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.nw-r small{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.nw-r b{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.nw-r .chip{font-size:10.5px;padding:3px 8px}
+/* ===== Phones: combined weather + air box, both crossings side by side ===== */
+@media (max-width:600px){
+  #now{display:block}
+  #wx,#air{display:none}
+  #now .big{font-size:34px}
+  #now .pill{margin-top:6px;padding:5px 9px;font-size:11.5px}
+  .cams{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .cam{aspect-ratio:1/1}
+  .etas{flex-direction:column;gap:4px;top:6px;left:6px}
+  .eta{padding:3px 7px;border-radius:7px}
+  .eta b{font-size:13px}
+  .eta small{font-size:9px}
+  .cam .cap{padding:14px 7px 5px}
+  .cam .cap b{font-size:11.5px}
+  .cam .cap small{font-size:9.5px}
+  .cam .cap time{display:none}
+}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -279,12 +343,13 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 <header class="top">
   <div class="top-in">
     <a class="brand" href="/">
-      <svg style="display:block;height:30px;width:auto" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="-7.12 -71.57 328.26 99.94" role="img" aria-label="yay.sg"><path d="M11.279296875 19.04296875V6.8359375H20.556640625Q21.630859375 6.8359375 22.16796875 6.4453125Q22.705078125 6.0546875 23.14453125 4.931640625L23.828125 3.125L0.87890625 -52.734375H20.01953125L31.689453125 -14.74609375L43.359375 -52.734375H62.5L38.232421875 9.228515625Q35.986328125 14.990234375 32.1533203125 17.0166015625Q28.3203125 19.04296875 22.94921875 19.04296875Z M79.8515625 1.26953125Q74.919921875 1.26953125 70.5009765625 -0.390625Q66.08203125 -2.05078125 63.34765625 -5.56640625Q60.61328125 -9.08203125 60.61328125 -14.697265625Q60.61328125 -20.751953125 64.1044921875 -24.6826171875Q67.595703125 -28.61328125 73.9677734375 -30.56640625Q80.33984375 -32.51953125 89.12890625 -32.51953125H95.0859375V-34.08203125Q95.0859375 -38.8671875 93.4501953125 -41.064453125Q91.814453125 -43.26171875 88.0546875 -43.26171875Q84.392578125 -43.26171875 82.48828125 -41.30859375Q80.583984375 -39.35546875 79.998046875 -35.595703125L62.908203125 -38.37890625Q63.884765625 -42.822265625 66.8876953125 -46.38671875Q69.890625 -49.951171875 75.3349609375 -52.05078125Q80.779296875 -54.150390625 88.982421875 -54.150390625Q96.208984375 -54.150390625 101.3603515625 -52.001953125Q106.51171875 -49.853515625 109.2705078125 -44.677734375Q112.029296875 -39.501953125 112.029296875 -30.37109375V-14.94140625Q112.029296875 -13.28125 112.4931640625 -12.744140625Q112.95703125 -12.20703125 114.470703125 -12.20703125H116.619140625V0.0H109.001953125Q102.361328125 0.0 99.08984375 -3.22265625Q97.380859375 -4.8828125 96.55078125 -7.373046875Q95.525390625 -5.517578125 93.962890625 -3.857421875Q91.86328125 -1.611328125 88.4208984375 -0.1708984375Q84.978515625 1.26953125 79.8515625 1.26953125ZM84.978515625 -9.86328125Q88.15234375 -9.86328125 90.447265625 -11.279296875Q92.7421875 -12.6953125 94.01171875 -15.380859375Q95.28125 -18.06640625 95.28125 -21.875V-23.291015625H89.958984375Q85.271484375 -23.291015625 82.68359375 -22.0703125Q80.095703125 -20.849609375 79.0947265625 -19.091796875Q78.09375 -17.333984375 78.09375 -15.72265625Q78.09375 -14.6484375 78.630859375 -13.28125Q79.16796875 -11.9140625 80.6328125 -10.888671875Q82.09765625 -9.86328125 84.978515625 -9.86328125Z M125.083984375 19.04296875V6.8359375H134.361328125Q135.435546875 6.8359375 135.97265625 6.4453125Q136.509765625 6.0546875 136.94921875 4.931640625L137.6328125 3.125L114.68359375 -52.734375H133.82421875L145.494140625 -14.74609375L157.1640625 -52.734375H176.3046875L152.037109375 9.228515625Q149.791015625 14.990234375 145.9580078125 17.0166015625Q142.125 19.04296875 136.75390625 19.04296875Z M234.65742187499998 1.318359375Q228.60273437499998 1.318359375 223.06074218749998 -0.341796875Q217.51874999999998 -2.001953125 213.71015624999998 -5.615234375Q209.90156249999998 -9.228515625 208.92499999999998 -15.087890625L224.11054687499998 -18.115234375Q224.50117187499998 -14.35546875 226.84492187499998 -12.40234375Q229.18867187499998 -10.44921875 233.92499999999998 -10.44921875Q238.46601562499998 -10.44921875 240.46796874999998 -12.01171875Q242.46992187499998 -13.57421875 242.46992187499998 -15.625Q242.46992187499998 -17.431640625 240.80976562499998 -18.9697265625Q239.14960937499998 -20.5078125 234.70624999999998 -21.142578125L230.50703124999998 -21.728515625Q227.62617187499998 -22.119140625 224.25703124999998 -22.8515625Q220.88789062499998 -23.583984375 217.86054687499998 -25.1220703125Q214.83320312499998 -26.66015625 212.92890624999998 -29.443359375Q211.02460937499998 -32.2265625 211.02460937499998 -36.71875Q211.02460937499998 -41.9921875 213.85664062499998 -45.8740234375Q216.68867187499998 -49.755859375 221.86445312499998 -51.904296875Q227.04023437499998 -54.052734375 233.97382812499998 -54.052734375Q239.97968749999998 -54.052734375 245.13105468749998 -52.34375Q250.28242187499998 -50.634765625 253.82246093749995 -47.2412109375Q257.36249999999995 -43.84765625 258.38789062499995 -38.76953125L243.39765624999998 -35.693359375Q243.05585937499998 -37.3046875 242.22578124999998 -38.8916015625Q241.39570312499998 -40.478515625 239.61347656249998 -41.5283203125Q237.83124999999998 -42.578125 234.65742187499998 -42.578125Q231.23945312499998 -42.578125 229.43281249999998 -41.2841796875Q227.62617187499998 -39.990234375 227.62617187499998 -37.98828125Q227.62617187499998 -36.279296875 228.94453124999998 -35.2294921875Q230.26289062499998 -34.1796875 232.41132812499998 -33.5693359375Q234.55976562499998 -32.958984375 237.04999999999998 -32.568359375L242.12812499999998 -31.8359375Q246.32734374999998 -31.25 250.23359374999998 -29.541015625Q254.13984374999998 -27.83203125 256.65449218749995 -24.609375Q259.16914062499995 -21.38671875 259.16914062499995 -16.162109375Q259.16914062499995 -10.400390625 255.94648437499995 -6.494140625Q252.72382812499998 -2.587890625 247.15742187499998 -0.634765625Q241.59101562499998 1.318359375 234.65742187499998 1.318359375Z M284.72382812499995 20.361328125Q271.54023437499995 20.361328125 265.11933593749995 16.943359375Q258.69843749999995 13.525390625 258.69843749999995 6.4453125Q258.69843749999995 1.953125 261.01777343749995 -0.5859375Q263.33710937499995 -3.125 266.70624999999995 -4.19921875Q264.89960937499995 -5.56640625 263.89863281249995 -7.4951171875Q262.89765624999995 -9.423828125 262.89765624999995 -11.669921875Q262.89765624999995 -14.74609375 264.82636718749995 -17.0166015625Q266.75507812499995 -19.287109375 270.31953124999995 -20.361328125Q266.46210937499995 -22.802734375 264.31367187499995 -26.611328125Q262.16523437499995 -30.419921875 262.16523437499995 -35.205078125Q262.16523437499995 -40.869140625 265.09492187499995 -45.0927734375Q268.02460937499995 -49.31640625 273.27363281249995 -51.6845703125Q278.52265624999995 -54.052734375 285.40742187499995 -54.052734375Q289.50898437499995 -54.052734375 292.97578124999995 -53.22265625Q293.51289062499995 -57.8125 296.34492187499995 -60.400390625Q299.81171874999995 -63.57421875 306.84296874999995 -63.57421875H311.38398437499995V-51.3671875H305.23164062499995Q303.71796874999995 -51.3671875 303.25410156249995 -50.830078125Q302.79023437499995 -50.29296875 302.79023437499995 -48.6328125V-48.388671875Q304.49921874999995 -46.875 305.76874999999995 -45.068359375Q308.69843749999995 -40.8203125 308.69843749999995 -35.205078125Q308.69843749999995 -29.638671875 305.76874999999995 -25.4150390625Q302.83906249999995 -21.19140625 297.56562499999995 -18.8232421875Q292.29218749999995 -16.455078125 285.35859374999995 -16.455078125H282.23359374999995Q277.93671874999995 -16.455078125 277.93671874999995 -14.2578125Q277.93671874999995 -12.158203125 282.33124999999995 -12.158203125H293.02460937499995Q298.15156249999995 -12.158203125 301.91132812499995 -10.9130859375Q305.67109374999995 -9.66796875 308.16132812499995 -7.4462890625Q310.65156249999995 -5.224609375 311.89667968749995 -2.24609375Q313.14179687499995 0.732421875 313.14179687499995 4.19921875Q313.14179687499995 12.353515625 306.47675781249995 16.357421875Q299.81171874999995 20.361328125 286.13984374999995 20.361328125ZM285.40742187499995 -26.904296875Q288.87421874999995 -26.904296875 290.80292968749995 -29.1015625Q292.73164062499995 -31.298828125 292.73164062499995 -35.205078125Q292.73164062499995 -39.111328125 290.80292968749995 -41.3330078125Q288.87421874999995 -43.5546875 285.40742187499995 -43.5546875Q281.98945312499995 -43.5546875 280.03632812499995 -41.3330078125Q278.08320312499995 -39.111328125 278.08320312499995 -35.205078125Q278.08320312499995 -31.298828125 280.03632812499995 -29.1015625Q281.98945312499995 -26.904296875 285.40742187499995 -26.904296875ZM285.21210937499995 9.9609375H286.48164062499995Q295.85664062499995 9.9609375 295.85664062499995 4.345703125Q295.85664062499995 2.197265625 294.22089843749995 0.7568359375Q292.58515624999995 -0.68359375 288.09296874999995 -0.68359375H282.08710937499995Q279.74335937499995 -0.68359375 277.64374999999995 0.537109375Q275.54414062499995 1.7578125 275.54414062499995 4.638671875Q275.54414062499995 7.32421875 277.88789062499995 8.642578125Q280.23164062499995 9.9609375 285.21210937499995 9.9609375Z" fill="#FFFFFF"/><circle cx="190.63" cy="-11.35" r="11.35" fill="#E1251B"/></svg><span>Singapore at a glance</span>
+      <svg style="display:block;height:30px;width:auto" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="-7.12 -71.57 328.26 99.94" role="img" aria-label="yay.sg"><path d="M11.279296875 19.04296875V6.8359375H20.556640625Q21.630859375 6.8359375 22.16796875 6.4453125Q22.705078125 6.0546875 23.14453125 4.931640625L23.828125 3.125L0.87890625 -52.734375H20.01953125L31.689453125 -14.74609375L43.359375 -52.734375H62.5L38.232421875 9.228515625Q35.986328125 14.990234375 32.1533203125 17.0166015625Q28.3203125 19.04296875 22.94921875 19.04296875Z M79.8515625 1.26953125Q74.919921875 1.26953125 70.5009765625 -0.390625Q66.08203125 -2.05078125 63.34765625 -5.56640625Q60.61328125 -9.08203125 60.61328125 -14.697265625Q60.61328125 -20.751953125 64.1044921875 -24.6826171875Q67.595703125 -28.61328125 73.9677734375 -30.56640625Q80.33984375 -32.51953125 89.12890625 -32.51953125H95.0859375V-34.08203125Q95.0859375 -38.8671875 93.4501953125 -41.064453125Q91.814453125 -43.26171875 88.0546875 -43.26171875Q84.392578125 -43.26171875 82.48828125 -41.30859375Q80.583984375 -39.35546875 79.998046875 -35.595703125L62.908203125 -38.37890625Q63.884765625 -42.822265625 66.8876953125 -46.38671875Q69.890625 -49.951171875 75.3349609375 -52.05078125Q80.779296875 -54.150390625 88.982421875 -54.150390625Q96.208984375 -54.150390625 101.3603515625 -52.001953125Q106.51171875 -49.853515625 109.2705078125 -44.677734375Q112.029296875 -39.501953125 112.029296875 -30.37109375V-14.94140625Q112.029296875 -13.28125 112.4931640625 -12.744140625Q112.95703125 -12.20703125 114.470703125 -12.20703125H116.619140625V0.0H109.001953125Q102.361328125 0.0 99.08984375 -3.22265625Q97.380859375 -4.8828125 96.55078125 -7.373046875Q95.525390625 -5.517578125 93.962890625 -3.857421875Q91.86328125 -1.611328125 88.4208984375 -0.1708984375Q84.978515625 1.26953125 79.8515625 1.26953125ZM84.978515625 -9.86328125Q88.15234375 -9.86328125 90.447265625 -11.279296875Q92.7421875 -12.6953125 94.01171875 -15.380859375Q95.28125 -18.06640625 95.28125 -21.875V-23.291015625H89.958984375Q85.271484375 -23.291015625 82.68359375 -22.0703125Q80.095703125 -20.849609375 79.0947265625 -19.091796875Q78.09375 -17.333984375 78.09375 -15.72265625Q78.09375 -14.6484375 78.630859375 -13.28125Q79.16796875 -11.9140625 80.6328125 -10.888671875Q82.09765625 -9.86328125 84.978515625 -9.86328125Z M125.083984375 19.04296875V6.8359375H134.361328125Q135.435546875 6.8359375 135.97265625 6.4453125Q136.509765625 6.0546875 136.94921875 4.931640625L137.6328125 3.125L114.68359375 -52.734375H133.82421875L145.494140625 -14.74609375L157.1640625 -52.734375H176.3046875L152.037109375 9.228515625Q149.791015625 14.990234375 145.9580078125 17.0166015625Q142.125 19.04296875 136.75390625 19.04296875Z M234.65742187499998 1.318359375Q228.60273437499998 1.318359375 223.06074218749998 -0.341796875Q217.51874999999998 -2.001953125 213.71015624999998 -5.615234375Q209.90156249999998 -9.228515625 208.92499999999998 -15.087890625L224.11054687499998 -18.115234375Q224.50117187499998 -14.35546875 226.84492187499998 -12.40234375Q229.18867187499998 -10.44921875 233.92499999999998 -10.44921875Q238.46601562499998 -10.44921875 240.46796874999998 -12.01171875Q242.46992187499998 -13.57421875 242.46992187499998 -15.625Q242.46992187499998 -17.431640625 240.80976562499998 -18.9697265625Q239.14960937499998 -20.5078125 234.70624999999998 -21.142578125L230.50703124999998 -21.728515625Q227.62617187499998 -22.119140625 224.25703124999998 -22.8515625Q220.88789062499998 -23.583984375 217.86054687499998 -25.1220703125Q214.83320312499998 -26.66015625 212.92890624999998 -29.443359375Q211.02460937499998 -32.2265625 211.02460937499998 -36.71875Q211.02460937499998 -41.9921875 213.85664062499998 -45.8740234375Q216.68867187499998 -49.755859375 221.86445312499998 -51.904296875Q227.04023437499998 -54.052734375 233.97382812499998 -54.052734375Q239.97968749999998 -54.052734375 245.13105468749998 -52.34375Q250.28242187499998 -50.634765625 253.82246093749995 -47.2412109375Q257.36249999999995 -43.84765625 258.38789062499995 -38.76953125L243.39765624999998 -35.693359375Q243.05585937499998 -37.3046875 242.22578124999998 -38.8916015625Q241.39570312499998 -40.478515625 239.61347656249998 -41.5283203125Q237.83124999999998 -42.578125 234.65742187499998 -42.578125Q231.23945312499998 -42.578125 229.43281249999998 -41.2841796875Q227.62617187499998 -39.990234375 227.62617187499998 -37.98828125Q227.62617187499998 -36.279296875 228.94453124999998 -35.2294921875Q230.26289062499998 -34.1796875 232.41132812499998 -33.5693359375Q234.55976562499998 -32.958984375 237.04999999999998 -32.568359375L242.12812499999998 -31.8359375Q246.32734374999998 -31.25 250.23359374999998 -29.541015625Q254.13984374999998 -27.83203125 256.65449218749995 -24.609375Q259.16914062499995 -21.38671875 259.16914062499995 -16.162109375Q259.16914062499995 -10.400390625 255.94648437499995 -6.494140625Q252.72382812499998 -2.587890625 247.15742187499998 -0.634765625Q241.59101562499998 1.318359375 234.65742187499998 1.318359375Z M284.72382812499995 20.361328125Q271.54023437499995 20.361328125 265.11933593749995 16.943359375Q258.69843749999995 13.525390625 258.69843749999995 6.4453125Q258.69843749999995 1.953125 261.01777343749995 -0.5859375Q263.33710937499995 -3.125 266.70624999999995 -4.19921875Q264.89960937499995 -5.56640625 263.89863281249995 -7.4951171875Q262.89765624999995 -9.423828125 262.89765624999995 -11.669921875Q262.89765624999995 -14.74609375 264.82636718749995 -17.0166015625Q266.75507812499995 -19.287109375 270.31953124999995 -20.361328125Q266.46210937499995 -22.802734375 264.31367187499995 -26.611328125Q262.16523437499995 -30.419921875 262.16523437499995 -35.205078125Q262.16523437499995 -40.869140625 265.09492187499995 -45.0927734375Q268.02460937499995 -49.31640625 273.27363281249995 -51.6845703125Q278.52265624999995 -54.052734375 285.40742187499995 -54.052734375Q289.50898437499995 -54.052734375 292.97578124999995 -53.22265625Q293.51289062499995 -57.8125 296.34492187499995 -60.400390625Q299.81171874999995 -63.57421875 306.84296874999995 -63.57421875H311.38398437499995V-51.3671875H305.23164062499995Q303.71796874999995 -51.3671875 303.25410156249995 -50.830078125Q302.79023437499995 -50.29296875 302.79023437499995 -48.6328125V-48.388671875Q304.49921874999995 -46.875 305.76874999999995 -45.068359375Q308.69843749999995 -40.8203125 308.69843749999995 -35.205078125Q308.69843749999995 -29.638671875 305.76874999999995 -25.4150390625Q302.83906249999995 -21.19140625 297.56562499999995 -18.8232421875Q292.29218749999995 -16.455078125 285.35859374999995 -16.455078125H282.23359374999995Q277.93671874999995 -16.455078125 277.93671874999995 -14.2578125Q277.93671874999995 -12.158203125 282.33124999999995 -12.158203125H293.02460937499995Q298.15156249999995 -12.158203125 301.91132812499995 -10.9130859375Q305.67109374999995 -9.66796875 308.16132812499995 -7.4462890625Q310.65156249999995 -5.224609375 311.89667968749995 -2.24609375Q313.14179687499995 0.732421875 313.14179687499995 4.19921875Q313.14179687499995 12.353515625 306.47675781249995 16.357421875Q299.81171874999995 20.361328125 286.13984374999995 20.361328125ZM285.40742187499995 -26.904296875Q288.87421874999995 -26.904296875 290.80292968749995 -29.1015625Q292.73164062499995 -31.298828125 292.73164062499995 -35.205078125Q292.73164062499995 -39.111328125 290.80292968749995 -41.3330078125Q288.87421874999995 -43.5546875 285.40742187499995 -43.5546875Q281.98945312499995 -43.5546875 280.03632812499995 -41.3330078125Q278.08320312499995 -39.111328125 278.08320312499995 -35.205078125Q278.08320312499995 -31.298828125 280.03632812499995 -29.1015625Q281.98945312499995 -26.904296875 285.40742187499995 -26.904296875ZM285.21210937499995 9.9609375H286.48164062499995Q295.85664062499995 9.9609375 295.85664062499995 4.345703125Q295.85664062499995 2.197265625 294.22089843749995 0.7568359375Q292.58515624999995 -0.68359375 288.09296874999995 -0.68359375H282.08710937499995Q279.74335937499995 -0.68359375 277.64374999999995 0.537109375Q275.54414062499995 1.7578125 275.54414062499995 4.638671875Q275.54414062499995 7.32421875 277.88789062499995 8.642578125Q280.23164062499995 9.9609375 285.21210937499995 9.9609375Z" fill="#FFFFFF"/><circle cx="190.63" cy="-11.35" r="11.35" fill="#E1251B"/></svg><span data-i18n="Singapore at a glance">Singapore at a glance</span>
     </a>
     <div class="clock">
       <span id="date"></span>
       <span class="time" id="time"></span>
       <span class="live"><span class="dot"></span><span id="upd">Live</span></span>
+      <button class="mode lang" id="lang" type="button" aria-label="切换到中文">中文</button>
       <button class="mode" id="mode" type="button" aria-label="Switch light or dark mode" title="Light or dark mode">
         <svg class="moon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="sun" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -301,6 +366,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 <main>
   <div class="grid">
 
+    <section class="card now" id="now"><h2>Weather &amp; air</h2><span class="skel"></span><span class="skel"></span></section>
+
     <section class="card" id="wx"><h2>Weather</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="air"><h2>Air quality</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
@@ -311,28 +378,28 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card wide tall" id="nw"><h2>Top 5 SG news</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card wide tall" id="lot"><h2>4D &amp; TOTO results</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="mv" hidden><h2>Roads &amp; MRT</h2></section>
 
     <section class="card home" id="hs" hidden>
-      <h2>Keep it handy</h2>
-      <b>Add Yay.sg to your home screen.</b>
-      <p>iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".</p>
+      <h2 data-i18n="Keep it handy">Keep it handy</h2>
+      <b data-i18n="Add Yay.sg to your home screen.">Add Yay.sg to your home screen.</b>
+      <p data-i18n='iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".'>iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".</p>
     </section>
 
   </div>
 
   <div class="spon">
-    <span><span class="lbl">Advertise</span>Reach thousands of Singaporeans every day on yay.sg.</span>
-    <a href="https://wa.me/6588224466?text=Hi%2C%20I%27m%20interested%20in%20advertising%20on%20yay.sg" target="_blank" rel="noopener">WhatsApp us</a>
+    <span><span class="lbl" data-i18n="Advertise">Advertise</span><span data-i18n="Reach thousands of Singaporeans every day on yay.sg.">Reach thousands of Singaporeans every day on yay.sg.</span></span>
+    <a href="https://wa.me/6588224466?text=Hi%2C%20I%27m%20interested%20in%20advertising%20on%20yay.sg" target="_blank" rel="noopener" data-i18n="WhatsApp us">WhatsApp us</a>
   </div>
 </main>
 
 <footer>
-  <span>Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.</span>
+  <span data-i18n="Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.">Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.</span>
 </footer>
 
 <script>
@@ -341,7 +408,73 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   const $ = (id) => document.getElementById(id);
   const tidy = (s) => String(s || '').replace(/\s*\((Day|Night)\)/gi, '');
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const unavailable = (title) => `<h2>${title}</h2><p class="muted">Not available right now. We'll keep trying.</p>`;
+  const unavailable = (title) => `<h2>${T(title)}</h2><p class="muted">${T("Not available right now. We'll keep trying.")}</p>`;
+
+  // ---------- language (English / 简体中文) ----------
+  let LANG = 'en';
+  try { const saved = localStorage.getItem('yay-lang'); if (saved === 'zh' || saved === 'en') LANG = saved; } catch (e) {}
+  const ZH = {
+    'Singapore at a glance': '新加坡一览', 'Weather': '天气', 'Air quality': '空气质量',
+    'Causeway &amp; Second Link': '长堤与第二通道', 'Exchange rate · 1 SGD buys': '汇率 · 1新元可兑换', 'Exchange rate': '汇率',
+    'COE prices': '拥车证价格', '4D &amp; TOTO results': '4D与多多开彩成绩', 'Public holidays': '公共假期',
+    'Roads &amp; MRT': '道路与地铁', 'Keep it handy': '随手可查',
+    'Add Yay.sg to your home screen.': '把 yay.sg 加到手机主屏幕。',
+    'iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".': 'iPhone：点“分享”，再选“添加到主屏幕”。Android：点菜单，再选“添加到主屏幕”。',
+    'Advertise': '广告', 'Reach thousands of Singaporeans every day on yay.sg.': '在 yay.sg 刊登广告，每天触达数千名新加坡人。',
+    'WhatsApp us': 'WhatsApp 联系我们',
+    'Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.': '数据来源：data.gov.sg（NEA、LTA）、LTA DataMall、欧洲央行参考汇率、Yahoo Finance（指数，可能有延迟）及各媒体RSS。本站并非政府官方服务。兑换货币前请向兑换商确认汇率。',
+    'Live': '实时', 'Reconnecting…': '重新连接中…', 'Loading headlines…': '正在加载新闻…',
+    "Not available right now. We'll keep trying.": '暂时无法获取，我们会继续尝试。',
+    'Updated {t}': '{t} 更新', 'Feels like': '体感', 'Humidity': '湿度', '{a}° to {b}°': '{a}° 至 {b}°',
+    'No rain expected for the next 2 hours': '未来2小时预计无雨',
+    'Morning': '上午', 'Afternoon': '下午', 'Night': '晚上', 'Overnight': '凌晨',
+    'Fair': '晴', 'Fair & Warm': '晴热', 'Sunny': '晴朗', 'Partly Cloudy': '局部多云', 'Cloudy': '多云',
+    'Hazy': '有烟霾', 'Slightly Hazy': '轻微烟霾', 'Windy': '有风', 'Mist': '薄雾', 'Fog': '雾',
+    'Light Rain': '小雨', 'Moderate Rain': '中雨', 'Heavy Rain': '大雨', 'Passing Showers': '短暂阵雨',
+    'Light Showers': '小阵雨', 'Showers': '阵雨', 'Heavy Showers': '大阵雨', 'Thundery Showers': '雷阵雨',
+    'Heavy Thundery Showers': '强雷阵雨', 'Heavy Thundery Showers with Gusty Winds': '强雷阵雨伴有阵风',
+    '24-hr PSI': '24小时PSI', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
+    'North': '北部', 'South': '南部', 'East': '东部', 'West': '西部', 'Central': '中部',
+    'Singapore average: <b>{avg}</b> · highest in the {r}': '全岛平均：<b>{avg}</b> · {r}最高',
+    'Good air. Enjoy the outdoors.': '空气良好，适合户外活动。',
+    'Fine for normal activities.': '适合一般活动。',
+    'Go easy outdoors. Kids, elderly, heart or lung conditions: take care.': '减少户外活动。儿童、年长者及心肺病患者请多加注意。',
+    'Avoid outdoor exercise. Kids, elderly, heart or lung conditions: stay in.': '避免户外运动。儿童、年长者及心肺病患者请留在室内。',
+    'Stay indoors where you can.': '尽量留在室内。',
+    'Live cameras': '实时摄像头', ' · tap to enlarge': ' · 点击放大',
+    'Smooth': '畅通', 'Heavy': '拥堵', 'To JB': '往新山', 'To SG': '往新加坡', '{a}–{b} min': '{a}–{b} 分钟',
+    'Woodlands Causeway': '兀兰长堤', 'Tuas Second Link': '大士第二通道', 'Towards Johor': '往柔佛方向',
+    'Woodlands Checkpoint': '兀兰关卡', 'Tuas Checkpoint': '大士关卡', 'Checkpoint area': '关卡一带',
+    '<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 5am.': '<b>夜间暂停。</b>通关时间最后更新于{last}，早上5点恢复实时更新。',
+    '<b>Update delayed.</b> Crossing times last updated at {last}. Check the camera photos for the latest view.': '<b>更新延迟。</b>通关时间最后更新于{last}，请参考摄像头画面。',
+    'Crossing times updated {last}, next update at {next}. Data from live Google traffic.': '通关时间于{last}更新，下次更新：{next}。数据来自Google实时交通。',
+    'STI': '海峡时报指数', 'KLCI': '吉隆坡综合指数', 'Nikkei 225': '日经225', 'Hang Seng': '恒生指数',
+    'Shanghai': '上证指数', 'Dow Jones': '道琼斯', 'Nasdaq': '纳斯达克', 'S&P 500': '标普500',
+    'Cars up to 1600cc': '1600cc及以下汽车', 'Cars above 1600cc': '1600cc以上汽车', 'Goods & buses': '货车与巴士',
+    'Motorcycles': '摩托车', 'Open': '开放类', 'Same': '持平', '{mon} · Round {r}': '{mon} · 第{r}轮',
+    'World': '国际', 'More SG': '本地',
+    'Singapore Pools': '新加坡博彩', ' · Draw {n}': ' · 第{n}期', '1st': '头奖', '2nd': '二奖', '3rd': '三奖',
+    'Starter': '入围奖', 'Consolation': '安慰奖', 'Winning numbers · Additional': '中奖号码 · 附加号码',
+    'Group 1 prize': '头奖奖金', 'TOTO': '多多',
+    'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
+    '4D results not available right now.': '暂时无法获取4D成绩。', 'TOTO results not available right now.': '暂时无法获取多多成绩。',
+    'Results are for information only, always verify with Singapore Pools. 18 and above. Gamble responsibly, NCPG helpline 1800-6-668-668.': '开彩成绩仅供参考，请以新加坡博彩公司公布为准。仅限18岁及以上。理性博彩，NCPG求助热线 1800-6-668-668。',
+    "New Year's Day": '元旦', 'Chinese New Year': '农历新年', 'Chinese New Year (Day 2)': '农历新年（第二天）',
+    'Hari Raya Puasa': '开斋节', 'Good Friday': '耶稣受难日', 'Labour Day': '劳动节', 'Hari Raya Haji': '哈芝节',
+    'Vesak Day': '卫塞节', 'National Day': '国庆日', 'Deepavali': '屠妖节', 'Christmas Day': '圣诞节',
+    'Today!': '今天！', 'Tomorrow': '明天', 'in {n} days': '{n}天后', '{d} off': '{d}补假',
+    'No more public holidays this year.': '今年已无公共假期。',
+    'MRT status not available right now.': '暂时无法获取地铁状况。', 'Train service disruption': '列车服务中断',
+    'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
+    'Live · {t}': '实时 · {t}',
+    'Johor Bahru': '新山', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
+  };
+  const T = (key, vars) => {
+    let out = LANG === 'zh' && ZH[key] != null ? ZH[key] : key;
+    if (vars) for (const k in vars) out = out.split('{' + k + '}').join(vars[k]);
+    return out;
+  };
+  const L = () => (LANG === 'zh' ? 'zh-SG' : 'en-SG');
 
   // ---------- light / dark switch ----------
   $('mode').addEventListener('click', function () {
@@ -353,14 +486,14 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   // ---------- clock ----------
   function tick() {
     const now = new Date();
-    $('date').textContent = now.toLocaleDateString('en-SG', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' });
-    $('time').textContent = now.toLocaleTimeString('en-SG', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }).toUpperCase();
+    $('date').textContent = now.toLocaleDateString(L(), { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' });
+    $('time').textContent = now.toLocaleTimeString(L(), { timeZone: TZ, hour: 'numeric', minute: '2-digit' }).toUpperCase();
   }
   tick(); setInterval(tick, 10000);
 
   // ---------- formatting ----------
-  const sgTime = (iso) => iso ? new Date(iso).toLocaleTimeString('en-SG', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }).toLowerCase().replace(' ', '') : '';
-  const sgDate = (ymd, opts) => new Date(ymd + 'T12:00:00+08:00').toLocaleDateString('en-SG', Object.assign({ timeZone: TZ }, opts));
+  const sgTime = (iso) => iso ? new Date(iso).toLocaleTimeString(L(), { timeZone: TZ, hour: 'numeric', minute: '2-digit' }).toLowerCase().replace(' ', '') : '';
+  const sgDate = (ymd, opts) => new Date(ymd + 'T12:00:00+08:00').toLocaleDateString(L(), Object.assign({ timeZone: TZ }, opts));
   function fmtRate(v) {
     if (v >= 1000) return Math.round(v).toLocaleString('en-SG');
     if (v >= 100) return v.toFixed(2);
@@ -396,10 +529,10 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
   function periodLabel(iso) {
     const h = Number(new Date(iso).toLocaleString('en-SG', { timeZone: TZ, hour: 'numeric', hour12: false }));
-    if (h >= 6 && h < 12) return 'Morning';
-    if (h >= 12 && h < 18) return 'Afternoon';
-    if (h >= 18) return 'Night';
-    return 'Overnight';
+    if (h >= 6 && h < 12) return T('Morning');
+    if (h >= 12 && h < 18) return T('Afternoon');
+    if (h >= 18) return T('Night');
+    return T('Overnight');
   }
   function mostCommon(obj) {
     const c = {};
@@ -413,22 +546,24 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     if (!w) { el.innerHTML = unavailable('Weather'); return; }
     const cond = tidy(w.nowCondition || w.today.forecast || '');
     const temp = w.tempNow != null ? w.tempNow + '°' : (w.today.high != null ? w.today.high + '°' : '--');
-    const range = w.today.low != null ? `${w.today.low}° to ${w.today.high}°` : '';
+    const range = w.today.low != null ? T('{a}° to {b}°', { a: w.today.low, b: w.today.high }) : '';
     let rain;
     if (w.rainAreas && w.rainAreas.length) {
-      const names = w.rainAreas.slice(0, 2).join(', ');
-      const more = w.rainAreas.length > 2 ? ` and ${w.rainAreas.length - 2} more areas` : '';
-      rain = `<div class="pill" style="background:var(--blue-bg);color:var(--blue)">Rain in ${esc(names)}${more} until ${sgTime(w.validUntil)}</div>`;
+      const extra = w.rainAreas.length - 2;
+      const msg = LANG === 'zh'
+        ? `${esc(w.rainAreas.slice(0, 2).join('、'))}${extra > 0 ? `等${w.rainAreas.length}个地区` : ''}有雨，持续至${sgTime(w.validUntil)}`
+        : `Rain in ${esc(w.rainAreas.slice(0, 2).join(', '))}${extra > 0 ? ` and ${extra} more areas` : ''} until ${sgTime(w.validUntil)}`;
+      rain = `<div class="pill" style="background:var(--blue-bg);color:var(--blue)">${msg}</div>`;
     } else {
-      rain = `<div class="pill" style="background:var(--good-bg);color:var(--good)">No rain expected for the next 2 hours</div>`;
+      rain = `<div class="pill" style="background:var(--good-bg);color:var(--good)">${T('No rain expected for the next 2 hours')}</div>`;
     }
     const now = Date.now();
     const later = (w.periods || []).filter((p) => Date.parse(p.end) > now).slice(0, 3)
-      .map((p) => `<div><b>${periodLabel(p.start)}</b>${esc(tidy(mostCommon(p.regions)))}</div>`).join('');
-    el.innerHTML = `<h2>Weather <small>Updated ${sgTime(new Date().toISOString())}</small></h2>
-      <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>Feels like</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
-      <div class="sub">${esc(cond)}${range ? ' · ' + range : ''}</div>
-      ${w.humidity != null ? `<div class="hum"><span>Humidity</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
+      .map((p) => `<div><b>${periodLabel(p.start)}</b>${esc(T(tidy(mostCommon(p.regions))))}</div>`).join('');
+    el.innerHTML = `<h2>${T('Weather')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
+      <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
+      <div class="sub">${esc(T(cond))}${range ? ' · ' + range : ''}</div>
+      ${w.humidity != null ? `<div class="hum"><span>${T('Humidity')}</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
       ${rain}${later ? `<div class="later">${later}</div>` : ''}`;
   }
 
@@ -455,25 +590,66 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     if (!entries.length) return '';
     const avg = Math.round(entries.reduce((sum, [, v]) => sum + v, 0) / entries.length);
     const top = entries.sort((a, b) => b[1] - a[1])[0][0];
-    const name = top[0].toUpperCase() + top.slice(1);
-    return `Singapore average: <b>${avg}</b> · highest in the ${name}`;
+    const name = T(top[0].toUpperCase() + top.slice(1));
+    return T('Singapore average: <b>{avg}</b> · highest in the {r}', { avg, r: name });
   }
 
-  function renderAir(p) {
+  function jbLine(ja) {
+    if (!ja || ja.aqi == null) return '';
+    const lv = ja.band ? ja.band.level : 0;
+    return `<div class="jbrow"><span>${T('Johor Bahru')}</span><b>AQI ${ja.aqi}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
+  }
+
+  function renderAir(p, ja) {
     const el = $('air');
     if (!p || p.max == null) { el.innerHTML = unavailable('Air quality'); return; }
     const lv = p.band.level;
     const bars = Object.entries(p.regions).map(([k, v]) => {
       const b = v <= 50 ? 0 : v <= 100 ? 1 : v <= 200 ? 2 : v <= 300 ? 3 : 4;
-      return `<div class="bar"><span>${k[0].toUpperCase() + k.slice(1)}</span><span class="t"><i style="width:${Math.min(100, v / 3)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`;
+      return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 3)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`;
     }).join('');
-    el.innerHTML = `<h2>Air quality <small>24-hr PSI</small></h2>
-      <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${p.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${p.band.label}</span></div>
+    el.innerHTML = `<h2>${T('Air quality')} <small>${T('24-hr PSI')}</small></h2>
+      <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${p.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(p.band.label)}</span></div>
       <div class="sub">${psiAvgLine(p)}</div>
       <div class="bars">${bars}</div>
-      <div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${PSI_TIP[lv]}</div>`;
+      ${jbLine(ja)}
+      <div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(PSI_TIP[lv])}</div>`;
 
     $('alert').hidden = true;
+  }
+
+  // Phones: one compact box for weather and air, so the Causeway box shows on the first screen
+  function renderNow(w, p, ja) {
+    const el = $('now');
+    if (!w && !p) { el.innerHTML = unavailable('Weather &amp; air'); return; }
+    let left = '', right = '', lines = [], pills = '';
+    if (w) {
+      const cond = tidy(w.nowCondition || w.today.forecast || '');
+      const temp = w.tempNow != null ? w.tempNow + '°' : (w.today.high != null ? w.today.high + '°' : '--');
+      left = `<div class="nw-l"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}${wxIcon(cond)}</div>`;
+      const bits = [esc(T(cond))];
+      if (w.today.low != null) bits.push(T('{a}° to {b}°', { a: w.today.low, b: w.today.high }));
+      if (w.humidity != null) bits.push(`${T('Humidity')} ${w.humidity}%`);
+      lines.push(bits.join(' · '));
+      if (w.rainAreas && w.rainAreas.length) {
+        const extra = w.rainAreas.length - 1;
+        const msg = LANG === 'zh'
+          ? `${esc(w.rainAreas[0])}${extra > 0 ? `等${w.rainAreas.length}个地区` : ''}有雨，至${sgTime(w.validUntil)}`
+          : `Rain in ${esc(w.rainAreas[0])}${extra > 0 ? ` +${extra} areas` : ''} until ${sgTime(w.validUntil)}`;
+        pills += `<div class="pill" style="background:var(--blue-bg);color:var(--blue)">${msg}</div>`;
+      }
+    }
+    if (p && p.max != null) {
+      const lv = p.band.level;
+      right = `<div class="nw-r"><small>PSI</small><b>${p.max}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(p.band.label)}</span></div>`;
+      lines.push(psiAvgLine(p));
+      pills += `<div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(PSI_TIP[lv])}</div>`;
+    }
+    el.innerHTML = `<h2>${T('Weather &amp; air')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
+      <div class="nw-top">${left}${right}</div>
+      ${lines.map((l) => `<div class="sub">${l}</div>`).join('')}
+      ${jbLine(ja)}
+      ${pills}`;
   }
 
   function renderCams(c, xings) {
@@ -484,7 +660,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const badge = (e, to) => {
       if (!e) return '';
       const [label, bg] = LV[e.level] || LV.moderate;
-      return `<span class="eta" style="background:${bg}"><small>${to}</small><b>${e.low}–${e.high} min</b><small>${label}</small></span>`;
+      return `<span class="eta" style="background:${bg}"><small>${T(to)}</small><b>${T('{a}–{b} min', { a: e.low, b: e.high })}</b><small>${T(label)}</small></span>`;
     };
     const est = (camId) => {
       const jb = ests.find((k) => k.cam === camId && k.dir === 'jb');
@@ -504,22 +680,22 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       let msg;
       if (hourNow >= 1 && hourNow < 5) {
         estState = 'paused';
-        msg = `<b>Overnight pause.</b> Crossing times last updated at ${last}. Live updates resume at 5am.`;
+        msg = T('<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 5am.', { last });
       } else if (ageMin > 45) {
         estState = 'paused';
-        msg = `<b>Update delayed.</b> Crossing times last updated at ${last}. Check the camera photos for the latest view.`;
+        msg = T('<b>Update delayed.</b> Crossing times last updated at {last}. Check the camera photos for the latest view.', { last });
       } else {
-        msg = `Crossing times updated ${last}, next update at ${next}. Data from live Google traffic.`;
+        msg = T('Crossing times updated {last}, next update at {next}. Data from live Google traffic.', { last, next });
       }
       estNote = `<div class="eta-note ${estState}">${estState === 'paused' ? '<span class="pz" aria-hidden="true"></span>' : '<span class="lv" aria-hidden="true"></span>'}<span>${msg}</span></div>`;
     }
     const main = c.filter((x) => x.id === '2701' || x.id === '4703');
     const list = (main.length ? main : c).slice(0, 2);
-    el.innerHTML = `<h2>Causeway &amp; Second Link <small>Live cameras<span class="hide-sm"> · tap to enlarge</span></small></h2>
+    el.innerHTML = `<h2>${T('Causeway &amp; Second Link')} <small>${T('Live cameras')}<span class="hide-sm">${T(' · tap to enlarge')}</span></small></h2>
       <div class="cams">${list.map((x) => `
         <a class="cam" href="${esc(x.url)}" target="_blank" rel="noopener">
           <img src="${esc(x.url)}" alt="Live traffic camera at ${esc(x.label)}, ${esc(x.sub)}" loading="lazy" onerror="this.parentNode.classList.add('off')">
-          <span class="cap"><span><b>${esc(x.label)}</b><small>${esc(x.sub)}</small></span><time>${sgTime(x.timestamp)}</time></span>
+          <span class="cap"><span><b>${esc(T(x.label))}</b><small>${esc(T(x.sub))}</small></span><time>${sgTime(x.timestamp)}</time></span>
           ${est(x.id)}
         </a>`).join('')}</div>${estNote}`;
   }
@@ -536,7 +712,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       const c = chg(r.changePct);
       return `<div><span class="h"><b>${r.code}</b><span class="${c.cls}">${c.txt}</span></span><div class="v">${fmtRate(r.rate)}</div></div>`;
     }).join('');
-    el.innerHTML = `<h2>Exchange rate · 1 SGD buys <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxg">${tiles}</div>`;
+    el.innerHTML = `<h2>${T('Exchange rate · 1 SGD buys')} <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxg">${tiles}</div>`;
   }
 
   function renderMarkets(list) {
@@ -547,7 +723,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const fmt = (v) => v.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const items = list.map((m) => {
       const c = chg(m.changePct);
-      return `<span class="it"><span class="pair">${esc(m.name)}</span><b>${fmt(m.price)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
+      return `<span class="it"><span class="pair">${esc(T(m.name))}</span><b>${fmt(m.price)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
     }).join('');
     $('mktTrack').innerHTML = items + items;
   }
@@ -561,11 +737,11 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       if (x.change != null) {
         if (x.change > 0) { cls = 'upc'; txt = '▲ ' + x.change.toLocaleString('en-SG'); }
         else if (x.change < 0) { cls = 'dnc'; txt = '▼ ' + Math.abs(x.change).toLocaleString('en-SG'); }
-        else { txt = 'Same'; }
+        else { txt = T('Same'); }
       }
-      return `<div class="row"><span class="cat">${x.cat}</span><span class="lab">${esc(x.cat === 'C' ? 'Goods & buses' : x.label)}</span><span class="pr">${money(x.premium)}</span><span class="ch ${cls}">${txt}</span></div>`;
+      return `<div class="row"><span class="cat">${x.cat}</span><span class="lab">${esc(T(x.cat === 'C' ? 'Goods & buses' : x.label))}</span><span class="pr">${money(x.premium)}</span><span class="ch ${cls}">${txt}</span></div>`;
     }).join('');
-    el.innerHTML = `<h2>COE prices <small>${mon} · Round ${esc(c.round)}</small></h2>${rows}`;
+    el.innerHTML = `<h2>${T('COE prices')} <small>${T('{mon} · Round {r}', { mon, r: esc(c.round) })}</small></h2>${rows}`;
   }
 
   function renderNews(n) {
@@ -597,9 +773,53 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     if (!list && sg && sg.length >= 8) { list = sg.slice(5); tag = 'More SG'; }
     if (!list) { bar.hidden = true; return; }
     bar.hidden = false;
-    $('wnTag').textContent = tag;
+    $('wnTag').textContent = T(tag);
     const items = list.map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('');
     $('newsTrack').innerHTML = items + items;
+  }
+
+  // TOTO prize groups 1 to 3: share amount and number of winning shares
+  function groupsTable(t) {
+    const rows = (t.groups || []).slice(0, 3);
+    if (!rows.length) return t.group1 ? `<div class="g1"><small>${T('Group 1 prize')}</small><b>${esc(t.group1)}</b></div>` : '';
+    const win = (n) => {
+      const k = Number(String(n).replace(/[^\d]/g, ''));
+      if (!k) return T('No winner');
+      return LANG === 'zh' ? `${k}注` : `${k} ${k === 1 ? 'winner' : 'winners'}`;
+    };
+    return `<div class="tg">
+      <div class="tg-h"><span>${T('Prize group')}</span><span>${T('Share amount')}</span><span>${T('Winners')}</span></div>
+      ${rows.map((r) => `<div class="tg-r${r.group === 1 ? ' g1r' : ''}"><span>${T('Group {n}', { n: r.group })}</span><b>${esc(r.amount)}</b><span>${win(r.winners)}</span></div>`).join('')}
+    </div>`;
+  }
+
+  function renderLottery(lt) {
+    const el = $('lot');
+    if (!lt) { el.innerHTML = unavailable('4D &amp; TOTO results'); return; }
+    const d = lt.fourD, t = lt.toto;
+    const drawDate = (s) => { const t = Date.parse(String(s || '').replace(/^\w+,\s*/, '')); return isNaN(t) ? esc(s || '') : new Date(t).toLocaleDateString(L(), { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); };
+    const grid = (arr) => `<div class="lg">${arr.map((n) => `<span>${esc(n)}</span>`).join('')}</div>`;
+    const four = d ? `
+      <div class="lcol">
+        <div class="lhead"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
+        <div class="ltop">
+          <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
+          <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
+          <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
+        </div>
+        <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
+        <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
+      </div>` : `<div class="lcol"><p class="muted">${T('4D results not available right now.')}</p></div>`;
+    const tot = t ? `
+      <div class="lcol">
+        <div class="lhead"><b>${T('TOTO')}</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
+        <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
+        <div class="lsub" style="margin-top:6px">${T('Winning numbers · Additional')}</div>
+        ${groupsTable(t)}
+      </div>` : `<div class="lcol"><p class="muted">${T('TOTO results not available right now.')}</p></div>`;
+    el.innerHTML = `<h2>${T('4D &amp; TOTO results')} <small>${T('Singapore Pools')}</small></h2>
+      <div class="lot">${four}${tot}</div>
+      <div class="lnote">${T('Results are for information only, always verify with Singapore Pools. 18 and above. Gamble responsibly, NCPG helpline 1800-6-668-668.')}</div>`;
   }
 
   function renderToday() {
@@ -610,32 +830,35 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const isDec = today.slice(5, 7) === '12';
     // This year's holidays only. From December, next year's are added too.
     const up = HOLIDAYS.filter(([d]) => d >= today && (Number(d.slice(0, 4)) === yr || (isDec && Number(d.slice(0, 4)) === yr + 1))).slice(0, 4);
-    if (!up.length) { el.innerHTML = '<h2>Public holidays</h2><p class="muted">No more public holidays this year.</p>'; return; }
-    const when = (n) => n === 0 ? 'Today!' : n === 1 ? 'Tomorrow' : `in ${n} days`;
+    if (!up.length) { el.innerHTML = `<h2>${T('Public holidays')}</h2><p class="muted">${T('No more public holidays this year.')}</p>`; return; }
+    const when = (n) => n === 0 ? T('Today!') : n === 1 ? T('Tomorrow') : T('in {n} days', { n });
+    const off = (d) => T('{d} off', { d: fmt(d) });
     const fmt = (d) => sgDate(d, { weekday: 'short', day: 'numeric', month: 'short' });
     const [d0, n0, o0] = up[0];
-    const first = `<div class="hol-next"><div><b>${esc(n0)}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + fmt(o0) + ' off' : ''}</div></div><div class="hol-count">${days(d0) === 0 ? '<span>Today!</span>' : `<small>in</small><span>${days(d0)}</span><small>${days(d0) === 1 ? 'day' : 'days'}</small>`}</div></div>`;
-    const rest = up.slice(1).map(([d, n, o]) => `<div class="row"><span>${esc(n)}<span class="muted"> · ${fmt(d)}${o ? ', ' + fmt(o) + ' off' : ''}</span></span><span class="k">${when(days(d))}</span></div>`).join('');
-    el.innerHTML = `<h2>Public holidays</h2>${first}${rest}`;
+    const n0d = days(d0);
+    const count = n0d === 0 ? `<span>${T('Today!')}</span>` : LANG === 'zh' ? `<small>还有</small><span>${n0d}</span><small>天</small>` : `<small>in</small><span>${n0d}</span><small>${n0d === 1 ? 'day' : 'days'}</small>`;
+    const first = `<div class="hol-next"><div><b>${esc(T(n0))}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + off(o0) : ''}</div></div><div class="hol-count">${count}</div></div>`;
+    const rest = up.slice(1).map(([d, n, o]) => `<div class="row"><span>${esc(T(n))}<span class="muted"> · ${fmt(d)}${o ? ', ' + off(o) : ''}</span></span><span class="k">${when(days(d))}</span></div>`).join('');
+    el.innerHTML = `<h2>${T('Public holidays')}</h2>${first}${rest}`;
   }
 
   function renderMove(l) {
     const el = $('mv');
     if (!l || !l.enabled) { el.hidden = true; $('hs').hidden = false; return; }
     el.hidden = false; $('hs').hidden = true;
-    let mrt = '<p class="muted">MRT status not available right now.</p>';
+    let mrt = `<p class="muted">${T('MRT status not available right now.')}</p>`;
     if (l.trains) {
       mrt = l.trains.disrupted
-        ? `<div class="pill" style="background:var(--bad-bg);color:var(--bad);margin-top:0">${esc(l.trains.messages[0] || 'Train service disruption')}</div>`
-        : `<div class="pill" style="background:var(--good-bg);color:var(--good);margin-top:0">All MRT &amp; LRT lines running normally</div>`;
+        ? `<div class="pill" style="background:var(--bad-bg);color:var(--bad);margin-top:0">${esc(l.trains.messages[0] || T('Train service disruption'))}</div>`
+        : `<div class="pill" style="background:var(--good-bg);color:var(--good);margin-top:0">${T('All MRT &amp; LRT lines running normally')}</div>`;
     }
     let roads = '';
     if (l.incidents) {
       roads = l.incidents.length
         ? l.incidents.slice(0, 4).map((x) => `<div class="row" style="justify-content:flex-start;align-items:flex-start"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:50%;margin-top:6px;background:${/accident/i.test(x.type) ? 'var(--bad)' : '#C98A00'}"></span><span>${esc(x.message)}</span></div>`).join('')
-        : '<div class="row"><span>No major road incidents</span></div>';
+        : `<div class="row"><span>${T('No major road incidents')}</span></div>`;
     }
-    el.innerHTML = `<h2>Roads &amp; MRT</h2>${mrt}<div style="margin-top:8px">${roads}</div>`;
+    el.innerHTML = `<h2>${T('Roads &amp; MRT')}</h2>${mrt}<div style="margin-top:8px">${roads}</div>`;
   }
 
   // ---------- load ----------
@@ -644,22 +867,45 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       const res = await fetch('/api/data', { cache: 'no-store' });
       if (!res.ok) throw new Error(res.status);
       const d = await res.json();
+      lastData = d;
+      renderAll(d);
+    } catch (e) {
+      $('upd').textContent = T('Reconnecting…');
+      setTimeout(load, 20000);
+    }
+  }
+  function renderAll(d) {
       renderWeather(d.weather);
-      renderAir(d.psi);
+      renderAir(d.psi, d.jbAir);
+      renderNow(d.weather, d.psi, d.jbAir);
       renderCams(d.cams, d.crossings);
       renderFx(d.fx);
       renderMarkets(d.markets);
       renderCoe(d.coe);
-      renderNews(d.news);
       renderWorld(d.world, d.news);
+      renderLottery(d.lottery);
       renderToday();
       renderMove(d.lta);
-      $('upd').textContent = 'Live · ' + sgTime(d.updated);
-    } catch (e) {
-      $('upd').textContent = 'Reconnecting…';
-      setTimeout(load, 20000);
-    }
+      $('upd').textContent = T('Live · {t}', { t: sgTime(d.updated) });
   }
+  let lastData = null;
+
+  // Static text in the page (header, home tile, ad strip, footer)
+  function applyStatic() {
+    document.documentElement.lang = LANG === 'zh' ? 'zh-Hans-SG' : 'en';
+    document.querySelectorAll('[data-i18n]').forEach((el) => { el.innerHTML = T(el.getAttribute('data-i18n')); });
+    $('lang').textContent = LANG === 'zh' ? 'EN' : '中文';
+    $('lang').setAttribute('aria-label', LANG === 'zh' ? 'Switch to English' : '切换到中文');
+  }
+  $('lang').addEventListener('click', () => {
+    LANG = LANG === 'zh' ? 'en' : 'zh';
+    try { localStorage.setItem('yay-lang', LANG); } catch (e) {}
+    applyStatic();
+    tick();
+    if (lastData) renderAll(lastData); else renderToday();
+  });
+  applyStatic();
+  tick();
   load();
   setInterval(load, 3 * 60 * 1000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
