@@ -360,6 +360,27 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .jbbox small{display:block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px}
 .jbbox b{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
 .jbbox .chip{font-size:11.5px}
+/* Simple Johor Bahru line */
+.jbrow{display:flex;align-items:baseline;gap:8px;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--ink2)}
+.jbrow small{font-size:10.5px;color:var(--faint)}
+.jbrow b{margin-left:auto;font-size:16px;font-weight:800;color:var(--ink)}
+.jbrow .jbl{font-size:12px;font-weight:700}
+/* ===== Laptops and desktops: everything in two rows ===== */
+@media (min-width:960px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
+    "wx air cp cp"
+    "fx coe d4 toto"
+    "fx td d4 toto"
+    "fx mv d4 toto";grid-auto-flow:row}
+  #wx{grid-area:wx}#air{grid-area:air}#cp{grid-area:cp}#fxc{grid-area:fx}#coe{grid-area:coe}
+  #d4{grid-area:d4}#toto{grid-area:toto}#td{grid-area:td}#mv{grid-area:mv}
+  #hs{display:none!important}
+  .wide,.tall{grid-column:auto;grid-row:auto}
+  #fxc{display:flex;flex-direction:column}
+  #fxc .fxg{flex:1 1 auto;grid-auto-rows:1fr;align-content:stretch}
+  #fxc .fxg div{display:flex;flex-direction:column;justify-content:center}
+  #td .hol-next{padding-bottom:6px}
+}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -515,6 +536,18 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   };
   const L = () => (LANG === 'zh' ? 'zh-SG' : 'en-SG');
 
+  // ---------- fit the whole dashboard on one screen (laptops and desktops) ----------
+  // The layout is designed for a 1280 x 700 screen. Smaller windows get scaled down
+  // proportionally, like zooming out, so nothing has to scroll. Phones keep their own layout.
+  function fitToScreen() {
+    const w = window.innerWidth, h = window.innerHeight;
+    if (w < 960) { document.body.style.zoom = ''; return; }
+    const z = Math.max(0.68, Math.min(1, w / 1280, h / 700));
+    document.body.style.zoom = z < 0.995 ? String(z) : '';
+  }
+  fitToScreen();
+  window.addEventListener('resize', fitToScreen);
+
   // ---------- light / dark switch ----------
   $('mode').addEventListener('click', function () {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'paper' : 'dark';
@@ -645,7 +678,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function jbLine(ja) {
     if (!ja || ja.aqi == null) return '';
     const lv = ja.band ? ja.band.level : 0;
-    return `<div class="jbbox" style="border-color:${PSI_COLORS[lv]}"><div><small>${T('Johor Bahru · US AQI')}</small><b>${ja.aqi}</b></div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
+    return `<div class="jbrow"><span>${T('Johor Bahru')} <small>(US AQI)</small></span><b>${ja.aqi}</b><span class="jbl" style="color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
   }
 
   function renderAir(p, ja) {
@@ -746,7 +779,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         </a>`).join('')}</div>${estNote}`;
   }
 
-  const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR'];
+  const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR', 'EUR', 'GBP', 'AUD'];
   function chg(pct) {
     if (pct == null || Math.abs(pct) < 0.05) return { cls: 'flat', txt: '0.0%' };
     return pct > 0 ? { cls: 'up', txt: '▲ ' + pct.toFixed(1) + '%' } : { cls: 'down', txt: '▼ ' + Math.abs(pct).toFixed(1) + '%' };
@@ -836,7 +869,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     // No Group 1 winner: the jackpot rolls over to the next draw
     const g1row = rows.find((r) => r.group === 1);
     const g1none = g1row && !Number(String(g1row.winners).replace(/[^\d]/g, ''));
-    const snow = g1none ? `<div class="tg-snow">${T('No Group 1 winner, the jackpot snowballs.')}</div>` : '';
+    const snow = '';
     return `<div class="tg">
       <div class="tg-h"><span>${T('Prize group')}</span><span>${T('Share amount')}</span><span>${T('Winners')}</span></div>
       ${rows.map((r) => {
