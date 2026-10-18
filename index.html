@@ -655,7 +655,7 @@ body.measuring #air .bars{flex:none!important}
 html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
 /* Footer 40% bigger */
 footer{font-size:16.8px!important}
-@media (max-width:600px){footer{font-size:15.4px!important}}
+@media (max-width:600px){footer{font-size:15.4px!important}.flinks{flex-wrap:nowrap;justify-content:center;gap:4px;font-size:min(13.5px,3.45vw);white-space:nowrap}}
 /* Crossing time badges as big as the weather temperature */
 @media (min-width:960px){
   .eta b{font-size:var(--etasz,36px);line-height:1.05}
@@ -713,7 +713,7 @@ footer{font-size:16.8px!important}
 
     <section class="card tall" id="toto"><h2>Major events</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="td"><h2>Holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
 
 
@@ -772,7 +772,7 @@ footer{font-size:16.8px!important}
     POP_ADVERTISE: '<p>每天都有新加坡人打开 yay.sg 查看重要资讯。</p><p>想让他们看到您的品牌？欢迎通过 WhatsApp 联系我们。</p>',
     POP_FEEDBACK: '<p>发现错误、资料不对，或有任何意见和建议？</p><p>请通过 WhatsApp 告诉我们，我们会尽快处理。</p>', 'Markets': '股市', 'Start your day with a yay.': '每天从一声 yay 开始。', 'Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
     'Causeway &amp; Second Link': '长堤与第二通道', 'Exchange rate · 1 SGD buys': '汇率 · 1新元可兑换', 'Exchange rate': '汇率',
-    'COE prices': '拥车证价格', '4D &amp; TOTO results': '4D与多多开彩成绩', 'Public holidays': '公共假期',
+    'COE prices': '拥车证价格', '4D &amp; TOTO results': '4D与多多开彩成绩', 'Holidays': '假期',
     'Roads &amp; MRT': '道路与地铁', 'Keep it handy': '随手可查',
     'Add Yay.sg to your home screen.': '把 yay.sg 加到手机主屏幕。',
     'iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".': 'iPhone：点“分享”，再选“添加到主屏幕”。Android：点菜单，再选“添加到主屏幕”。',
@@ -1534,7 +1534,7 @@ footer{font-size:16.8px!important}
     const up = HOLIDAYS.filter(([d]) => d >= today && (Number(d.slice(0, 4)) === yr || (isDec && Number(d.slice(0, 4)) === yr + 1))).slice(0, 4);
     const fmtS = (d) => sgDate(d, { day: 'numeric', month: 'short' });
     const school = schoolRow(today, days, fmtS);
-    if (!up.length) { el.innerHTML = `<h2>${T('Public holidays')}</h2><p class="muted">${T('No more public holidays this year.')}</p>${school}`; return; }
+    if (!up.length) { el.innerHTML = `<h2>${T('Holidays')}</h2><p class="muted">${T('No more public holidays this year.')}</p>${school}`; return; }
     const when = (n) => n === 0 ? T('Today!') : n === 1 ? T('Tomorrow') : T('in {n} days', { n });
     const off = (d) => T('{d} off', { d: fmt(d) });
     const fmt = (d) => sgDate(d, { weekday: 'short', day: 'numeric', month: 'short' });
@@ -1543,7 +1543,7 @@ footer{font-size:16.8px!important}
     const count = n0d === 0 ? `<span>${T('Today!')}</span>` : LANG === 'zh' ? `<small>还有</small><span>${n0d}</span><small>天</small>` : `<small>in</small><span>${n0d}</span><small>${n0d === 1 ? 'day' : 'days'}</small>`;
     const first = `<div class="hol-next"><div><b>${esc(T(n0))}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + off(o0) : ''}</div></div><div class="hol-count">${count}</div></div>`;
     const rest = up.slice(1).map(([d, n, o]) => `<div class="row"><span>${esc(T(n))}<span class="muted"> · ${fmt(d)}${o ? ', ' + off(o) : ''}</span></span><span class="k">${when(days(d))}</span></div>`).join('');
-    el.innerHTML = `<h2>${T('Public holidays')}</h2>${first}${rest}${school}`;
+    el.innerHTML = `<h2>${T('Holidays')}</h2>${first}${rest}${school}`;
   }
 
   // Jams, accidents and MRT status (LTA DataMall)
