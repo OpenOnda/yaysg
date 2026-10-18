@@ -259,8 +259,12 @@ footer{padding:0 16px 18px;font-size:11px}
 #td .row{font-size:12.5px}
 /* Smaller strips on phones */
 @media (max-width:600px){
-  .news a{font-size:12px;padding:5px 14px;gap:7px}
-  .news a small{font-size:9.5px}
+  .news a{font-size:8.4px;padding:4px 11px;gap:5px}
+  .news a small{font-size:7px}
+  .news a i{width:4px;height:4px}
+  .nm{font-size:9.8px;padding:4px 11px;gap:5px}
+  .nm em{font-size:8.4px}
+  .nm-note{font-size:7.7px;padding:0 11px 0 4px}
   .news .tag{font-size:9.5px;padding:0 9px;letter-spacing:.06em}
   .fx .it{font-size:11px;padding:4px 14px;gap:6px}
   .ticker.news .track{animation-duration:80s}
@@ -300,7 +304,7 @@ footer{padding:0 16px 18px;font-size:11px}
 html[lang^="zh"] body{font-family:'Schibsted Grotesk','PingFang SC','Hiragino Sans GB','Noto Sans SC','Microsoft YaHei',system-ui,sans-serif}
 html[lang^="zh"] .card h2{letter-spacing:.04em}
 .clock span{white-space:nowrap}
-@media (max-width:600px){#date{display:none}.clock{gap:8px}}
+@media (max-width:600px){#date{display:none}.clock{gap:8px}.brand>span{display:none}.top-in{flex-wrap:nowrap}.clock .time{font-size:15px}.mode{width:30px;height:30px}}
 .jbrow{display:flex;align-items:center;gap:8px;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:12px;color:var(--muted)}
 .jbrow b{color:var(--ink);font-family:var(--mono);font-weight:600}
 .jbrow .chip{font-size:10.5px;padding:3px 8px;margin-left:auto}
@@ -318,16 +322,16 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
   #wx,#air{display:none}
   #now .big{font-size:34px}
   #now .pill{margin-top:6px;padding:5px 9px;font-size:11.5px}
-  .cams{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-  .cam{aspect-ratio:1/1}
-  .etas{flex-direction:column;gap:4px;top:6px;left:6px}
-  .eta{padding:3px 7px;border-radius:7px}
-  .eta b{font-size:13px}
-  .eta small{font-size:9px}
-  .cam .cap{padding:14px 7px 5px}
-  .cam .cap b{font-size:11.5px}
-  .cam .cap small{font-size:9.5px}
-  .cam .cap time{display:none}
+  /* Cameras stacked full width on phones, so the photos are big enough to read */
+  .cams{grid-template-columns:1fr;gap:8px}
+  .cam{aspect-ratio:16/10}
+  .etas{flex-direction:row;gap:6px;top:8px;left:8px}
+  .eta{padding:4px 9px;border-radius:8px}
+  .eta b{font-size:15px}
+  .eta small{font-size:10px}
+  .cam .cap{padding:18px 10px 7px}
+  .cam .cap b{font-size:13px}
+  .cam .cap small{font-size:10.5px}
 }
 .tg-r.none b{color:var(--faint);font-weight:500}
 .tg-r.none span:nth-child(3){color:var(--faint)}
@@ -422,9 +426,11 @@ main .keep{margin-left:0;margin-right:0}
 .share-btn:hover{background:#FFE3E0}
 .flinks a{font-weight:600;color:var(--muted);text-decoration:none}.flinks a:hover{color:var(--ink);text-decoration:underline}
 .fright{display:inline-flex;align-items:center;gap:14px}
-.share-mini{all:unset;cursor:pointer;font-weight:700;font-size:12px;color:#fff;background:var(--red);padding:4px 12px;border-radius:999px}
-.share-mini:hover{filter:brightness(1.08)}
+.share-mini{font-weight:700;font-size:12px;color:#fff;background:var(--red);padding:4px 12px;border-radius:999px}
 @media (max-width:959px){.share-mini{display:none}}
+.share-row{display:flex;justify-content:center;margin:0 0 10px}
+.share-big{text-align:center;display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-weight:800;font-size:14px;padding:11px 22px;border-radius:999px}
+@media (min-width:960px){.share-row{display:none}}
 @media (min-width:960px){.keep{display:none}main{padding-bottom:6px}footer{display:grid;grid-template-columns:1fr auto 1fr;padding:4px 16px 8px;align-items:center}footer .copy{justify-self:end}}
 .flinks{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .flinks button{all:unset;cursor:pointer;font-weight:600;color:var(--muted)}
@@ -537,8 +543,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       <b data-i18n="Keep yay.sg handy">Keep yay.sg handy</b>
       <p data-i18n='Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".'>Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".</p>
     </div>
-    <button class="share-btn js-share" type="button"><span data-i18n="Share yay.sg">Share yay.sg</span></button>
   </section>
+  <div class="share-row"><span class="share-big" data-i18n="Enjoying yay.sg? Tell your friends about it!">Enjoying yay.sg? Tell your friends about it!</span></div>
 </main>
 
 <footer>
@@ -549,7 +555,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     <button type="button" data-pop="disclaimer" data-i18n="Disclaimer">Disclaimer</button><i>·</i>
     <a href="https://wa.me/6588224466?text=Hi%20yay.sg" target="_blank" rel="noopener" data-i18n="Contact">Contact</a>
   </nav>
-  <button class="share-mini js-share" type="button" data-i18n="Share yay.sg">Share yay.sg</button>
+  <span class="share-mini" data-i18n="Enjoying yay.sg? Tell your friends about it!">Enjoying yay.sg? Tell your friends about it!</span>
   <span class="copy">© 2026 yay.sg</span>
 </footer>
 
@@ -569,7 +575,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'UV': '紫外线', 'Low': '低', 'Extreme': '极高', 'Sunrise · sunset': '日出 · 日落', ' (+{n} more)': '（另有{n}处）',
     'School holidays': '学校假期', 'until {d}': '至{d}', 'On now': '进行中',
     'Keep yay.sg handy': '把 yay.sg 放在手边', 'Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".': '加到手机主屏幕。iPhone：点“分享”，再选“添加到主屏幕”。Android：点菜单，再选“添加到主屏幕”。',
-    'Share yay.sg': '分享 yay.sg', 'Disclaimer': '免责声明', 'About': '关于我们', 'Feedback': '意见反馈', 'Contact': '联系我们', 'Send feedback on WhatsApp': '用 WhatsApp 发送反馈',
+    'Share yay.sg': '分享 yay.sg', 'Enjoying yay.sg? Tell your friends about it!': '喜欢 yay.sg？告诉你的朋友吧！', 'Disclaimer': '免责声明', 'About': '关于我们', 'Feedback': '意见反馈', 'Contact': '联系我们', 'Send feedback on WhatsApp': '用 WhatsApp 发送反馈',
     "Start your day with a yay. Here's Singapore at a glance.": '每天从一声 yay 开始。新加坡一览，尽在这里。',
     POP_ABOUT: '<p>yay.sg 把新加坡每天最常查的资讯放在一个页面：天气、空气质量、长堤与第二通道的通关时间、交通状况、汇率、拥车证价格、4D与多多成绩，以及公共假期。</p><p>打开一次，就知道今天该怎么安排。</p><p>yay.sg 是新加坡公司 OpenOnda Pte. Ltd. 的项目。</p>',
     POP_DISCLAIMER: '<p>yay.sg 不是政府官方服务，与所列的任何政府机构或媒体均无关联。</p><p>资料来源：NEA与LTA（data.gov.sg）、LTA DataMall、PUB、欧洲央行参考汇率、open.er-api.com、Yahoo Finance与CNBC（股市指数，延迟约15分钟）、新加坡博彩公司、Google交通资料及各媒体RSS。</p><p>资料可能有延迟或误差。换汇请以兑换商报价为准，开彩成绩请以新加坡博彩公司为准，出行前请留意官方通告。</p>',
@@ -1198,12 +1204,6 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const b = e.target.closest('[data-pop]');
     if (b && POPS[b.dataset.pop]) popup(POPS[b.dataset.pop](), 'pop-sheet');
   });
-  // Share: the phone's own share menu if there is one, otherwise WhatsApp
-  document.querySelectorAll('.js-share').forEach((btn) => btn.addEventListener('click', async () => {
-    const text = T('Start your day with a yay. Here\'s Singapore at a glance.');
-    if (navigator.share) { try { await navigator.share({ title: 'yay.sg', text, url: 'https://yay.sg' }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
-    window.open('https://wa.me/?text=' + encodeURIComponent(text + ' https://yay.sg'), '_blank', 'noopener');
-  }));
   // "+N more, see all": show every incident in a pop-up, the box itself stays the same size
   window.tiMore = () => {
     const saved = $('mv').innerHTML; window.TI_OPEN = true; renderMove(lastData.lta);
