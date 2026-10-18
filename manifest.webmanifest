@@ -1,0 +1,10 @@
+{
+  "name": "Yay.sg",
+  "short_name": "Yay.sg",
+  "description": "Singapore at a glance: weather, haze, Causeway, rates, COE and news.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EEF1EE",
+  "theme_color": "#14231F",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }, { "src": "icon-1024.png", "sizes": "1024x1024", "type": "image/png" }]
+}
