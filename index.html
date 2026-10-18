@@ -778,7 +778,7 @@ body.measuring #wx .later{margin-top:8px!important}
     'Starter (10 numbers)': '入围奖（10个号码）', 'Consolation (10 numbers)': '安慰奖（10个号码）',
     'What each bet costs': '各类投注费用', 'Bet type': '投注方式', 'Numbers picked': '选号数', 'Cost': '费用', 'Ordinary': '普通', 'System 7': '系统7', 'System 8': '系统8', 'System 9': '系统9', 'System 10': '系统10', 'System 11': '系统11', 'System 12': '系统12',
     TOTO_NOTE: '每组6个号码的组合收费$1。系统投注包含所选号码的所有组合，例如系统8共28组。详情请参阅新加坡博彩公司网站。',
-    'Singapore averages': '全岛平均', '1-hr PM2.5': '1小时PM2.5', 'Johor AQI': '柔佛AQI', 'UV index': '紫外线指数', 'Comfortable': '舒适', 'Warm': '温暖', 'Hot': '炎热', 'Very hot': '酷热', 'After sunset': '日落后', 'Not available': '暂无', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
+    'Singapore averages': '全岛平均', '1-hr PM2.5': '1小时PM2.5', 'Johor AQI': '柔佛AQI', 'UV index': '紫外线指数', 'Comfortable': '舒适', 'Warm': '温暖', 'Hot': '炎热', 'Very hot': '酷热', 'After sunset': '日落后', 'First reading ~8am': '约8点首次更新', 'Not available': '暂无', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
     AIR_NOTE: '1小时PM2.5反映当前空气（正常≤55，偏高56至150，高151至250，非常高>250）。24小时PSI是NEA的每日健康指标（良好≤50，中等51至100，不健康101至200）。新山数据来自Open-Meteo的美国AQI模型估算。',
     PZ4_NOTE: '以上为每$1注的奖金。“大”可中全部23个号码；“小”只中前三奖，但奖金较高。iBet 包含4个数字的所有排列，奖金按比例分配。详情请参阅新加坡博彩公司网站。',
     'Huat Corner': '发财角', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
@@ -1085,7 +1085,7 @@ body.measuring #wx .later{margin-top:8px!important}
     const uv = hr >= 7 && hr < 19 && w.uv;
     let uvT;
     if (uv) { const [, label, lv] = UV_BANDS.find(([max]) => uv.value <= max); uvT = tile(T('UV index'), uv.value, T(label), PSI_FG[lv]); }
-    else uvT = tile(T('UV index'), '–', T(hr >= 19 || hr < 7 ? 'After sunset' : 'Not available'), 'var(--muted)');
+    else uvT = tile(T('UV index'), '–', T(hr >= 19 || hr < 7 ? 'After sunset' : hr < 9 ? 'First reading ~8am' : 'Not available'), 'var(--muted)');
     return tile(T('Actual'), temp, '&nbsp;', 'var(--muted)') + (fl != null ? tile(T('Feels like'), fl + '°', flBand[0], flBand[1]) : '') + uvT;
   }
   function sunOnly() {
