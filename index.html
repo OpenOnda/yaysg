@@ -345,13 +345,15 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 /* Fill the first row evenly on laptops and desktops */
 @media (min-width:960px){
   #wx{display:flex;flex-direction:column}
-  #wx .later{margin-top:auto;padding-top:7px}
+  #wx .later{flex:1 1 auto;margin-top:7px}
+  #wx .later div{display:flex;flex-direction:column;justify-content:space-between;gap:2px}
   #cp{display:flex;flex-direction:column}
   #cp .cams{flex:1 1 auto;min-height:0}
   #cp .cam{aspect-ratio:auto;height:100%;min-height:150px}
 }
 .wind{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:5px;font-size:12px;color:var(--muted)}
 .wind b{color:var(--ink);font-family:var(--mono);font-weight:600}
+.later svg{width:26px;height:26px;display:block;margin:2px 0}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -487,7 +489,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Starter': '入围奖', 'Consolation': '安慰奖', 'Winning numbers · Additional': '中奖号码 · 附加号码',
     'Group 1 prize': '头奖奖金', 'TOTO': '多多',
     'No Group 1 winner, the jackpot snowballs.': '本期头奖无人中，奖金滚入下一期。', '4D results': '4D开彩成绩', 'TOTO results': '多多开彩成绩', 'Next draw': '下期开彩', 'Estimated jackpot': '预计头奖', 'Jackpot': '头奖',
-    'For information only, always verify with Singapore Pools. 18 and above.': '仅供参考，请以新加坡博彩公司公布为准。仅限18岁及以上。', '18 and above. Gamble responsibly. NCPG helpline 1800-6-668-668.': '仅限18岁及以上。理性博彩，NCPG求助热线 1800-6-668-668。', 'Wind': '风', 'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
+    'Always verify with Singapore Pools. 18 and above.': '请以新加坡博彩公司公布为准。仅限18岁及以上。', '18 and above. NCPG helpline 1800-6-668-668.': '仅限18岁及以上。NCPG求助热线 1800-6-668-668。', 'Wind': '风', 'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
     '4D results not available right now.': '暂时无法获取4D成绩。', 'TOTO results not available right now.': '暂时无法获取多多成绩。',
     'Results are for information only, always verify with Singapore Pools. 18 and above. Gamble responsibly, NCPG helpline 1800-6-668-668.': '开彩成绩仅供参考，请以新加坡博彩公司公布为准。仅限18岁及以上。理性博彩，NCPG求助热线 1800-6-668-668。',
     "New Year's Day": '元旦', 'Chinese New Year': '农历新年', 'Chinese New Year (Day 2)': '农历新年（第二天）',
@@ -598,7 +600,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     }
     const now = Date.now();
     const later = (w.periods || []).filter((p) => Date.parse(p.end) > now).slice(0, 3)
-      .map((p) => `<div><b>${periodLabel(p.start)}</b>${esc(T(tidy(mostCommon(p.regions))))}</div>`).join('');
+      .map((p) => { const c = tidy(mostCommon(p.regions)); return `<div><b>${periodLabel(p.start)}</b>${wxIcon(c)}<span>${esc(T(c))}</span></div>`; }).join('');
     el.innerHTML = `<h2>${T('Weather')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
       <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
       <div class="sub">${esc(T(cond))}${range ? ' · ' + range : ''}</div>
@@ -857,7 +859,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       </div>
       <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
       <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
-      <div class="lnote">${T('For information only, always verify with Singapore Pools. 18 and above.')}</div>`;
+      <div class="lnote">${T('Always verify with Singapore Pools. 18 and above.')}</div>`;
   }
 
   function renderToto(t, nx) {
@@ -874,7 +876,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <div class="nj"><small>${T(nx.estimate ? 'Estimated jackpot' : 'Jackpot')}</small><b>${esc(nx.jackpot)}</b></div>
       </div>` : '';
     el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}
-      <div class="lnote">${T('18 and above. Gamble responsibly. NCPG helpline 1800-6-668-668.')}</div>`;
+      <div class="lnote">${T('18 and above. NCPG helpline 1800-6-668-668.')}</div>`;
   }
 
   function renderToday() {
@@ -942,7 +944,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderToto(d.lottery && d.lottery.toto, d.lottery && d.lottery.totoNext);
       renderToday();
       renderMove(d.lta);
-      $('upd').textContent = T('Live · {t}', { t: sgTime(d.updated) });
+      $('upd').textContent = T('Live');
+      $('upd').title = 'Data refreshed ' + sgTime(d.updated);
   }
   let lastData = null;
 
