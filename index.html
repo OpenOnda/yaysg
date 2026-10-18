@@ -133,12 +133,20 @@ main{max-width:1320px;margin:0 auto;padding:14px 20px 28px}
 .up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--faint)}
 
 /* coe */
-.coe .row{border-top-color:#2A3C36;color:#F1F4F1}
-.coe .cat{width:20px;font-family:var(--mono);font-weight:600;color:#F5C842}
-.coe .lab{flex:1 1 auto;font-size:13px;color:#C9D6D1}
+.coe .row{color:var(--ink)}
+.coe .cat{width:20px;font-family:var(--mono);font-weight:600;color:var(--red)}
+.coe .lab{flex:1 1 auto;font-size:13px;color:var(--ink2)}
 .coe .pr{font-weight:700;font-size:16px}
 .coe .ch{width:70px;text-align:right;font-family:var(--mono);font-size:12px}
-.coe .ch.upc{color:#F59A92}.coe .ch.dnc{color:#7FD3C3}.coe .ch.fl{color:#9FB3AC}
+.coe .ch.upc{color:var(--bad)}.coe .ch.dnc{color:var(--good)}.coe .ch.fl{color:var(--faint)}
+.feels{display:flex;flex-direction:column;padding-bottom:3px}
+.feels span{font-size:10.5px;font-family:var(--mono);color:var(--muted)}
+.feels b{font-size:22px;font-weight:800;color:#C2410C;letter-spacing:-.02em;line-height:1}
+html[data-theme="dark"] .feels b{color:#FDBA74}
+.hum{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--muted)}
+.hum .t{height:6px;border-radius:99px;background:var(--hair);overflow:hidden}
+.hum .t i{display:block;height:100%;background:#3B82C4;border-radius:99px}
+.hum b{color:var(--ink);font-family:var(--mono);font-weight:600}
 
 /* news list */
 .nl{list-style:none;margin:0;padding:0;counter-reset:n}
@@ -165,6 +173,66 @@ footer a{font-weight:600}
 .mode .sun{display:none}
 html[data-theme="dark"] .mode .sun{display:block}
 html[data-theme="dark"] .mode .moon{display:none}
+
+/* ===== Compact layout: fit the whole dashboard on one laptop screen ===== */
+.top-in{padding:7px 16px}
+.top-in svg[aria-label="yay.sg"]{height:24px!important}
+.brand span{font-size:13px}
+.clock{gap:10px;font-size:12px}
+.clock .time{font-size:16px}
+.mode{width:32px;height:32px;border-radius:9px}
+.fx .it{padding:5px 20px;font-size:12.5px}
+.news a{padding:6px 20px;font-size:13.5px}
+.news .tag{font-size:11px;padding:0 12px}
+.alert{margin-top:8px;padding:0 16px}
+.alert div{padding:7px 14px;font-size:13px;border-radius:10px;gap:4px 10px}
+main{padding:8px 16px 18px;max-width:1440px}
+.top-in,.alert,footer{max-width:1440px}
+.grid{gap:8px}
+@media (min-width:960px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.wide{grid-column:span 2}.tall{grid-row:span 2}}
+.card{padding:11px 14px;border-radius:14px}
+.card h2{margin:0 0 7px;font-size:10.5px}
+.card h2 small{font-size:10px}
+.big{font-size:36px}
+.sub{font-size:12.5px;margin-top:2px}
+.pill{margin-top:7px;padding:6px 10px;font-size:12px;border-radius:8px}
+.row{padding:5px 0;font-size:13px}
+.muted{font-size:12px}
+.wx-top svg{width:40px;height:40px}
+.later{gap:5px;margin-top:7px}
+.later div{padding:5px 7px;font-size:11px;border-radius:8px}
+.later b{font-size:10px;margin-bottom:0}
+.bars{gap:3px;margin-top:7px}
+.bar{grid-template-columns:48px 1fr 30px;font-size:11px}
+.bar .t{height:6px}
+.cams{gap:8px}
+.cam{aspect-ratio:16/9;border-radius:10px}
+.cam .cap{padding:16px 10px 6px}
+.cam .cap b{font-size:12.5px}
+.fxg{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.fxg div{padding:6px 8px;border-radius:9px}
+.fxg .h{font-size:10.5px}
+.fxg .v{font-size:16px;margin-top:0}
+.coe .row{padding:4px 0}
+.coe .lab{font-size:11.5px}
+.coe .pr{font-size:14px}
+.coe .ch{width:58px;font-size:11px}
+.nl li{padding:6px 0;gap:10px}
+.nl li::before{flex:0 0 16px;font-size:14px}
+.nl a{font-size:13.5px;line-height:1.3}
+.nl .meta{font-size:10.5px;margin-top:1px}
+.home b{font-size:17px;margin-bottom:4px}
+.home p{font-size:12.5px;margin:0}
+details summary{font-size:12px;margin-top:4px}
+.hk{font-size:12px}
+.spon{margin-top:8px;padding:7px 14px;font-size:13px;border-radius:10px}
+footer{padding:0 16px 18px;font-size:11px}
+.alert div{flex-wrap:nowrap;white-space:nowrap;overflow:hidden}
+.alert div span{overflow:hidden;text-overflow:ellipsis}
+@media (max-width:700px){.alert div{flex-wrap:wrap;white-space:normal}}
+.cam{aspect-ratio:2/1}
+@media (max-width:560px){.cam{aspect-ratio:16/9}}
+.coe .row{padding:3px 0}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -174,7 +242,6 @@ html[data-theme="dark"]{--bg:#10201B;--card:#182B25;--line:#24392F;--soft:#20363
   --good:#7FD3C3;--good-bg:#1E3B33;--bad:#F59A92;--bad-bg:#3A2422;--warn:#F5C842;--warn-bg:#3A3220;
   --blue:#A9CBEB;--blue-bg:#1F3344;--dark:#0B1612;--dark2:#08110E}
 html[data-theme="dark"] body{background:var(--bg)}
-html[data-theme="dark"] .card.dark{background:#0B1612;border-color:#24392F}
 html[data-theme="dark"] .spon{background:#2A2615;border-color:#6B5A22}
 html[data-theme="dark"] .spon .lbl,html[data-theme="dark"] .spon a{color:#F5C842}
 html[data-theme="dark"] a:hover{color:#FF8A80}
@@ -215,9 +282,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card" id="fxc"><h2>S$1 buys</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card dark coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
+    <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card wide tall" id="nw"><h2>Top SG news</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card wide tall" id="nw"><h2>Top 5 SG news</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="td"><h2>Today</h2><span class="skel"></span><span class="skel"></span></section>
 
@@ -226,7 +293,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     <section class="card home" id="hs" hidden>
       <h2>Keep it handy</h2>
       <b>Add Yay.sg to your home screen.</b>
-      <p>On iPhone, tap Share then "Add to Home Screen". On Android, tap the menu then "Add to Home screen".</p>
+      <p>iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".</p>
     </section>
 
   </div>
@@ -246,6 +313,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 (function () {
   const TZ = 'Asia/Singapore';
   const $ = (id) => document.getElementById(id);
+  const tidy = (s) => String(s || '').replace(/\s*\((Day|Night)\)/gi, '');
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const unavailable = (title) => `<h2>${title}</h2><p class="muted">Not available right now. We'll keep trying.</p>`;
 
@@ -317,9 +385,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function renderWeather(w) {
     const el = $('wx');
     if (!w) { el.innerHTML = unavailable('Weather'); return; }
-    const cond = w.nowCondition || w.today.forecast || '';
+    const cond = tidy(w.nowCondition || w.today.forecast || '');
     const temp = w.tempNow != null ? w.tempNow + '°' : (w.today.high != null ? w.today.high + '°' : '--');
-    const range = w.today.low != null ? `Today ${w.today.low}° to ${w.today.high}°` : '';
+    const range = w.today.low != null ? `${w.today.low}° to ${w.today.high}°` : '';
     let rain;
     if (w.rainAreas && w.rainAreas.length) {
       const names = w.rainAreas.slice(0, 2).join(', ');
@@ -330,9 +398,11 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     }
     const now = Date.now();
     const later = (w.periods || []).filter((p) => Date.parse(p.end) > now).slice(0, 3)
-      .map((p) => `<div><b>${periodLabel(p.start)}</b>${esc(mostCommon(p.regions))}</div>`).join('');
+      .map((p) => `<div><b>${periodLabel(p.start)}</b>${esc(tidy(mostCommon(p.regions)))}</div>`).join('');
     el.innerHTML = `<h2>Weather <small>Updated ${sgTime(new Date().toISOString())}</small></h2>
-      <div class="wx-top"><div><div class="big">${temp}</div><div class="sub">${esc(cond)}${range ? ' · ' + range : ''}</div></div>${wxIcon(cond)}</div>
+      <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>Feels like</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
+      <div class="sub">${esc(cond)}${range ? ' · ' + range : ''}</div>
+      ${w.humidity != null ? `<div class="hum"><span>Humidity</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
       ${rain}${later ? `<div class="later">${later}</div>` : ''}`;
   }
 
@@ -362,7 +432,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const al = $('alert');
     if (lv >= 2) {
       al.hidden = false;
-      al.innerHTML = `<div style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}"><strong>Haze alert: PSI ${p.max}, ${p.band.label.toLowerCase()}.</strong><span>${PSI_ADVICE[lv]} Elderly, children and those with heart or lung conditions should take extra care. Check NEA for official advisories.</span></div>`;
+      al.innerHTML = `<div style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}"><strong>Haze alert: PSI ${p.max}, ${p.band.label.toLowerCase()}.</strong><span>${PSI_ADVICE[lv]} Elderly, children and those with heart or lung conditions, take extra care. See NEA for advisories.</span></div>`;
     } else { al.hidden = true; }
   }
 
@@ -408,9 +478,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       if (x.change != null) {
         if (x.change > 0) { cls = 'upc'; txt = '▲ ' + x.change.toLocaleString('en-SG'); }
         else if (x.change < 0) { cls = 'dnc'; txt = '▼ ' + Math.abs(x.change).toLocaleString('en-SG'); }
-        else { txt = 'No change'; }
+        else { txt = 'Same'; }
       }
-      return `<div class="row"><span class="cat">${x.cat}</span><span class="lab">${esc(x.label)}</span><span class="pr">${money(x.premium)}</span><span class="ch ${cls}">${txt}</span></div>`;
+      return `<div class="row"><span class="cat">${x.cat}</span><span class="lab">${esc(x.cat === 'C' ? 'Goods & buses' : x.label)}</span><span class="pr">${money(x.premium)}</span><span class="ch ${cls}">${txt}</span></div>`;
     }).join('');
     el.innerHTML = `<h2>COE prices <small>${mon} · Round ${esc(c.round)}</small></h2>${rows}`;
   }
@@ -418,9 +488,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function renderNews(n) {
     const el = $('nw');
     if (!n || !n.length) { el.innerHTML = unavailable('Top SG news'); $('newsTrack').innerHTML = ''; return; }
-    el.innerHTML = `<h2>Top SG news</h2><ol class="nl">${n.slice(0, 8).map((x) => `
+    el.innerHTML = `<h2>Top 5 SG news</h2><ol class="nl">${n.slice(0, 5).map((x) => `
       <li><div><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><div class="meta">${esc(x.src)}${x.time ? ' · ' + ago(x.time) : ''}</div></div></li>`).join('')}</ol>`;
-    const items = n.slice(0, 6).map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('');
+    const items = n.slice(0, 5).map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('');
     $('newsTrack').innerHTML = items + items;
   }
 
