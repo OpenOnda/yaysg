@@ -744,8 +744,12 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       z = next; apply(z);
     }
     // Final safety: never let the footer drop below the screen
-    const fin = Math.max(0.55, Math.min(z, h / natural(z)));
-    if (fin < z - 0.001) body.style.zoom = String(fin);
+    for (let i = 0; i < 4; i++) {
+      const over = document.documentElement.scrollHeight - h;
+      if (over <= 0) break;
+      z = Math.max(0.55, z * (h - 2) / (h + over));
+      apply(z);
+    }
   }
   fitToScreen();
   window.addEventListener('resize', fitToScreen);
@@ -882,7 +886,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       ${w.humidity != null ? `<div class="hum"><span>${T('Humidity')}</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
       ${windLine(w)}
       ${sunLine(w)}
-      ${floodPill(w)}${rain}${later ? `<div class="later">${later}</div>` : ''}`;
+      ${floodPill(w)}${rain}`;
   }
 
   const PSI_COLORS = ['#0F8A6B', '#C98A00', '#C2410C', '#B42318', '#7A1010'];
@@ -1219,15 +1223,17 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function evRow(e, todayYmd) {
     const dt = new Date(e.start + 'T12:00:00+08:00');
     const day = dt.toLocaleDateString('en-SG', { timeZone: TZ, day: 'numeric' });
-    const mon = dt.toLocaleDateString('en-SG', { timeZone: TZ, month: 'short' }).toUpperCase();
+    const mon = LANG === 'zh' ? (dt.getUTCMonth() + 1) + '月' : dt.toLocaleDateString('en-SG', { timeZone: TZ, month: 'short' }).toUpperCase();
     // This weekend = the coming Saturday and Sunday (or today, if it's the weekend)
     const now = new Date(todayYmd + 'T12:00:00+08:00'); const wd = now.getUTCDay();
     const sat = new Date(now.getTime() + ((6 - wd + 7) % 7 - (wd === 0 ? 1 : 0)) * 864e5).toISOString().slice(0, 10);
     const sun = new Date(Date.parse(sat + 'T12:00:00Z') + 864e5).toISOString().slice(0, 10);
     const on = e.start <= todayYmd && e.end >= todayYmd;
     const tag = on ? T('On now') : (e.start <= sun && e.end >= sat) ? T('This weekend') : '';
-    const until = e.dates ? ` · ${esc(e.dates)}` : e.end !== e.start ? ` · ${T('till {d}', { d: sgDate(e.end, { day: 'numeric', month: 'short' }) })}` : '';
-    const inner = `<div class="ev-d"><b>${day}</b><small>${mon}</small></div><div class="ev-t"><b>${esc(e.name)}</b><span>${esc(e.venue)}${until}</span></div>${tag ? `<em>${tag}</em>` : ''}`;
+    const zh = LANG === 'zh';
+    const nm = zh && e.name_zh ? e.name_zh : e.name, vn = zh && e.venue_zh ? e.venue_zh : e.venue, dtx = zh && e.dates_zh ? e.dates_zh : e.dates;
+    const until = dtx ? ` · ${esc(dtx)}` : e.end !== e.start ? ` · ${T('till {d}', { d: sgDate(e.end, { day: 'numeric', month: 'short' }) })}` : '';
+    const inner = `<div class="ev-d"><b>${day}</b><small>${mon}</small></div><div class="ev-t"><b>${esc(nm)}</b><span>${esc(vn)}${until}</span></div>${tag ? `<em>${tag}</em>` : ''}`;
     return e.link ? `<a class="ev" href="${esc(e.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="ev">${inner}</div>`;
   }
   function renderEvents(ev) {
@@ -1418,7 +1424,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       if (d.events && d.events.enabled) renderEvents(d.events);
       else fetch('/events.json', { cache: 'no-store' }).then((r) => r.ok ? r.json() : []).catch(() => []).then((list) => {
         const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
-        const evs = (Array.isArray(list) ? list : []).map((e) => ({ start: e.start, end: e.end || e.start, dates: e.dates || '', name: e.name, venue: e.venue || '', link: e.link || '' }))
+        const evs = (Array.isArray(list) ? list : []).map((e) => ({ start: e.start, end: e.end || e.start, dates: e.dates || '', dates_zh: e.dates_zh || '', name: e.name, name_zh: e.name_zh || '', venue: e.venue || '', venue_zh: e.venue_zh || '', link: e.link || '' }))
           .filter((e) => e.start && e.name && e.end >= today).sort((a, b) => a.start.localeCompare(b.start));
         renderEvents({ enabled: true, list: evs });
       });

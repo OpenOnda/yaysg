@@ -1,11 +1,11 @@
 [
-  { "start": "2026-10-18", "name": "NCT 127 5th Tour 'Neo City: Singapore'", "venue": "Singapore Indoor Stadium" },
-  { "start": "2026-11-04", "name": "LANY: Soft World Tour", "venue": "Singapore Indoor Stadium" },
-  { "start": "2026-11-10", "end": "2026-11-11", "name": "My Chemical Romance Live in Singapore", "venue": "Singapore Indoor Stadium" },
-  { "start": "2026-11-13", "end": "2026-11-17", "dates": "13, 14 & 17 Nov", "name": "Mizuho Blue Challenge football series", "venue": "National Stadium" },
-  { "start": "2026-11-25", "name": "Guns N' Roses World Tour", "venue": "National Stadium" },
-  { "start": "2026-11-28", "end": "2026-11-29", "name": "BABYMONSTER 'Choom' World Tour", "venue": "Singapore Indoor Stadium" },
-  { "start": "2026-12-04", "end": "2026-12-06", "name": "BYD Singapore International Marathon", "venue": "National Stadium" },
-  { "start": "2026-12-10", "end": "2026-12-13", "name": "PGL Major Singapore (Counter-Strike 2)", "venue": "Singapore Indoor Stadium" },
-  { "start": "2027-01-08", "end": "2027-01-10", "name": "Jay Chou 'Carnival II' World Tour", "venue": "National Stadium" }
+  { "start": "2026-10-18", "name": "NCT 127 5th Tour 'Neo City: Singapore'", "name_zh": "NCT 127 第五次巡回演唱会《NEO CITY: SINGAPORE》", "venue": "Singapore Indoor Stadium", "venue_zh": "新加坡室内体育馆" },
+  { "start": "2026-11-04", "name": "LANY: Soft World Tour", "name_zh": "LANY《soft》世界巡回演唱会", "venue": "Singapore Indoor Stadium", "venue_zh": "新加坡室内体育馆" },
+  { "start": "2026-11-10", "end": "2026-11-11", "name": "My Chemical Romance Live in Singapore", "name_zh": "My Chemical Romance 新加坡演唱会", "venue": "Singapore Indoor Stadium", "venue_zh": "新加坡室内体育馆" },
+  { "start": "2026-11-13", "end": "2026-11-17", "dates": "13, 14 & 17 Nov", "dates_zh": "11月13、14及17日", "name": "Mizuho Blue Challenge football series", "name_zh": "瑞穗蓝色挑战赛 国际足球系列赛", "venue": "National Stadium", "venue_zh": "国家体育场" },
+  { "start": "2026-11-25", "name": "Guns N' Roses World Tour 2026", "name_zh": "枪炮与玫瑰 2026 世界巡回演唱会", "venue": "National Stadium", "venue_zh": "国家体育场" },
+  { "start": "2026-11-28", "end": "2026-11-29", "name": "BABYMONSTER 'Choom' World Tour", "name_zh": "BABYMONSTER《CHOOM》世界巡回演唱会", "venue": "Singapore Indoor Stadium", "venue_zh": "新加坡室内体育馆" },
+  { "start": "2026-12-04", "end": "2026-12-06", "name": "BYD Singapore International Marathon", "name_zh": "比亚迪新加坡国际马拉松", "venue": "National Stadium", "venue_zh": "国家体育场" },
+  { "start": "2026-12-10", "end": "2026-12-13", "name": "PGL Major Singapore (Counter-Strike 2)", "name_zh": "PGL Major 新加坡站（反恐精英2）", "venue": "Singapore Indoor Stadium", "venue_zh": "新加坡室内体育馆" },
+  { "start": "2027-01-08", "end": "2027-01-10", "name": "Jay Chou 'Carnival II' World Tour", "name_zh": "周杰伦「嘉年华」II 世界巡回演唱会 新加坡站", "venue": "National Stadium", "venue_zh": "国家体育场" }
 ]
