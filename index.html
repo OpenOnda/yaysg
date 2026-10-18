@@ -378,8 +378,8 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 @media (min-width:960px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
     "wx air cp cp"
+    "wx mv d4 toto"
     "td mv d4 toto"
-    "fx mv d4 toto"
     "fx coe d4 toto";grid-auto-flow:row}
   #wx{grid-area:wx}#air{grid-area:air}#cp{grid-area:cp}#fxc{grid-area:fx}#coe{grid-area:coe}
   #d4{grid-area:d4}#toto{grid-area:toto}#td{grid-area:td}#mv{grid-area:mv}
@@ -417,6 +417,21 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
+.lhead2.lot span{margin-left:0;text-align:left}
+.lsec>.more-btn,#toto>.more-btn{display:block;width:max-content;margin-left:auto}
+.fxl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
+.fxr{display:flex;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px solid var(--hair);font-size:15px}
+.fxr b{font-family:var(--mono);font-weight:600;font-size:13px;color:var(--muted);flex:0 0 auto}
+.fxr i{flex:1}
+.fxr span{font-weight:800;letter-spacing:-.01em}
+.aq-top{display:flex;align-items:center;gap:12px}
+.aq-lab{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.aq-lab small{font-size:12px;line-height:1.3;color:var(--muted)}
+.aq-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 8px}
+.aq-t{background:var(--soft);border-radius:10px;padding:7px 10px;display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:0 8px}
+.aq-t small{grid-column:1/3;font-size:11px;color:var(--muted)}
+.aq-t b{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.aq-t em{font-style:normal;font-size:12.5px;font-weight:700}
 .lsec{padding:2px 0 10px;margin-bottom:8px;border-bottom:1px solid var(--hair)}
 .lsec:last-of-type{border-bottom:0;margin-bottom:0}
 .lhead2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:7px}
@@ -519,9 +534,15 @@ body.measuring #fxc .fxg div{justify-content:flex-start!important}
 body.measuring #toto .evs,body.measuring #d4 .lsec.alm{flex:none!important}
 body.measuring #d4 .lnote{margin-top:0!important}
 body.measuring .later div{justify-content:flex-start!important}
+body.measuring #wx .later{flex:none!important}
+#td .row>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#td .row .k{white-space:nowrap}
 /* ===== Desktop: tighter boxes so the page can be shown bigger ===== */
 @media (min-width:960px){
   .cam{aspect-ratio:2/1;max-height:215px}
+  .cam .cap b{font-size:15.6px}
+  .cam .cap small{font-size:13.2px}
+  .cam .cap time{font-size:13px}
   .cam img{width:100%;height:100%;object-fit:cover}
   #d4 .ltop div{padding:6px 8px}
   #d4 .ltop b{font-size:21px}
@@ -549,6 +570,13 @@ body.measuring .later div{justify-content:flex-start!important}
   .card h2 small{font-size:10.5px}
   .lhead2 span{font-size:11px}
 }
+/* Feels-like number as big as the temperature; forecast tiles centred */
+.wx-top .feels b,.nw-l .feels b{font-size:inherit}
+.wx-top .feels,.nw-l .feels{font-size:inherit;padding-bottom:0}
+.wx-top .big,.wx-top .feels b{font-size:var(--tempsz,36px);line-height:1}
+.nw-l .big,.nw-l .feels b{font-size:34px;line-height:1}
+#wx .later div{align-items:center!important;justify-content:center!important;text-align:center}
+#wx .later svg{margin:2px auto}
 </style>
 </head>
 <body>
@@ -671,7 +699,7 @@ body.measuring .later div{justify-content:flex-start!important}
     'Light Rain': '小雨', 'Moderate Rain': '中雨', 'Heavy Rain': '大雨', 'Passing Showers': '短暂阵雨',
     'Light Showers': '小阵雨', 'Showers': '阵雨', 'Heavy Showers': '大阵雨', 'Thundery Showers': '雷阵雨',
     'Heavy Thundery Showers': '强雷阵雨', 'Heavy Thundery Showers with Gusty Winds': '强雷阵雨伴有阵风',
-    '24-hr PSI': '24小时PSI', '24-hr PSI, Singapore average': '24小时PSI全岛平均', 'Right now · 1-hr PM2.5': '当前 · 1小时PM2.5', 'Worst in the {r} · updated {t}': '{r}最高 · {t}更新', 'Normal': '正常', 'Elevated': '偏高', 'High': '高', 'Very high': '非常高', 'PM2.5 now, SG average': '当前PM2.5全岛平均', 'Singapore average · highest: {r} {v}': '全岛平均 · 最高：{r} {v}', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
+    '24-hr PSI': '24小时PSI', '24-hr PSI, Singapore average': '24小时PSI全岛平均', 'Right now · 1-hr PM2.5': '当前 · 1小时PM2.5', 'Worst in the {r} · updated {t}': '{r}最高 · {t}更新', 'Normal': '正常', 'Elevated': '偏高', 'High': '高', 'Very high': '非常高', 'PM2.5 now, SG average': '当前PM2.5全岛平均', 'Singapore average': '全岛平均', 'Right now, 1-hr reading': '当前1小时读数', '24-hr PSI, SG average': '24小时PSI全岛平均', 'Singapore average · highest: {r} {v}': '全岛平均 · 最高：{r} {v}', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
     'North': '北部', 'South': '南部', 'East': '东部', 'West': '西部', 'Central': '中部',
     'Singapore average: <b>{avg}</b> · highest in the {r}': '全岛平均：<b>{avg}</b> · {r}最高',
     'Good air. Enjoy the outdoors.': '空气良好，适合户外活动。',
@@ -754,7 +782,7 @@ body.measuring .later div{justify-content:flex-start!important}
       e.hidden = false;
       if (used(ev) > rooms.get(ev) - 2 || document.querySelector('main').getBoundingClientRect().height > mainH + 1) { e.hidden = true; break; }
     }
-    const plan = cards.map((c) => { const u = used(c), r = rooms.get(c); return [c, u > 0 ? Math.max(1, Math.min(1.3, (r / u) * 0.97)) : 1]; });
+    const plan = cards.map((c) => { const u = used(c), r = rooms.get(c); return [c, u > 0 ? Math.max(1, Math.min(c.id === 'wx' ? 1.45 : 1.3, (r / u) * 0.97)) : 1]; });
     document.body.classList.remove('measuring');
     // Apply, and back off if anything would push the page past the screen
     const grew = () => document.querySelector('main').getBoundingClientRect().height > mainH + 1 || !fits();
@@ -998,12 +1026,12 @@ body.measuring .later div{justify-content:flex-start!important}
       const [b] = pmBand(v);
       return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 2.5)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`;
     }).join('');
-    el.innerHTML = `<h2>${T('Air quality')} <small>${T('Right now · 1-hr PM2.5')}</small></h2>
-      <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${avg}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>
-      <div class="sub">${T('Singapore average · highest: {r} {v}', { v: pm.max, r: T(top[0].toUpperCase() + top.slice(1)) })}</div>
-      <div class="bars">${bars}</div>
-      ${psi24Line(p)}
-      ${jbLine(ja)}`;
+    const pa = psiAvg(p); const [plv, plabel] = psiBandOf(pa);
+    const jb = ja && ja.aqi != null ? `<div class="aq-t"><small>${T('Johor Bahru')} · US AQI</small><b>${ja.aqi}</b><em style="color:${PSI_FG[ja.band ? ja.band.level : 0]}">${T(ja.band ? ja.band.label : '')}</em></div>` : '';
+    el.innerHTML = `<h2>${T('Air quality')} <small>PM2.5</small></h2>
+      <div class="aq-top"><div class="big">${avg}</div><div class="aq-lab"><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span><small>${T('Singapore average')}<br>${T('Right now, 1-hr reading')}</small></div></div>
+      <div class="aq-tiles"><div class="aq-t"><small>${T('24-hr PSI, SG average')}</small><b>${pa}</b><em style="color:${PSI_FG[plv]}">${T(plabel)}</em></div>${jb}</div>
+      <div class="bars">${bars}</div>`;
     $('alert').hidden = true;
   }
   function renderAirPsi(p, ja) {
@@ -1121,11 +1149,9 @@ body.measuring .later div{justify-content:flex-start!important}
   function renderFx(f) {
     const el = $('fxc');
     if (!f || !f.rates) { el.innerHTML = unavailable('Exchange rate'); return; }
-    const tiles = f.rates.filter((r) => MAIN_FX.includes(r.code)).sort((a, b) => MAIN_FX.indexOf(a.code) - MAIN_FX.indexOf(b.code)).map((r) => {
-      const c = chg(r.changePct);
-      return `<div><span class="h"><b>${r.code}</b><span class="${c.cls}">${c.txt}</span></span><div class="v">${fmtRate(r.rate)}</div></div>`;
-    }).join('');
-    el.innerHTML = `<h2>${T('Exchange rate · 1 SGD buys')} <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxg">${tiles}</div>`;
+    const rows = f.rates.filter((r) => MAIN_FX.includes(r.code)).sort((a, b) => MAIN_FX.indexOf(a.code) - MAIN_FX.indexOf(b.code))
+      .map((r) => `<div class="fxr"><b>${r.code}</b><i></i><span>${fmtRate(r.rate)}</span></div>`).join('');
+    el.innerHTML = `<h2>${T('Exchange rate · 1 SGD buys')} <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxl">${rows}</div>`;
   }
 
   // Indexes now ride along in the red world-news strip, after the headlines
@@ -1239,13 +1265,13 @@ body.measuring .later div{justify-content:flex-start!important}
     const d = lt.fourD, t = lt.toto, nx = lt.totoNext;
     const el = $('d4');
     if (!d && !t) { el.innerHTML = unavailable('4D &amp; TOTO'); return; }
-    const four = d ? `<div class="lsec"><div class="lhead2"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
+    const four = d ? `<div class="lsec"><div class="lhead2 lot"><span>4D · ${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
       <div class="ltop">
         <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
         <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
         <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
       </div><button class="more-btn" type="button" onclick="lotMore('4d')">${T('Show more')} ›</button></div>` : '';
-    const toto = t ? `<div class="lsec"><div class="lhead2"><b>TOTO</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
+    const toto = t ? `<div class="lsec"><div class="lhead2 lot"><span>TOTO · ${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
       <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
       ${nx ? `<div class="nextline"><span>${T('Next draw')} ${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span><b>${esc(nx.jackpot)}</b></div>` : ''}
       <button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>` : '';
