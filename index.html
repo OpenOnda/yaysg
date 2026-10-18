@@ -408,6 +408,7 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
+.mk-note{font-size:11px;font-style:italic;opacity:.65}
 .it-more-btn{all:unset;cursor:pointer;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--tic)}
 .ti-modal{position:fixed;inset:0;z-index:50;background:rgba(10,20,17,.45);display:flex;align-items:center;justify-content:center;padding:16px}
 .ti-sheet{box-sizing:border-box;position:relative;width:min(560px,100%);max-height:85vh;overflow:auto;padding:18px 20px}
@@ -431,10 +432,10 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .ti-g{border-top:1px solid var(--hair);padding:6px 0 2px}
 .gh{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;font-weight:800;margin-bottom:2px}
 .gh span{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--faint)}
-.it{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:1.5;color:var(--ink2)}
-.it span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.it b{font-weight:700;color:var(--ink)}
-.it time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
+.ti-g .it{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:1.5;color:var(--ink2)}
+.ti-g .it span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ti-g .it b{font-weight:700;color:var(--ink)}
+.ti-g .it time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .it-more{font-size:11px}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
@@ -529,7 +530,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   let LANG = 'en';
   try { const saved = localStorage.getItem('yay-lang'); if (saved === 'zh' || saved === 'en') LANG = saved; } catch (e) {}
   const ZH = {
-    'Singapore at a glance': '新加坡一览', 'Start your day with a yay.': '每天从一声 yay 开始。', ' Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
+    'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟', 'Start your day with a yay.': '每天从一声 yay 开始。', ' Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
     'Causeway &amp; Second Link': '长堤与第二通道', 'Exchange rate · 1 SGD buys': '汇率 · 1新元可兑换', 'Exchange rate': '汇率',
     'COE prices': '拥车证价格', '4D &amp; TOTO results': '4D与多多开彩成绩', 'Public holidays': '公共假期',
     'Roads &amp; MRT': '道路与地铁', 'Keep it handy': '随手可查',
@@ -844,7 +845,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
   const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'VND', 'IDR', 'KRW', 'PHP'];
   function chg(pct) {
-    if (pct == null || Math.abs(pct) < 0.05) return { cls: 'flat', txt: '0.0%' };
+    if (pct == null) return { cls: 'flat', txt: '' };
+    if (Math.abs(pct) < 0.05) return { cls: 'flat', txt: '0.0%' };
     return pct > 0 ? { cls: 'up', txt: '▲ ' + pct.toFixed(1) + '%' } : { cls: 'down', txt: '▼ ' + Math.abs(pct).toFixed(1) + '%' };
   }
   function renderFx(f) {
@@ -867,7 +869,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       const c = chg(m.changePct);
       return `<span class="it"><span class="pair">${esc(T(m.name))}</span><b>${fmt(m.price)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
     }).join('');
-    $('mktTrack').innerHTML = items + items;
+    const note = `<span class="it mk-note">${T('Prices are 15 min delayed')}</span>`;
+    $('mktTrack').innerHTML = items + note + items + note;
   }
 
   function renderCoe(c) {
