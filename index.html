@@ -347,6 +347,8 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
   #wx{display:flex;flex-direction:column}
   #wx .later{flex:1 1 auto;margin-top:7px}
   #wx .later div{display:flex;flex-direction:column;justify-content:space-between;gap:2px}
+  #air{display:flex;flex-direction:column}
+  #air .bars{flex:1 1 auto;justify-content:space-evenly}
   #cp{display:flex;flex-direction:column}
   #cp .cams{flex:1 1 auto;min-height:0}
   #cp .cam{aspect-ratio:auto;height:100%;min-height:150px}
@@ -354,6 +356,10 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .wind{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:5px;font-size:12px;color:var(--muted)}
 .wind b{color:var(--ink);font-family:var(--mono);font-weight:600}
 .later svg{width:26px;height:26px;display:block;margin:2px 0}
+.jbbox{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;padding:8px 11px;border-radius:11px;background:var(--soft);border-left:4px solid var(--line)}
+.jbbox small{display:block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px}
+.jbbox b{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.jbbox .chip{font-size:11.5px}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -500,7 +506,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'MRT status not available right now.': '暂时无法获取地铁状况。', 'Train service disruption': '列车服务中断',
     'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
     'Live · {t}': '实时 · {t}',
-    'Johor Bahru': '新山', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
+    'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
   };
   const T = (key, vars) => {
     let out = LANG === 'zh' && ZH[key] != null ? ZH[key] : key;
@@ -639,7 +645,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function jbLine(ja) {
     if (!ja || ja.aqi == null) return '';
     const lv = ja.band ? ja.band.level : 0;
-    return `<div class="jbrow"><span>${T('Johor Bahru')}</span><b>AQI ${ja.aqi}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
+    return `<div class="jbbox" style="border-color:${PSI_COLORS[lv]}"><div><small>${T('Johor Bahru · US AQI')}</small><b>${ja.aqi}</b></div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
   }
 
   function renderAir(p, ja) {
@@ -654,8 +660,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${p.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(p.band.label)}</span></div>
       <div class="sub">${psiAvgLine(p)}</div>
       <div class="bars">${bars}</div>
-      ${jbLine(ja)}
-      <div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(PSI_TIP[lv])}</div>`;
+      ${jbLine(ja)}`;
 
     $('alert').hidden = true;
   }
@@ -685,7 +690,6 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       const lv = p.band.level;
       right = `<div class="nw-r"><small>PSI</small><b>${p.max}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(p.band.label)}</span></div>`;
       lines.push(psiAvgLine(p));
-      pills += `<div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(PSI_TIP[lv])}</div>`;
     }
     el.innerHTML = `<h2>${T('Weather &amp; air')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
       <div class="nw-top">${left}${right}</div>
