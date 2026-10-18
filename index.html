@@ -284,7 +284,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 </header>
 
 <div class="ticker fx" id="mkt" aria-label="Stock market indexes" hidden><div class="track" id="mktTrack"></div></div>
-<div class="ticker news" aria-label="Latest Singapore news"><span class="tag">Latest</span><div class="clip"><div class="track" id="newsTrack"><a href="#"><i></i>Loading headlines…</a></div></div></div>
+<div class="ticker news" id="wnBar" aria-label="World news headlines"><span class="tag" id="wnTag">World</span><div class="clip"><div class="track" id="newsTrack"><a href="#"><i></i>Loading headlines…</a></div></div></div>
 
 <div class="alert" id="alert" hidden></div>
 
@@ -522,7 +522,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
   function renderMarkets(list) {
     const box = $('mkt');
-    if (!list || !list.length) { box.hidden = true; return; }
+    // Hide the strip rather than show a half-empty one
+    if (!list || list.length < 3) { box.hidden = true; return; }
     box.hidden = false;
     const fmt = (v) => v.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const items = list.map((m) => {
@@ -550,11 +551,10 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
   function renderNews(n) {
     const el = $('nw');
-    if (!n || !n.length) { el.innerHTML = unavailable('Top SG news'); $('newsTrack').innerHTML = ''; return; }
+    if (!n || !n.length) { el.innerHTML = unavailable('Top 5 SG news'); return; }
     el.innerHTML = `<h2>Top 5 SG news</h2><ol class="nl">${n.slice(0, 5).map((x) => `
       <li><div><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><div class="meta">${esc(x.src)}${x.time ? ' · ' + ago(x.time) : ''}</div></div></li>`).join('')}</ol>`;
-    const items = n.slice(0, 5).map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('');
-    $('newsTrack').innerHTML = items + items;
+
   }
 
   // Singapore public holidays (MOM). Update this list each year.
@@ -569,6 +569,20 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     ['2027-05-17', 'Hari Raya Haji'], ['2027-05-20', 'Vesak Day'], ['2027-08-09', 'National Day'],
     ['2027-10-28', 'Deepavali'], ['2027-12-25', 'Christmas Day'],
   ];
+  // Red strip: world headlines, so it doesn't repeat the Top 5 SG box.
+  // If world news can't be loaded, fall back to further SG headlines, or hide the strip.
+  function renderWorld(world, sg) {
+    const bar = $('wnBar');
+    let list = world && world.length ? world : null;
+    let tag = 'World';
+    if (!list && sg && sg.length >= 8) { list = sg.slice(5); tag = 'More SG'; }
+    if (!list) { bar.hidden = true; return; }
+    bar.hidden = false;
+    $('wnTag').textContent = tag;
+    const items = list.map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('');
+    $('newsTrack').innerHTML = items + items;
+  }
+
   function renderToday() {
     const el = $('td');
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
@@ -618,6 +632,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderMarkets(d.markets);
       renderCoe(d.coe);
       renderNews(d.news);
+      renderWorld(d.world, d.news);
       renderToday();
       renderMove(d.lta);
       $('upd').textContent = 'Live · ' + sgTime(d.updated);
