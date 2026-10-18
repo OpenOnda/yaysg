@@ -1,3 +1,5 @@
+import { getStore } from '@netlify/blobs';
+
 // Yay.sg live data function.
 // Fetches every feed on the server, so the page loads with one request
 // and nothing breaks because of browser security rules (CORS).
@@ -370,54 +372,81 @@ async function lta() {
 }
 
 // ---------- Causeway / Second Link crossing estimate (Google Maps traffic, optional) ----------
-// Driving time from a point on the Singapore side, across the bridge, to the Malaysian checkpoint.
-// It reflects road traffic only. Immigration clearance can add time on top.
+// Driving time across each bridge, checkpoint to checkpoint, in both directions.
+// Road traffic only. Immigration clearance can add time on top.
 const CROSSINGS = [
-  { id: 'woodlands', cam: '2701', origin: 'Kranji MRT Station, Singapore', destination: 'Bangunan Sultan Iskandar, Johor Bahru, Malaysia' },
-  { id: 'tuas', cam: '4703', origin: 'Tuas Link MRT Station, Singapore', destination: 'Kompleks Sultan Abu Bakar, Gelang Patah, Johor, Malaysia' },
+  { id: 'woodlands-jb', cam: '2701', dir: 'jb', origin: 'Woodlands Checkpoint, Singapore', destination: 'Bangunan Sultan Iskandar, Johor Bahru, Malaysia' },
+  { id: 'tuas-jb', cam: '4703', dir: 'jb', origin: 'Tuas Checkpoint, Singapore', destination: 'Kompleks Sultan Abu Bakar, Gelang Patah, Johor, Malaysia' },
+  { id: 'woodlands-sg', cam: '2701', dir: 'sg', origin: 'Johor Bahru City Square, Johor Bahru, Malaysia', destination: 'Woodlands Checkpoint, Singapore' },
+  { id: 'tuas-sg', cam: '4703', dir: 'sg', origin: 'Kompleks Sultan Abu Bakar, Gelang Patah, Johor, Malaysia', destination: 'Tuas Checkpoint, Singapore' },
 ];
 
 const secs = (s) => (s ? Number(String(s).replace('s', '')) : null);
 
+async function routeTime(c, key) {
+  const res = await fetch('https://routes.googleapis.com/directions/v2:computeRoutes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': key,
+      'X-Goog-FieldMask': 'routes.duration,routes.staticDuration',
+    },
+    body: JSON.stringify({
+      origin: { address: c.origin },
+      destination: { address: c.destination },
+      travelMode: 'DRIVE',
+      routingPreference: 'TRAFFIC_AWARE',
+    }),
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) throw new Error(`routes ${res.status}`);
+  const j = await res.json();
+  const r = j.routes?.[0];
+  const now = secs(r?.duration);
+  const free = secs(r?.staticDuration);
+  if (!now) return null;
+  const mins = now / 60;
+  const ratio = free ? now / free : 1;
+  return {
+    id: c.id, cam: c.cam, dir: c.dir,
+    minutes: Math.round(mins),
+    low: Math.max(3, Math.round(mins * 0.9)),
+    high: Math.max(5, Math.round(mins * 1.4)),
+    level: ratio < 1.5 ? 'smooth' : ratio < 2.5 ? 'moderate' : 'heavy',
+  };
+}
+
+// Google allows 5,000 free traffic requests a month. Four routes every 30 minutes,
+// paused 1am to 5am, comes to about 4,800. The last result is saved in Netlify's
+// storage so restarts never trigger extra requests.
+const XING_TTL = 30 * 60 * 1000;
+
+function sgHour() {
+  return Number(new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: 'numeric', hour12: false }).format(new Date()));
+}
+
 async function crossings() {
   const key = process.env.GOOGLE_MAPS_KEY;
   if (!key) return null;
-  const results = await Promise.all(CROSSINGS.map(async (c) => {
-    const res = await fetch('https://routes.googleapis.com/directions/v2:computeRoutes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Goog-Api-Key': key,
-        'X-Goog-FieldMask': 'routes.duration,routes.staticDuration',
-      },
-      body: JSON.stringify({
-        origin: { address: c.origin },
-        destination: { address: c.destination },
-        travelMode: 'DRIVE',
-        routingPreference: 'TRAFFIC_AWARE',
-      }),
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!res.ok) throw new Error(`routes ${res.status}`);
-    const j = await res.json();
-    const r = j.routes?.[0];
-    const now = secs(r?.duration);
-    const free = secs(r?.staticDuration);
-    if (!now) return null;
-    const mins = now / 60;
-    const ratio = free ? now / free : 1;
-    const down5 = (m) => Math.max(5, Math.floor(m / 5) * 5);
-    const up5 = (m) => Math.ceil(m / 5) * 5;
-    return {
-      id: c.id,
-      cam: c.cam,
-      minutes: Math.round(mins),
-      low: down5(mins),
-      high: up5(mins * 1.25 + 5),
-      level: ratio < 1.4 ? 'smooth' : ratio < 2.2 ? 'moderate' : 'heavy',
-    };
-  }));
-  return { updated: new Date().toISOString(), list: results.filter(Boolean) };
+  let store = null;
+  let saved = null;
+  try {
+    store = getStore('yaysg-cache');
+    saved = await store.get('crossings', { type: 'json' });
+  } catch (e) {
+    console.error('[blobs]', e.message);
+  }
+  const age = saved ? Date.now() - Date.parse(saved.updated) : Infinity;
+  const h = sgHour();
+  const quietHours = h >= 1 && h < 5;
+  if (saved && (age < XING_TTL || quietHours)) return saved;
+
+  const results = await Promise.allSettled(CROSSINGS.map((c) => routeTime(c, key)));
+  const list = results.map((r) => (r.status === 'fulfilled' ? r.value : null)).filter(Boolean);
+  if (!list.length) return saved; // keep the last good numbers if Google fails
+  const fresh = { updated: new Date().toISOString(), list };
+  try { if (store) await store.setJSON('crossings', fresh); } catch (e) { console.error('[blobs]', e.message); }
+  return fresh;
 }
 
 // ---------- handler ----------
@@ -433,8 +462,7 @@ export default async () => {
     cached('news', 10 * MIN, news),
     cached('lta', 3 * MIN, lta),
   ]);
-  // Every 20 minutes keeps Google usage inside the free monthly allowance
-  const x = await cached('crossings', 20 * MIN, crossings);
+  const x = await cached('crossings', 5 * MIN, crossings);
 
   const body = {
     updated: new Date().toISOString(),
