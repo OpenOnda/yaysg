@@ -382,8 +382,8 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
   .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
     "wx air cp cp"
     "wx air cp cp"
-    "td mv d4 toto"
-    "fx coe d4 toto";grid-auto-flow:row}
+    "td toto mv d4"
+    "fx toto coe d4";grid-auto-flow:row}
   #wx{grid-area:wx}#air{grid-area:air}#cp{grid-area:cp}#fxc{grid-area:fx}#coe{grid-area:coe}
   #d4{grid-area:d4}#toto{grid-area:toto}#td{grid-area:td}#mv{grid-area:mv}
   #hs{display:none!important}
@@ -669,6 +669,22 @@ footer{font-size:16.8px!important}
 .wx-row{margin:2px 0 8px}
 .wx-cond{display:flex;align-items:center;gap:8px}
 .wx-cond svg{width:30px;height:30px;flex:0 0 auto}
+/* Smaller forecast tiles so the rest of the weather text can be bigger */
+@media (min-width:960px){
+  #wx .later{flex:none!important;margin-top:8px}
+  #wx .later div{padding:4px 6px!important;font-size:11.5px!important;gap:0!important}
+  #wx .later b{font-size:10.5px!important}
+  #wx .later svg{width:26px!important;height:26px!important}
+}
+/* Weather: bigger lines under the tiles, forecast tiles at the bottom */
+@media (min-width:960px){
+  #wx .wx-cond{font-size:15px}
+  #wx .hum,#wx .wind{font-size:14px;margin-top:8px}
+  #wx .wind b,#wx .hum b{font-size:14px}
+  #wx .pill{font-size:13.5px}
+  #wx .later{margin-top:auto!important}
+}
+body.measuring #wx .later{margin-top:8px!important}
 </style>
 </head>
 <body>
@@ -1634,14 +1650,15 @@ footer{font-size:16.8px!important}
     const groups = GROUPS.map((g) => ({ g, items: list.filter((x) => g.test(x.type.toLowerCase())) })).filter((x) => x.items.length);
     // Keep the box the same size on busy days: at most 7 lines in total.
     // Every group gets one line first, then the rest go to the most serious groups.
-    const MAX_LINES = window.TI_OPEN ? 99 : (window.innerWidth >= 960 ? 3 : 5);
-    groups.forEach((x) => { x.show = 1; });
-    let left = MAX_LINES - groups.length;
-    for (const x of groups) { const add = Math.min(left, Math.min(window.TI_OPEN ? 99 : 3, x.items.length) - 1); x.show += add; left -= add; }
+    const MAX_LINES = window.TI_OPEN ? 99 : (window.innerWidth >= 960 ? 4 : 5);
+    // One line per group first (most serious first), then extra lines while there's room
+    let left = MAX_LINES;
+    groups.forEach((x) => { x.show = left > 0 ? 1 : 0; left -= x.show; });
+    for (const x of groups) { if (!x.show) continue; const add = Math.max(0, Math.min(left, Math.min(window.TI_OPEN ? 99 : 3, x.items.length) - 1)); x.show += add; left -= add; }
     const hidden = groups.reduce((a, x) => a + x.items.length - x.show, 0);
     const body = !l.incidents ? `<p class="muted">${T('Road incidents not available right now.')}</p>`
       : !groups.length ? `<p class="muted">${T('No jams or accidents reported right now.')}</p>`
-      : `<div class="ti-groups">${groups.map(({ g, items, show }) => `
+      : `<div class="ti-groups">${groups.filter((x) => x.show > 0).map(({ g, items, show }) => `
           <div class="ti-g"><div class="gh" style="color:${g.color}">${T(g.name)}<span>${items.length}</span></div>
           ${items.slice(0, show).map((x) => `<div class="it" title="${esc(x.message)}"><span>${shortInc(x.message)}</span>${x.time ? `<time>${sgTime(x.time)}</time>` : ''}</div>`).join('')}</div>`).join('')}</div>
           ${hidden ? `<button class="it-more-btn" onclick="tiMore()">${T('+{n} more, see all', { n: hidden })} ›</button>` : groups.length ? `<button class="it-more-btn" onclick="tiMore()">${T('See all')} ›</button>` : ''}`;
