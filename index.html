@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yay.sg | Singapore at a glance</title>
-<meta name="description" content="Weather, haze, Causeway cameras, exchange rates, COE prices, hawker closures and top Singapore news, all on one screen.">
+<meta name="description" content="Weather, haze, Causeway and Second Link crossing times, exchange rates, COE prices, public holidays and top Singapore news, all on one screen.">
 <meta name="theme-color" content="#14231F">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -244,6 +244,12 @@ footer{padding:0 16px 18px;font-size:11px}
 .eta-note .lv{background:#2BB08F}
 .eta-note .pz{background:#C98A00}
 .eta-note.paused{color:var(--ink2)}
+.hol-next{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 0 8px;border-bottom:1px solid var(--hair);margin-bottom:2px}
+.hol-next b{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.hol-count{display:flex;align-items:baseline;gap:4px;color:var(--red)}
+.hol-count span{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.hol-count small{font-size:12px;font-weight:600}
+#td .row{font-size:12.5px}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -291,13 +297,13 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card wide" id="cp"><h2>Causeway &amp; Second Link <small>Live LTA cameras</small></h2><div class="cams"><span class="skel" style="height:160px"></span><span class="skel" style="height:160px"></span></div></section>
 
-    <section class="card" id="fxc"><h2>S$1 buys</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="fxc"><h2>Exchange rate · 1 SGD buys</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card wide tall" id="nw"><h2>Top 5 SG news</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card" id="td"><h2>Today</h2><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="mv" hidden><h2>Roads &amp; MRT</h2></section>
 
@@ -484,7 +490,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         estState = 'paused';
         msg = `<b>Update delayed.</b> Crossing times last updated at ${last}. Check the camera photos for the latest view.`;
       } else {
-        msg = `Crossing times updated ${last}, next update around ${next}. Checkpoint to checkpoint, from live Google traffic. Immigration clearance may add more.`;
+        msg = `Crossing times updated ${last}, next update at ${next}. Data from live Google traffic.`;
       }
       estNote = `<div class="eta-note ${estState}">${estState === 'paused' ? '<span class="pz" aria-hidden="true"></span>' : '<span class="lv" aria-hidden="true"></span>'}<span>${msg}</span></div>`;
     }
@@ -506,12 +512,12 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   }
   function renderFx(f) {
     const el = $('fxc');
-    if (!f || !f.rates) { el.innerHTML = unavailable('S$1 buys'); $('fxTrack').innerHTML = ''; return; }
+    if (!f || !f.rates) { el.innerHTML = unavailable('Exchange rate'); $('fxTrack').innerHTML = ''; return; }
     const tiles = f.rates.filter((r) => MAIN_FX.includes(r.code)).map((r) => {
       const c = chg(r.changePct);
       return `<div><span class="h"><b>${r.code}</b><span class="${c.cls}">${c.txt}</span></span><div class="v">${fmtRate(r.rate)}</div></div>`;
     }).join('');
-    el.innerHTML = `<h2>S$1 buys <small>${sgDate(f.date, { day: 'numeric', month: 'short' })} rates</small></h2><div class="fxg">${tiles}</div>`;
+    el.innerHTML = `<h2>Exchange rate · 1 SGD buys <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxg">${tiles}</div>`;
     const items = f.rates.map((r) => {
       const c = chg(r.changePct);
       return `<span class="it"><span class="pair">SGD/${r.code}</span><b>${fmtRate(r.rate)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
@@ -544,26 +550,30 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     $('newsTrack').innerHTML = items + items;
   }
 
-  function renderToday(h, hk) {
+  // Singapore public holidays (MOM). Update this list each year.
+  const HOLIDAYS = [
+    ['2026-01-01', "New Year's Day"], ['2026-02-17', 'Chinese New Year'], ['2026-02-18', 'Chinese New Year (Day 2)'],
+    ['2026-03-21', 'Hari Raya Puasa'], ['2026-04-03', 'Good Friday'], ['2026-05-01', 'Labour Day'],
+    ['2026-05-27', 'Hari Raya Haji'], ['2026-05-31', 'Vesak Day', '2026-06-01'],
+    ['2026-08-09', 'National Day', '2026-08-10'], ['2026-11-08', 'Deepavali', '2026-11-09'],
+    ['2026-12-25', 'Christmas Day'],
+    ['2027-01-01', "New Year's Day"], ['2027-02-06', 'Chinese New Year'], ['2027-02-07', 'Chinese New Year (Day 2)', '2027-02-08'],
+    ['2027-03-10', 'Hari Raya Puasa'], ['2027-03-26', 'Good Friday'], ['2027-05-01', 'Labour Day'],
+    ['2027-05-17', 'Hari Raya Haji'], ['2027-05-20', 'Vesak Day'], ['2027-08-09', 'National Day'],
+    ['2027-10-28', 'Deepavali'], ['2027-12-25', 'Christmas Day'],
+  ];
+  function renderToday() {
     const el = $('td');
-    let hol = '<div class="row"><span class="k">Next holiday</span><span class="muted">n/a</span></div>';
-    if (h) {
-      const when = h.days === 0 ? 'Today!' : h.days === 1 ? 'Tomorrow' : `in ${h.days} days`;
-      hol = `<div class="row"><span class="k">Next holiday</span><span><b>${esc(h.name)}</b> ${when}</span></div>
-        <div class="muted" style="margin:-2px 0 6px">${sgDate(h.date, { weekday: 'short', day: 'numeric', month: 'short' })}${h.observed ? ', ' + sgDate(h.observed, { weekday: 'short', day: 'numeric', month: 'short' }) + ' off' : ''}</div>`;
-    }
-    let hawk = '<div class="row"><span class="k">Hawkers closed</span><span class="muted">n/a</span></div>';
-    if (hk) {
-      const n = hk.closedToday.length;
-      hawk = `<div class="row"><span class="k">Hawkers closed today</span><b>${n === 0 ? 'None' : n + (n === 1 ? ' centre' : ' centres')}</b></div>`;
-      if (n) {
-        hawk += `<details><summary>See which ones</summary><ul class="hk">${hk.closedToday.map((x) => `<li>${esc(x.name)}${x.until !== hk.today ? ' (till ' + sgDate(x.until, { day: 'numeric', month: 'short' }) + ')' : ''}</li>`).join('')}</ul></details>`;
-      }
-      if (hk.upcoming && hk.upcoming.length) {
-        hawk += `<details><summary>${hk.upcoming.length} closing this week</summary><ul class="hk">${hk.upcoming.map((x) => `<li>${esc(x.name)}, from ${sgDate(x.from, { weekday: 'short', day: 'numeric', month: 'short' })}</li>`).join('')}</ul></details>`;
-      }
-    }
-    el.innerHTML = `<h2>Today</h2>${hol}${hawk}`;
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
+    const days = (ymd) => Math.round((Date.parse(ymd + 'T00:00:00Z') - Date.parse(today + 'T00:00:00Z')) / 86400000);
+    const up = HOLIDAYS.filter(([d]) => d >= today).slice(0, 4);
+    if (!up.length) { el.innerHTML = unavailable('Public holidays'); return; }
+    const when = (n) => n === 0 ? 'Today!' : n === 1 ? 'Tomorrow' : `in ${n} days`;
+    const fmt = (d) => sgDate(d, { weekday: 'short', day: 'numeric', month: 'short' });
+    const [d0, n0, o0] = up[0];
+    const first = `<div class="hol-next"><div><b>${esc(n0)}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + fmt(o0) + ' off' : ''}</div></div><div class="hol-count"><span>${days(d0)}</span><small>${days(d0) === 1 ? 'day' : 'days'}</small></div></div>`;
+    const rest = up.slice(1).map(([d, n, o]) => `<div class="row"><span>${esc(n)}<span class="muted"> · ${fmt(d)}${o ? ', ' + fmt(o) + ' off' : ''}</span></span><span class="k">${when(days(d))}</span></div>`).join('');
+    el.innerHTML = `<h2>Public holidays</h2>${first}${rest}`;
   }
 
   function renderMove(l) {
@@ -597,7 +607,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderFx(d.fx);
       renderCoe(d.coe);
       renderNews(d.news);
-      renderToday(d.holiday, d.hawkers);
+      renderToday();
       renderMove(d.lta);
       $('upd').textContent = 'Live · ' + sgTime(d.updated);
     } catch (e) {
