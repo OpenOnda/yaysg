@@ -259,12 +259,12 @@ footer{padding:0 16px 18px;font-size:11px}
 #td .row{font-size:12.5px}
 /* Smaller strips on phones */
 @media (max-width:600px){
-  .news a{font-size:8.4px;padding:4px 11px;gap:5px}
-  .news a small{font-size:7px}
+  .news a{font-size:9.7px;padding:4px 12px;gap:6px}
+  .news a small{font-size:8px}
   .news a i{width:4px;height:4px}
-  .nm{font-size:9.8px;padding:4px 11px;gap:5px}
-  .nm em{font-size:8.4px}
-  .nm-note{font-size:7.7px;padding:0 11px 0 4px}
+  .nm{font-size:11.3px;padding:4px 12px;gap:6px}
+  .nm em{font-size:9.7px}
+  .nm-note{font-size:8.9px;padding:0 12px 0 4px}
   .news .tag{font-size:9.5px;padding:0 9px;letter-spacing:.06em}
   .fx .it{font-size:11px;padding:4px 14px;gap:6px}
   .ticker.news .track{animation-duration:80s}
@@ -417,11 +417,34 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
+.lsec{padding:2px 0 10px;margin-bottom:8px;border-bottom:1px solid var(--hair)}
+.lsec:last-of-type{border-bottom:0;margin-bottom:0}
+.lhead2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:7px}
+.lhead2 b{font-size:15px;font-weight:800}
+.lhead2 span{font-family:var(--mono);font-size:10.5px;color:var(--faint);text-align:right}
+.nextline{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:9px;font-size:12px;color:var(--muted)}
+.nextline b{color:var(--red);font-size:17px;font-weight:800}
+.more-btn{all:unset;cursor:pointer;display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--red)}
+.alm .lhead2{flex-direction:column;align-items:flex-start;gap:2px}.alm .lhead2 span{text-align:left}
+.alm-day{font-size:13px;font-weight:700;margin-bottom:6px}.alm-day i{font-style:normal;font-weight:500;color:var(--muted)}
+.alm-day.bad{color:var(--bad)}.alm-day.good{color:var(--good)}.alm-day span{font-size:9px;vertical-align:2px}
+.alm-row{display:grid;grid-template-columns:78px 1fr;gap:8px;font-size:12px;line-height:1.45;padding:3px 0;color:var(--ink2)}
+.alm-row em{font-style:normal;font-weight:700;color:var(--muted)}.alm-row em.yi{color:var(--good)}.alm-row em.ji{color:var(--bad)}
+.evs{display:flex;flex-direction:column;gap:6px}
+.ev{display:flex;align-items:center;gap:11px;padding:7px 8px;border-radius:10px;background:var(--soft);text-decoration:none;color:var(--ink)}
+a.ev:hover{outline:1px solid var(--line)}
+.ev-d{flex:0 0 44px;height:44px;border-radius:9px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ev-d b{font-size:17px;font-weight:800}.ev-d small{font-family:var(--mono);font-size:9px;color:var(--red);margin-top:2px}
+.ev-t{min-width:0;flex:1}.ev-t b{display:block;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-t span{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev em{font-style:normal;flex:0 0 auto;font-size:10px;font-weight:700;color:var(--good);background:var(--good-bg);padding:3px 7px;border-radius:999px}
+.lot-pop{width:min(540px,100%)}
+@media (min-width:960px){#d4 .ltop b{font-size:24px}#d4 .ltop div{padding:10px 8px}#d4 .lnote{margin-top:auto}#toto{display:flex;flex-direction:column}#toto .evs{flex:1;justify-content:flex-start}}
 .slg2{margin-left:.3em}@media (max-width:560px){.slg2{margin-left:0}}
 .keep{max-width:var(--maxw,1440px);margin:16px auto 14px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 22px;border-radius:18px;background:var(--red);color:#fff}
 main .keep{margin-left:0;margin-right:0}
 .keep b{display:block;font-size:18px;font-weight:800;letter-spacing:-.01em}
-.keep p{margin:3px 0 0;font-size:13px;line-height:1.45;color:#FFE3E0}
+.keep p{text-wrap:pretty;margin:3px 0 0;font-size:13px;line-height:1.45;color:#FFE3E0}
 .share-btn{all:unset;cursor:pointer;flex:0 0 auto;background:#fff;color:var(--red);font-weight:800;font-size:14px;padding:10px 18px;border-radius:999px;white-space:nowrap}
 .share-btn:hover{background:#FFE3E0}
 .flinks a{font-weight:600;color:var(--muted);text-decoration:none}.flinks a:hover{color:var(--ink);text-decoration:underline}
@@ -527,9 +550,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card tall" id="d4"><h2>4D results</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="d4"><h2>4D &amp; TOTO</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card tall" id="toto"><h2>TOTO results</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="toto"><h2>What's on</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
@@ -570,13 +593,16 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   try { const saved = localStorage.getItem('yay-lang'); if (saved === 'zh' || saved === 'en') LANG = saved; } catch (e) {}
   const ZH = {
     'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟',
+    '4D &amp; TOTO': '4D与多多', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
+    'Good for': '', 'Avoid': '', 'Clash': '', 'Evil spirits in the {d}': '煞{d}', "What's on": '近期活动', 'Concerts &amp; exhibitions': '演唱会与展览',
+    'See all events': '查看全部活动', 'This weekend': '本周末', 'till {d}': '至{d}', 'Upcoming events will appear here.': '近期活动将在这里显示。',
     'UV': '紫外线', 'Low': '低', 'Extreme': '极高', 'Sunrise · sunset': '日出 · 日落', ' (+{n} more)': '（另有{n}处）',
     'MOE school holidays': '教育部学校假期', 'until {d}': '至{d}', 'On now': '进行中',
     'Keep yay.sg handy': '把 yay.sg 放在手边', 'Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".': '加到手机主屏幕。iPhone：点“分享”，再选“添加到主屏幕”。Android：点菜单，再选“添加到主屏幕”。',
     'Share yay.sg': '分享 yay.sg', 'Enjoying yay.sg? Tell your friends about it!': '喜欢 yay.sg？告诉你的朋友吧！', 'Disclaimer': '免责声明', 'About': '关于我们', 'Feedback': '意见反馈', 'Contact': '联系我们', 'Send feedback on WhatsApp': '用 WhatsApp 发送反馈',
     "Start your day with a yay. Here's Singapore at a glance.": '每天从一声 yay 开始。新加坡一览，尽在这里。',
     POP_ABOUT: '<p>yay.sg 把新加坡每天最常查的资讯放在一个页面：天气、空气质量、长堤与第二通道的通关时间、交通状况、汇率、拥车证价格、4D与多多成绩，以及公共假期。</p><p>打开一次，就知道今天该怎么安排。</p><p>yay.sg 是新加坡公司 OpenOnda Pte. Ltd. 的项目。</p>',
-    POP_DISCLAIMER: '<p>yay.sg 不是政府官方服务，与所列的任何政府机构或媒体均无关联。</p><p>资料来源：NEA与LTA（data.gov.sg）、LTA DataMall、PUB、欧洲央行参考汇率、open.er-api.com、Yahoo Finance与CNBC（股市指数，延迟约15分钟）、新加坡博彩公司、Google交通资料及各媒体RSS。</p><p>资料可能有延迟或误差。换汇请以兑换商报价为准，开彩成绩请以新加坡博彩公司为准，出行前请留意官方通告。</p>',
+    POP_DISCLAIMER: '<p>yay.sg 不是政府官方服务，与所列的任何政府机构或媒体均无关联。</p><p>资料来源：NEA与LTA（data.gov.sg）、LTA DataMall、PUB、欧洲央行参考汇率、open.er-api.com、Yahoo Finance与CNBC（股市指数，延迟约15分钟）、新加坡博彩公司、Google交通资料及各媒体RSS。</p><p>资料可能有延迟或误差。换汇请以兑换商报价为准，开彩成绩请以新加坡博彩公司为准，出行前请留意官方通告。</p><p>4D与多多成绩仅供参考。博彩仅限18岁及以上人士。如您或身边的人受赌博问题困扰，请拨打NCPG求助热线 1800-6-668-668。</p><p>黄历为传统文化资讯，仅供参考，并非建议。</p>',
     POP_ADVERTISE: '<p>每天都有新加坡人打开 yay.sg 查看重要资讯。</p><p>想让他们看到您的品牌？欢迎通过 WhatsApp 联系我们。</p>',
     POP_FEEDBACK: '<p>发现错误、资料不对，或有任何意见和建议？</p><p>请通过 WhatsApp 告诉我们，我们会尽快处理。</p>', 'Markets': '股市', 'Start your day with a yay.': '每天从一声 yay 开始。', 'Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
     'Causeway &amp; Second Link': '长堤与第二通道', 'Exchange rate · 1 SGD buys': '汇率 · 1新元可兑换', 'Exchange rate': '汇率',
@@ -638,7 +664,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   // Longer English texts for the footer pop-ups
   const EN = {
     POP_ABOUT: '<p>yay.sg puts the things Singaporeans check every day on one page: weather, air quality, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.</p><p>One glance, and you know how to plan your day.</p><p>yay.sg is a project by OpenOnda Pte. Ltd., Singapore.</p>',
-    POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p>Data: NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p>',
+    POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p>Data: NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p><p>4D and TOTO results are shown for information only. Gambling is only for those aged 18 and above. If gambling is becoming a problem for you or someone you know, call the NCPG Helpline at 1800-6-668-668.</p><p>The Chinese almanac is traditional cultural information, shown for interest only, not advice.</p>',
     POP_ADVERTISE: '<p>Singaporeans open yay.sg every day to check for important information.</p><p>Want them to see your brand? WhatsApp us and we\'ll get back to you.</p>',
     POP_FEEDBACK: '<p>Spotted a bug, wrong information, or have a complaint or idea?</p><p>Tell us on WhatsApp and we\'ll look into it as soon as we can.</p>',
   };
@@ -1103,8 +1129,80 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
   const shortDate = (s) => { const t = Date.parse(String(s || '').replace(/^\w+,\s*/, '')); return isNaN(t) ? esc(s || '') : new Date(t).toLocaleDateString(L(), { weekday: 'short', day: 'numeric', month: 'short' }); };
 
-  function render4D(d) {
+  // 4D + TOTO in one box (top prizes and winning numbers), full results in a pop-up
+  let lotData = {};
+  function renderLottery(lt, alm) {
+    lotData = lt;
+    const d = lt.fourD, t = lt.toto, nx = lt.totoNext;
     const el = $('d4');
+    if (!d && !t) { el.innerHTML = unavailable('4D &amp; TOTO'); return; }
+    const four = d ? `<div class="lsec"><div class="lhead2"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
+      <div class="ltop">
+        <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
+        <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
+        <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
+      </div><button class="more-btn" type="button" onclick="lotMore('4d')">${T('Show more')} ›</button></div>` : '';
+    const toto = t ? `<div class="lsec"><div class="lhead2"><b>TOTO</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
+      <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
+      ${nx ? `<div class="nextline"><span>${T('Next draw')} ${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span><b>${esc(nx.jackpot)}</b></div>` : ''}
+      <button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>` : '';
+    el.innerHTML = `<h2>${T('4D &amp; TOTO')} <small>${T('Singapore Pools')}</small></h2>${four}${toto}${almanacHTML(alm)}`;
+  }
+  window.lotMore = (k) => {
+    const box = document.createElement('section');
+    if (k === '4d') render4D(lotData.fourD, box); else renderToto(lotData.toto, lotData.totoNext, box);
+    popup(box.innerHTML, 'pop-sheet lot-pop');
+  };
+  // Today's Chinese almanac. English view is fully in English, 中文 view fully in Chinese.
+  const ord = (n) => n + (n % 10 === 1 && n !== 11 ? 'st' : n % 10 === 2 && n !== 12 ? 'nd' : n % 10 === 3 && n !== 13 ? 'rd' : 'th');
+  function almanacHTML(a) {
+    if (!a) return '';
+    const zh = LANG === 'zh';
+    const items = (list) => list.map((x) => zh ? x.zh : (x.en || '')).filter(Boolean).join(' · ');
+    const date = zh
+      ? `${a.lunar}${a.festival ? ' · ' + a.festival : ''}`
+      : `${ord(a.lunarDay)} day, ${a.leap ? 'leap ' : ''}${ord(a.lunarMonth)} lunar month${a.festivalEn ? ' · ' + a.festivalEn : ''}`;
+    const day = a.good
+      ? `<div class="alm-day good"><span>●</span> ${zh ? '今日是黄道吉日' : 'Today is an auspicious day'}</div>`
+      : `<div class="alm-day bad"><span>●</span> ${zh ? '今日是黑道日，不算吉日' : 'Today is not an auspicious day'}</div>`;
+    const clash = zh ? `冲${a.clash.zh} · 煞${a.sha.zh}` : `Year of the ${esc(a.clash.en)} · Unlucky direction: ${esc(a.sha.en)}`;
+    const yi = items(a.yi), ji = items(a.ji);
+    return `<div class="lsec alm"><div class="lhead2"><b>${zh ? '今日黄历' : "Today's Chinese almanac"}</b><span>${date}</span></div>${day}
+      ${yi ? `<div class="alm-row"><em class="yi">${zh ? '宜' : 'Good for'}</em><span>${yi}</span></div>` : ''}
+      ${ji ? `<div class="alm-row"><em class="ji">${zh ? '忌' : 'Avoid'}</em><span>${ji}</span></div>` : ''}
+      <div class="alm-row"><em>${zh ? '冲煞' : 'Clashes with'}</em><span>${clash}</span></div></div>`;
+  }
+  // What's on: events from the Google Sheet
+  let evList = [];
+  function evRow(e, todayYmd) {
+    const dt = new Date(e.start + 'T12:00:00+08:00');
+    const day = dt.toLocaleDateString('en-SG', { timeZone: TZ, day: 'numeric' });
+    const mon = dt.toLocaleDateString('en-SG', { timeZone: TZ, month: 'short' }).toUpperCase();
+    // This weekend = the coming Saturday and Sunday (or today, if it's the weekend)
+    const now = new Date(todayYmd + 'T12:00:00+08:00'); const wd = now.getUTCDay();
+    const sat = new Date(now.getTime() + ((6 - wd + 7) % 7 - (wd === 0 ? 1 : 0)) * 864e5).toISOString().slice(0, 10);
+    const sun = new Date(Date.parse(sat + 'T12:00:00Z') + 864e5).toISOString().slice(0, 10);
+    const on = e.start <= todayYmd && e.end >= todayYmd;
+    const tag = on ? T('On now') : (e.start <= sun && e.end >= sat) ? T('This weekend') : '';
+    const until = e.end !== e.start ? ` · ${T('till {d}', { d: sgDate(e.end, { day: 'numeric', month: 'short' }) })}` : '';
+    const inner = `<div class="ev-d"><b>${day}</b><small>${mon}</small></div><div class="ev-t"><b>${esc(e.name)}</b><span>${esc(e.venue)}${until}</span></div>${tag ? `<em>${tag}</em>` : ''}`;
+    return e.link ? `<a class="ev" href="${esc(e.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="ev">${inner}</div>`;
+  }
+  function renderEvents(ev) {
+    const el = $('toto');
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
+    evList = (ev && ev.list) || [];
+    const head = `<h2>${T("What's on")} <small>${T('Concerts &amp; exhibitions')}</small></h2>`;
+    if (!evList.length) { el.innerHTML = `${head}<p class="muted">${T('Upcoming events will appear here.')}</p>`; return; }
+    el.innerHTML = `${head}<div class="evs">${evList.slice(0, 6).map((e) => evRow(e, today)).join('')}</div>
+      ${evList.length > 6 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
+  }
+  window.evMore = () => {
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
+    popup(`<h2>${T("What's on")} <small>${T('Concerts &amp; exhibitions')}</small></h2><div class="evs">${evList.map((e) => evRow(e, today)).join('')}</div>`, 'pop-sheet lot-pop');
+  };
+  function render4D(d, tgt) {
+    const el = tgt || $('d4');
     if (!d) { el.innerHTML = unavailable('4D results'); return; }
     const grid = (arr) => `<div class="lg">${arr.map((n) => `<span>${esc(n)}</span>`).join('')}</div>`;
     el.innerHTML = `<h2>${T('4D results')} <small>${T('Singapore Pools')}</small></h2>
@@ -1115,12 +1213,11 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
       </div>
       <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
-      <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
-      <div class="lnote">${T('18 and above only. NCPG Helpline 1800-6-668-668.')}</div>`;
+      <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}`;
   }
 
-  function renderToto(t, nx) {
-    const el = $('toto');
+  function renderToto(t, nx, tgt) {
+    const el = tgt || $('toto');
     if (!t && !nx) { el.innerHTML = unavailable('TOTO results'); return; }
     const last = t ? `
       <div class="lhead"><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
@@ -1132,8 +1229,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <div><small>${T('Next draw')}</small><span>${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span></div>
         <div class="nj"><small>${T(nx.estimate ? 'Estimated jackpot' : 'Jackpot')}</small><b>${esc(nx.jackpot)}</b></div>
       </div>` : '';
-    el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}
-      <div class="lnote">${T('18 and above only. NCPG Helpline 1800-6-668-668.')}</div>`;
+    el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}`;
   }
 
   function renderToday() {
@@ -1262,8 +1358,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderMarkets(d.markets);
       renderCoe(d.coe);
       renderWorld(d.world, d.news, d.worldZh);
-      render4D(d.lottery && d.lottery.fourD);
-      renderToto(d.lottery && d.lottery.toto, d.lottery && d.lottery.totoNext);
+      renderLottery(d.lottery || {}, d.almanac);
+      renderEvents(d.events);
       renderToday();
       renderMove(d.lta);
       $('upd').textContent = T('Live');
