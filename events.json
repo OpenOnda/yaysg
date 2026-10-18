@@ -1,0 +1,11 @@
+[
+  { "start": "2026-10-18", "name": "NCT 127 5th Tour 'Neo City: Singapore'", "venue": "Singapore Indoor Stadium" },
+  { "start": "2026-11-04", "name": "LANY: Soft World Tour", "venue": "Singapore Indoor Stadium" },
+  { "start": "2026-11-10", "end": "2026-11-11", "name": "My Chemical Romance Live in Singapore", "venue": "Singapore Indoor Stadium" },
+  { "start": "2026-11-13", "end": "2026-11-17", "dates": "13, 14 & 17 Nov", "name": "Mizuho Blue Challenge football series", "venue": "National Stadium" },
+  { "start": "2026-11-25", "name": "Guns N' Roses World Tour", "venue": "National Stadium" },
+  { "start": "2026-11-28", "end": "2026-11-29", "name": "BABYMONSTER 'Choom' World Tour", "venue": "Singapore Indoor Stadium" },
+  { "start": "2026-12-04", "end": "2026-12-06", "name": "BYD Singapore International Marathon", "venue": "National Stadium" },
+  { "start": "2026-12-10", "end": "2026-12-13", "name": "PGL Major Singapore (Counter-Strike 2)", "venue": "Singapore Indoor Stadium" },
+  { "start": "2027-01-08", "end": "2027-01-10", "name": "Jay Chou 'Carnival II' World Tour", "venue": "National Stadium" }
+]

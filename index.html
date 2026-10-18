@@ -552,7 +552,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card tall" id="d4"><h2>4D &amp; TOTO</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card tall" id="toto"><h2>What's on</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="toto"><h2>Major events</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
@@ -594,7 +594,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   const ZH = {
     'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟',
     '4D &amp; TOTO': '4D与多多', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
-    'Good for': '', 'Avoid': '', 'Clash': '', 'Evil spirits in the {d}': '煞{d}', "What's on": '近期活动', 'Concerts &amp; exhibitions': '演唱会与展览',
+    'Good for': '', 'Avoid': '', 'Clash': '', 'Evil spirits in the {d}': '煞{d}', 'Major events': '重大活动', 'Concerts, sports &amp; more': '演唱会、体育赛事等',
     'See all events': '查看全部活动', 'This weekend': '本周末', 'till {d}': '至{d}', 'Upcoming events will appear here.': '近期活动将在这里显示。',
     'UV': '紫外线', 'Low': '低', 'Extreme': '极高', 'Sunrise · sunset': '日出 · 日落', ' (+{n} more)': '（另有{n}处）',
     'MOE school holidays': '教育部学校假期', 'until {d}': '至{d}', 'On now': '进行中',
@@ -1184,7 +1184,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const sun = new Date(Date.parse(sat + 'T12:00:00Z') + 864e5).toISOString().slice(0, 10);
     const on = e.start <= todayYmd && e.end >= todayYmd;
     const tag = on ? T('On now') : (e.start <= sun && e.end >= sat) ? T('This weekend') : '';
-    const until = e.end !== e.start ? ` · ${T('till {d}', { d: sgDate(e.end, { day: 'numeric', month: 'short' }) })}` : '';
+    const until = e.dates ? ` · ${esc(e.dates)}` : e.end !== e.start ? ` · ${T('till {d}', { d: sgDate(e.end, { day: 'numeric', month: 'short' }) })}` : '';
     const inner = `<div class="ev-d"><b>${day}</b><small>${mon}</small></div><div class="ev-t"><b>${esc(e.name)}</b><span>${esc(e.venue)}${until}</span></div>${tag ? `<em>${tag}</em>` : ''}`;
     return e.link ? `<a class="ev" href="${esc(e.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="ev">${inner}</div>`;
   }
@@ -1192,14 +1192,14 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const el = $('toto');
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
     evList = (ev && ev.list) || [];
-    const head = `<h2>${T("What's on")} <small>${T('Concerts &amp; exhibitions')}</small></h2>`;
+    const head = `<h2>${T('Major events')} <small>${T('Concerts, sports &amp; more')}</small></h2>`;
     if (!evList.length) { el.innerHTML = `${head}<p class="muted">${T('Upcoming events will appear here.')}</p>`; return; }
     el.innerHTML = `${head}<div class="evs">${evList.slice(0, 6).map((e) => evRow(e, today)).join('')}</div>
       ${evList.length > 6 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
   }
   window.evMore = () => {
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
-    popup(`<h2>${T("What's on")} <small>${T('Concerts &amp; exhibitions')}</small></h2><div class="evs">${evList.map((e) => evRow(e, today)).join('')}</div>`, 'pop-sheet lot-pop');
+    popup(`<h2>${T('Major events')} <small>${T('Concerts, sports &amp; more')}</small></h2><div class="evs">${evList.map((e) => evRow(e, today)).join('')}</div>`, 'pop-sheet lot-pop');
   };
   function render4D(d, tgt) {
     const el = tgt || $('d4');
@@ -1359,7 +1359,13 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderCoe(d.coe);
       renderWorld(d.world, d.news, d.worldZh);
       renderLottery(d.lottery || {}, d.almanac);
-      renderEvents(d.events);
+      if (d.events && d.events.enabled) renderEvents(d.events);
+      else fetch('/events.json', { cache: 'no-store' }).then((r) => r.ok ? r.json() : []).catch(() => []).then((list) => {
+        const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
+        const evs = (Array.isArray(list) ? list : []).map((e) => ({ start: e.start, end: e.end || e.start, dates: e.dates || '', name: e.name, venue: e.venue || '', link: e.link || '' }))
+          .filter((e) => e.start && e.name && e.end >= today).sort((a, b) => a.start.localeCompare(b.start));
+        renderEvents({ enabled: true, list: evs });
+      });
       renderToday();
       renderMove(d.lta);
       $('upd').textContent = T('Live');
