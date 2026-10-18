@@ -104,7 +104,8 @@ async function weather() {
   // UV index (NEA, hourly from 7am to 7pm). Only today's latest reading counts.
   let uv = null;
   const ur = uvj?.data?.records?.[0];
-  const uvLatest = ur?.index?.[0];
+  // Newest reading, whatever order the feed lists them in
+  const uvLatest = [...(ur?.index || [])].sort((a, b) => Date.parse(b.hour) - Date.parse(a.hour))[0];
   if (uvLatest && Number.isFinite(Number(uvLatest.value)) && String(ur.date || uvLatest.hour || '').slice(0, 10) === sgToday()) {
     uv = { value: Math.round(Number(uvLatest.value)), hour: uvLatest.hour };
   }
