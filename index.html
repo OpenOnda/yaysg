@@ -438,6 +438,8 @@ a.ev:hover{outline:1px solid var(--line)}
 .ev-d b{font-size:17px;font-weight:800}.ev-d small{font-family:var(--mono);font-size:9px;color:var(--red);margin-top:2px}
 .ev-t{min-width:0;flex:1}.ev-t b{display:block;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev-t span{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-r{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.ev-r small{font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap}
 .ev em{font-style:normal;flex:0 0 auto;font-size:10px;font-weight:700;color:var(--good);background:var(--good-bg);padding:3px 7px;border-radius:999px}
 .lot-pop{width:min(540px,100%)}
 .pz4 .tg-h,.pz4 .tg-r{grid-template-columns:1.6fr 1fr 1fr}
@@ -511,6 +513,12 @@ html[data-theme="dark"] body{background:var(--bg)}
 html[data-theme="dark"] .spon{background:#2A2615;border-color:#6B5A22}
 html[data-theme="dark"] .spon .lbl,html[data-theme="dark"] .spon a{color:#F5C842}
 html[data-theme="dark"] a:hover{color:#FF8A80}
+/* measuring mode for fillBoxes: no stretching inside boxes */
+body.measuring #fxc .fxg{flex:none!important;grid-auto-rows:auto!important}
+body.measuring #fxc .fxg div{justify-content:flex-start!important}
+body.measuring #toto .evs,body.measuring #d4 .lsec.alm{flex:none!important}
+body.measuring #d4 .lnote{margin-top:0!important}
+body.measuring .later div{justify-content:flex-start!important}
 /* ===== Desktop: tighter boxes so the page can be shown bigger ===== */
 @media (min-width:960px){
   .cam{aspect-ratio:2/1}
@@ -662,7 +670,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Light Rain': '小雨', 'Moderate Rain': '中雨', 'Heavy Rain': '大雨', 'Passing Showers': '短暂阵雨',
     'Light Showers': '小阵雨', 'Showers': '阵雨', 'Heavy Showers': '大阵雨', 'Thundery Showers': '雷阵雨',
     'Heavy Thundery Showers': '强雷阵雨', 'Heavy Thundery Showers with Gusty Winds': '强雷阵雨伴有阵风',
-    '24-hr PSI': '24小时PSI', '24-hr PSI, Singapore average': '24小时PSI全岛平均', 'Right now · 1-hr PM2.5': '当前 · 1小时PM2.5', 'Worst in the {r} · updated {t}': '{r}最高 · {t}更新', 'Normal': '正常', 'Elevated': '偏高', 'High': '高', 'Very high': '非常高', 'PM2.5 now': '当前PM2.5', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
+    '24-hr PSI': '24小时PSI', '24-hr PSI, Singapore average': '24小时PSI全岛平均', 'Right now · 1-hr PM2.5': '当前 · 1小时PM2.5', 'Worst in the {r} · updated {t}': '{r}最高 · {t}更新', 'Normal': '正常', 'Elevated': '偏高', 'High': '高', 'Very high': '非常高', 'PM2.5 now, SG average': '当前PM2.5全岛平均', 'Singapore average · highest: {r} {v}': '全岛平均 · 最高：{r} {v}', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
     'North': '北部', 'South': '南部', 'East': '东部', 'West': '西部', 'Central': '中部',
     'Singapore average: <b>{avg}</b> · highest in the {r}': '全岛平均：<b>{avg}</b> · {r}最高',
     'Good air. Enjoy the outdoors.': '空气良好，适合户外活动。',
@@ -719,7 +727,38 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   // ---------- fit the whole dashboard on one screen (laptops and desktops) ----------
   // The layout is designed for a 1280 x 700 screen. Smaller windows get scaled down
   // proportionally, like zooming out, so nothing has to scroll. Phones keep their own layout.
+  // Enlarge each box's contents to fill the box, without changing the layout
+  const FILL_SKIP = new Set(['cp']);
+  let filling = false;
+  function fillBoxes() {
+    filling = true;
+    const cards = [...document.querySelectorAll('.grid > .card')].filter((c) => !c.hidden && !FILL_SKIP.has(c.id));
+    cards.forEach((c) => [...c.children].forEach((k) => { k.style.zoom = ''; }));
+    const extras = [...document.querySelectorAll('#toto .ev[data-extra]')];
+    extras.forEach((e) => { e.hidden = true; });
+    if (window.innerWidth < 960) { filling = false; return; }
+    const H = window.innerHeight;
+    const fits = () => document.documentElement.scrollHeight <= H;
+    document.body.classList.add('measuring');
+    const used = (c) => { const kids = [...c.children].filter((k) => !k.hidden && k.offsetParent !== null); if (!kids.length) return 0;
+      const top = kids[0].getBoundingClientRect().top, bot = Math.max(...kids.map((k) => k.getBoundingClientRect().bottom)); return bot - top; };
+    const room = (c) => { const cs = getComputedStyle(c); const z = parseFloat(document.body.style.zoom) || 1;
+      return c.getBoundingClientRect().height - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)) * z; };
+    // Major events: show more of them while they fit in the box
+    const ev = $('toto');
+    for (const e of extras) { e.hidden = false; if (used(ev) > room(ev) || !fits()) { e.hidden = true; break; } }
+    const plan = cards.map((c) => { const u = used(c), r = room(c); return [c, u > 0 ? Math.max(1, Math.min(1.3, (r / u) * 0.97)) : 1]; });
+    document.body.classList.remove('measuring');
+    // Apply, and back off if anything would push the page past the screen
+    for (let k = 0; k < 5; k++) {
+      const shrink = k === 4 ? 0 : Math.pow(0.6, k);
+      plan.forEach(([c, f]) => { const z = 1 + (f - 1) * shrink; [...c.children].forEach((kid) => { kid.style.zoom = z > 1.01 ? z.toFixed(3) : ''; }); });
+      if (fits()) break;
+    }
+    setTimeout(() => { filling = false; }, 120);
+  }
   function fitToScreen() {
+    document.querySelectorAll('.grid > .card > *').forEach((k) => { k.style.zoom = ''; });
     const w = window.innerWidth, h = window.innerHeight;
     const root = document.documentElement, body = document.body;
     const natural = (z) => {
@@ -733,7 +772,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       // so there are no empty columns on the left and right
       root.style.setProperty('--maxw', Math.abs(z - 1) > 0.005 ? Math.floor(w / z) + 'px' : '1440px');
     };
-    if (w < 960) { body.style.zoom = ''; root.style.removeProperty('--maxw'); return; }
+    if (w < 960) { body.style.zoom = ''; root.style.removeProperty('--maxw'); fillBoxes(); return; }
     let z = Math.min(1, w / 1120);  // start at 100%, may grow on big screens below
     apply(z);
     // Widening makes the boxes a bit taller, so settle the size over a few rounds
@@ -749,13 +788,14 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       z = Math.max(0.55, z * (h - 2) / (h + over));
       apply(z);
     }
+    fillBoxes();
   }
   fitToScreen();
   window.addEventListener('resize', fitToScreen);
   let fitT, lastH = 0;
   if (window.ResizeObserver) new ResizeObserver(() => {
     const hh = document.querySelector('main') ? document.querySelector('main').scrollHeight : 0;
-    if (Math.abs(hh - lastH) < 2) return; lastH = hh;
+    if (filling || Math.abs(hh - lastH) < 2) return; lastH = hh;
     clearTimeout(fitT); fitT = setTimeout(fitToScreen, 60);
   }).observe(document.querySelector('main'));
 
@@ -936,20 +976,22 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     return `<div class="jbrow"><span>${T('24-hr PSI, Singapore average')}</span><b>${a}</b><span class="jbl" style="color:${PSI_FG[lv]}">${T(label)}</span></div>`;
   }
   function pmBand(v) { return v <= 55 ? [0, 'Normal'] : v <= 150 ? [1, 'Elevated'] : v <= 250 ? [2, 'High'] : [3, 'Very high']; }
+  const pmAvg = (pm) => { const v = Object.values(pm.regions || {}); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : pm.max; };
   function renderAir(p, ja) {
     const el = $('air');
     if (!p || p.max == null) { el.innerHTML = unavailable('Air quality'); return; }
     const pm = p.pm1h;
     if (!pm || pm.max == null) return renderAirPsi(p, ja);
-    const [lv, label] = pmBand(pm.max);
+    const avg = pmAvg(pm);
+    const [lv, label] = pmBand(avg);
     const top = Object.entries(pm.regions).sort((a, b) => b[1] - a[1])[0][0];
     const bars = Object.entries(pm.regions).map(([k, v]) => {
       const [b] = pmBand(v);
       return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 2.5)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`;
     }).join('');
     el.innerHTML = `<h2>${T('Air quality')} <small>${T('Right now · 1-hr PM2.5')}</small></h2>
-      <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${pm.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>
-      <div class="sub">${T('Worst in the {r} · updated {t}', { r: T(top[0].toUpperCase() + top.slice(1)), t: sgTime(pm.timestamp) })}</div>
+      <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${avg}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>
+      <div class="sub">${T('Singapore average · highest: {r} {v}', { v: pm.max, r: T(top[0].toUpperCase() + top.slice(1)) })}</div>
       <div class="bars">${bars}</div>
       ${psi24Line(p)}
       ${jbLine(ja)}`;
@@ -996,8 +1038,9 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     }
     if (p && p.max != null) {
       if (p.pm1h && p.pm1h.max != null) {
-        const [lv, label] = pmBand(p.pm1h.max);
-        right = `<div class="nw-r"><small>${T('PM2.5 now')}</small><b>${p.pm1h.max}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>`;
+        const av = pmAvg(p.pm1h);
+        const [lv, label] = pmBand(av);
+        right = `<div class="nw-r"><small>${T('PM2.5 now, SG average')}</small><b>${av}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>`;
       } else {
         const a = psiAvg(p); const [lv, label] = psiBandOf(a);
         right = `<div class="nw-r"><small>PSI</small><b>${a}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>`;
@@ -1235,11 +1278,16 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const sun = new Date(Date.parse(sat + 'T12:00:00Z') + 864e5).toISOString().slice(0, 10);
     const on = e.start <= todayYmd && e.end >= todayYmd;
     const tag = on ? T('On now') : (e.start <= sun && e.end >= sat) ? T('This weekend') : '';
+    const dd = Math.round((Date.parse(e.start + 'T00:00:00Z') - Date.parse(todayYmd + 'T00:00:00Z')) / 864e5);
+    const cd = on ? '' : dd === 1 ? T('Tomorrow') : T('in {n} days', { n: dd });
     const zh = LANG === 'zh';
     const nm = zh && e.name_zh ? e.name_zh : e.name, vn = zh && e.venue_zh ? e.venue_zh : e.venue, dtx = zh && e.dates_zh ? e.dates_zh : e.dates;
     const until = dtx ? ` · ${esc(dtx)}` : e.end !== e.start ? ` · ${T('till {d}', { d: sgDate(e.end, { day: 'numeric', month: 'short' }) })}` : '';
-    const inner = `<div class="ev-d"><b>${day}</b><small>${mon}</small></div><div class="ev-t"><b>${esc(nm)}</b><span>${esc(vn)}${until}</span></div>${tag ? `<em>${tag}</em>` : ''}`;
+    const inner = `<div class="ev-d"><b>${day}</b><small>${mon}</small></div><div class="ev-t"><b>${esc(nm)}</b><span>${esc(vn)}${until}</span></div><div class="ev-r">${tag ? `<em>${tag}</em>` : ''}${cd ? `<small>${cd}</small>` : ''}</div>`;
     return e.link ? `<a class="ev" href="${esc(e.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="ev">${inner}</div>`;
+  }
+  function markExtra(html, keep) {
+    let i = 0; return html.replace(/<(a|div) class="ev"/g, (m, t) => (i++ >= keep ? `<${t} hidden data-extra="1" class="ev"` : m));
   }
   function renderEvents(ev) {
     const el = $('toto');
@@ -1247,8 +1295,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     evList = (ev && ev.list) || [];
     const head = `<h2>${T('Major events')} <small>${T('Concerts, sports &amp; more')}</small></h2>`;
     if (!evList.length) { el.innerHTML = `${head}<p class="muted">${T('Upcoming events will appear here.')}</p>`; return; }
-    el.innerHTML = `${head}<div class="evs">${evList.slice(0, 5).map((e) => evRow(e, today)).join('')}</div>
-      ${evList.length > 5 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
+    el.innerHTML = `${head}<div class="evs">${markExtra(evList.slice(0, 10).map((e) => evRow(e, today)).join(''), 5)}</div>
+      ${evList.length > 4 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
   }
   window.evMore = () => {
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
