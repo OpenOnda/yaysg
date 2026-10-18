@@ -369,7 +369,7 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .jbrow{display:flex;align-items:baseline;gap:8px;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--ink2)}
 .jbrow small{font-size:10.5px;color:var(--faint)}
 .jbrow b{margin-left:auto;font-size:16px;font-weight:800;color:var(--ink)}
-.jbrow .jbl{font-size:12px;font-weight:700}
+.jbrow .jbl{font-size:12px;font-weight:700;min-width:5.4em;text-align:right}
 /* ===== Laptops and desktops: everything in two rows ===== */
 @media (min-width:960px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
@@ -755,7 +755,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function sunLine(w) {
     const st = sunTimes(new Date(Date.now() + 8 * 3600e3));
     const sun = `<b>☀ ${sgTime(st.rise.toISOString())} · ${sgTime(st.set.toISOString())}</b>`;
-    const uv = w && w.uv;
+    const hr = Number(new Date().toLocaleString('en-GB', { timeZone: TZ, hour: 'numeric', hour12: false }));
+    const uv = hr >= 7 && hr < 19 && w && w.uv;
     let left = `<span>${T('Sunrise · sunset')}</span>`;
     if (uv) {
       const [, label, lv] = UV_BANDS.find(([max]) => uv.value <= max);
@@ -837,7 +838,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function psiBandOf(v) { return v <= 50 ? [0, 'Good'] : v <= 100 ? [1, 'Moderate'] : v <= 200 ? [2, 'Unhealthy'] : v <= 300 ? [3, 'Very unhealthy'] : [4, 'Hazardous']; }
   function psi24Line(p) {
     const a = psiAvg(p); const [lv, label] = psiBandOf(a);
-    return `<div class="psi24"><span>${T('24-hr PSI, Singapore average')}</span><b>${a}</b><span style="color:${PSI_FG[lv]};font-weight:700">${T(label)}</span></div>`;
+    return `<div class="jbrow"><span>${T('24-hr PSI, Singapore average')}</span><b>${a}</b><span class="jbl" style="color:${PSI_FG[lv]}">${T(label)}</span></div>`;
   }
   function pmBand(v) { return v <= 55 ? [0, 'Normal'] : v <= 150 ? [1, 'Elevated'] : v <= 250 ? [2, 'High'] : [3, 'Very high']; }
   function renderAir(p, ja) {
