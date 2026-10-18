@@ -224,7 +224,7 @@ async function cams() {
 
 // ---------- exchange rates (ECB reference rates via Frankfurter) ----------
 
-const FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR', 'KRW', 'PHP'];
+const FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR', 'KRW', 'PHP', 'INR'];
 
 async function fx() {
   const start = new Date(Date.now() - 10 * 86400000).toISOString().slice(0, 10);
