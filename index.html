@@ -653,6 +653,18 @@ body.measuring #air .bars{flex:none!important}
 .grid > .card > h2{background:#14231F;color:#FFFFFF;margin:-11px -14px 10px!important;padding:9px 14px;border-bottom:3px solid #E1251B}
 .grid > .card > h2 small{color:#9FB3AC!important}
 html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
+/* Footer 40% bigger */
+footer{font-size:16.8px!important}
+@media (max-width:600px){footer{font-size:15.4px!important}}
+/* Crossing time badges as big as the weather temperature */
+@media (min-width:960px){
+  .eta b{font-size:var(--etasz,36px);line-height:1.05}
+  .eta small{font-size:13px}
+  .eta{padding:7px 12px;border-radius:12px}
+}
+.eta b{white-space:nowrap}.eta b i{font-style:normal;font-size:.45em;font-weight:700;margin-left:4px}
+.feels.act span{color:var(--muted)}
+.feels.act .big{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -769,7 +781,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
     'Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.': '数据来源：data.gov.sg（NEA、LTA）、LTA DataMall、欧洲央行参考汇率、Yahoo Finance（指数，可能有延迟）及各媒体RSS。本站并非政府官方服务。兑换货币前请向兑换商确认汇率。',
     'Live': '实时', 'Reconnecting…': '重新连接中…', 'Loading headlines…': '正在加载新闻…',
     "Not available right now. We'll keep trying.": '暂时无法获取，我们会继续尝试。',
-    'Updated {t}': '{t} 更新', 'Feels like': '体感', 'Humidity': '湿度', '{a}° to {b}°': '{a}° 至 {b}°',
+    'Updated {t}': '{t} 更新', 'Actual': '实际', 'min': '分钟', 'Feels like': '体感', 'Humidity': '湿度', '{a}° to {b}°': '{a}° 至 {b}°',
     'No rain expected for the next 2 hours': '未来2小时预计无雨',
     'Morning': '上午', 'Afternoon': '下午', 'Night': '晚上', 'Overnight': '凌晨',
     'Fair': '晴', 'Fair & Warm': '晴热', 'Sunny': '晴朗', 'Partly Cloudy': '局部多云', 'Cloudy': '多云',
@@ -896,6 +908,14 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
     }
     setTimeout(() => { filling = false; }, 120);
   }
+  // Crossing times use the same text size as the weather temperature
+  function syncEta() {
+    const t = document.querySelector('#wx .wx-top .big');
+    const root = document.documentElement;
+    if (!t || window.innerWidth < 960) { root.style.removeProperty('--etasz'); return; }
+    const kz = parseFloat(t.closest('.wx-top').style.zoom) || 1;
+    root.style.setProperty('--etasz', (parseFloat(getComputedStyle(t).fontSize) * kz).toFixed(1) + 'px');
+  }
   function fitToScreen() {
     document.querySelectorAll('.grid > .card > *').forEach((k) => { k.style.zoom = ''; });
     const w = window.innerWidth, h = window.innerHeight;
@@ -928,6 +948,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
       apply(z);
     }
     fillBoxes();
+    syncEta();
     // Last check after the boxes are filled: shrink slightly if anything still spills over
     for (let i = 0; i < 4; i++) {
       const over = document.documentElement.scrollHeight - h;
@@ -1072,7 +1093,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
     const later = (w.periods || []).filter((p) => Date.parse(p.end) > now).slice(0, 3)
       .map((p) => { const c = tidy(mostCommon(p.regions)); return `<div><b>${periodLabel(p.start)}</b>${wxIcon(c)}<span>${esc(T(c))}</span></div>`; }).join('');
     el.innerHTML = `<h2>${T('Weather')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
-      <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
+      <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="feels act"><span>${T('Actual')}</span><div class="big">${temp}</div></div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
       <div class="sub">${esc(T(cond))}${range ? ' · ' + range : ''}</div>
       ${w.humidity != null ? `<div class="hum"><span>${T('Humidity')}</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
       ${windLine(w)}
@@ -1180,7 +1201,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
       pills += floodPill(w);
       const cond = tidy(w.nowCondition || w.today.forecast || '');
       const temp = w.tempNow != null ? w.tempNow + '°' : (w.today.high != null ? w.today.high + '°' : '--');
-      left = `<div class="nw-l"><div class="big">${temp}</div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}${wxIcon(cond)}</div>`;
+      left = `<div class="nw-l"><div class="feels act"><span>${T('Actual')}</span><div class="big">${temp}</div></div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}${wxIcon(cond)}</div>`;
       const bits = [esc(T(cond))];
       if (w.today.low != null) bits.push(T('{a}° to {b}°', { a: w.today.low, b: w.today.high }));
       if (w.humidity != null) bits.push(`${T('Humidity')} ${w.humidity}%`);
@@ -1220,7 +1241,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
     const badge = (e, to) => {
       if (!e) return '';
       const [label, bg] = LV[e.level] || LV.moderate;
-      return `<span class="eta" style="background:${bg}"><small>${T(to)}</small><b>${T('{a}–{b} min', { a: e.low, b: e.high })}</b><small>${T(label)}</small></span>`;
+      return `<span class="eta" style="background:${bg}"><small>${T(to)}</small><b>${e.low}–${e.high}<i>${T('min')}</i></b><small>${T(label)}</small></span>`;
     };
     const est = (camId) => {
       const jb = ests.find((k) => k.cam === camId && k.dir === 'jb');
