@@ -577,6 +577,15 @@ body.measuring #wx .later{flex:none!important}
 .nw-l .big,.nw-l .feels b{font-size:34px;line-height:1}
 #wx .later div{align-items:center!important;justify-content:center!important;text-align:center}
 #wx .later svg{margin:2px auto}
+/* Red strip 25% bigger on tablets and computers */
+@media (min-width:601px){
+  .news a{font-size:16.9px;padding:7px 24px}
+  .news a small{font-size:13.75px}
+  .news a i{width:7px;height:7px}
+  .nm{font-size:17.5px;padding:7px 24px}
+  .nm em{font-size:15px}
+  .nm-note{font-size:13.75px}
+}
 </style>
 </head>
 <body>
@@ -1140,7 +1149,7 @@ body.measuring #wx .later{flex:none!important}
         </a>`).join('')}</div>${estNote}`;
   }
 
-  const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'VND', 'IDR', 'KRW', 'PHP'];
+  const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'VND', 'IDR', 'KRW', 'PHP', 'INR'];
   function chg(pct) {
     if (pct == null) return { cls: 'flat', txt: '' };
     if (Math.abs(pct) < 0.05) return { cls: 'flat', txt: '0.0%' };
