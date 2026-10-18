@@ -665,6 +665,10 @@ footer{font-size:16.8px!important}
 .eta b{white-space:nowrap}.eta b i{font-style:normal;font-size:.45em;font-weight:700;margin-left:4px}
 .feels.act span{color:var(--muted)}
 .feels.act .big{color:var(--ink)}
+/* Weather tiles like the air quality tiles */
+.wx-row{margin:2px 0 8px}
+.wx-cond{display:flex;align-items:center;gap:8px}
+.wx-cond svg{width:30px;height:30px;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -756,7 +760,7 @@ footer{font-size:16.8px!important}
     'Starter (10 numbers)': '入围奖（10个号码）', 'Consolation (10 numbers)': '安慰奖（10个号码）',
     'What each bet costs': '各类投注费用', 'Bet type': '投注方式', 'Numbers picked': '选号数', 'Cost': '费用', 'Ordinary': '普通', 'System 7': '系统7', 'System 8': '系统8', 'System 9': '系统9', 'System 10': '系统10', 'System 11': '系统11', 'System 12': '系统12',
     TOTO_NOTE: '每组6个号码的组合收费$1。系统投注包含所选号码的所有组合，例如系统8共28组。详情请参阅新加坡博彩公司网站。',
-    'Singapore averages': '全岛平均', '1-hr PM2.5': '1小时PM2.5', 'JB AQI': '新山AQI', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
+    'Singapore averages': '全岛平均', '1-hr PM2.5': '1小时PM2.5', 'Johor AQI': '柔佛AQI', 'UV index': '紫外线指数', 'Comfortable': '舒适', 'Warm': '温暖', 'Hot': '炎热', 'Very hot': '酷热', 'After sunset': '日落后', 'Not available': '暂无', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
     AIR_NOTE: '1小时PM2.5反映当前空气（正常≤55，偏高56至150，高151至250，非常高>250）。24小时PSI是NEA的每日健康指标（良好≤50，中等51至100，不健康101至200）。新山数据来自Open-Meteo的美国AQI模型估算。',
     PZ4_NOTE: '以上为每$1注的奖金。“大”可中全部23个号码；“小”只中前三奖，但奖金较高。iBet 包含4个数字的所有排列，奖金按比例分配。详情请参阅新加坡博彩公司网站。',
     'Huat Corner': '发财角', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
@@ -1054,6 +1058,22 @@ footer{font-size:16.8px!important}
     return { rise: toDate(transit - w0 / 360), set: toDate(transit + w0 / 360) };
   }
   const UV_BANDS = [[2, 'Low', 0], [5, 'Moderate', 1], [7, 'High', 2], [10, 'Very high', 3], [99, 'Extreme', 4]];
+  // Weather tiles: Actual, Feels like, UV index (same look as the air quality tiles)
+  function wxTiles(w, temp) {
+    const tile = (lab, v, band, col) => `<div class="aq3"><small>${lab}</small><div class="big">${v}</div><em style="color:${col}">${band}</em></div>`;
+    const fl = w.feelsLike;
+    const flBand = fl == null ? ['', 'var(--muted)'] : fl <= 30 ? [T('Comfortable'), PSI_FG[0]] : fl <= 35 ? [T('Warm'), PSI_FG[1]] : fl <= 40 ? [T('Hot'), PSI_FG[2]] : [T('Very hot'), PSI_FG[3]];
+    const hr = Number(new Date().toLocaleString('en-GB', { timeZone: TZ, hour: 'numeric', hour12: false }));
+    const uv = hr >= 7 && hr < 19 && w.uv;
+    let uvT;
+    if (uv) { const [, label, lv] = UV_BANDS.find(([max]) => uv.value <= max); uvT = tile(T('UV index'), uv.value, T(label), PSI_FG[lv]); }
+    else uvT = tile(T('UV index'), '–', T(hr >= 19 || hr < 7 ? 'After sunset' : 'Not available'), 'var(--muted)');
+    return tile(T('Actual'), temp, '&nbsp;', 'var(--muted)') + (fl != null ? tile(T('Feels like'), fl + '°', flBand[0], flBand[1]) : '') + uvT;
+  }
+  function sunOnly() {
+    const st = sunTimes(new Date(Date.now() + 8 * 3600e3));
+    return `<div class="wind"><span>${T('Sunrise · sunset')}</span><b>☀ ${sgTime(st.rise.toISOString())} · ${sgTime(st.set.toISOString())}</b></div>`;
+  }
   function sunLine(w) {
     const st = sunTimes(new Date(Date.now() + 8 * 3600e3));
     const sun = `<b>☀ ${sgTime(st.rise.toISOString())} · ${sgTime(st.set.toISOString())}</b>`;
@@ -1093,11 +1113,11 @@ footer{font-size:16.8px!important}
     const later = (w.periods || []).filter((p) => Date.parse(p.end) > now).slice(0, 3)
       .map((p) => { const c = tidy(mostCommon(p.regions)); return `<div><b>${periodLabel(p.start)}</b>${wxIcon(c)}<span>${esc(T(c))}</span></div>`; }).join('');
     el.innerHTML = `<h2>${T('Weather')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
-      <div class="wx-top"><div style="display:flex;align-items:flex-end;gap:14px"><div class="feels act"><span>${T('Actual')}</span><div class="big">${temp}</div></div>${w.feelsLike != null ? `<div class="feels"><span>${T('Feels like')}</span><b>${w.feelsLike}°</b></div>` : ''}</div>${wxIcon(cond)}</div>
-      <div class="sub">${esc(T(cond))}${range ? ' · ' + range : ''}</div>
+      <div class="aq-row wx-row">${wxTiles(w, temp)}</div>
+      <div class="sub wx-cond">${wxIcon(cond)}<span>${esc(T(cond))}${range ? ' · ' + range : ''}</span></div>
       ${w.humidity != null ? `<div class="hum"><span>${T('Humidity')}</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
       ${windLine(w)}
-      ${sunLine(w)}
+      ${sunOnly()}
       ${floodPill(w)}${rain}${later ? `<div class="later">${later}</div>` : ''}`;
   }
 
@@ -1166,7 +1186,7 @@ footer{font-size:16.8px!important}
     }).join('');
     const pa = psiAvg(p); const [plv, plabel] = psiBandOf(pa);
     const tile = (lab, v, band, col) => `<div class="aq3"><small>${lab}</small><div class="big">${v}</div><em style="color:${col}">${band}</em></div>`;
-    const jbT = ja && ja.aqi != null ? tile(T('JB AQI'), ja.aqi, T(ja.band ? ja.band.label : ''), PSI_FG[ja.band ? ja.band.level : 0]) : '';
+    const jbT = ja && ja.aqi != null ? tile(T('Johor AQI'), ja.aqi, T(ja.band ? ja.band.label : ''), PSI_FG[ja.band ? ja.band.level : 0]) : '';
     el.innerHTML = `<h2>${T('Air quality')} <small>${T('Singapore averages')}</small></h2>
       <div class="aq-row">${tile(T('1-hr PM2.5'), avg, T(label), PSI_FG[lv])}${tile(T('24-hr PSI'), pa, T(plabel), PSI_FG[plv])}${jbT}</div>
       <div class="sub aq-sub">${T('Highest right now: {r} {v}', { v: pm.max, r: T(top[0].toUpperCase() + top.slice(1)) })}</div>
