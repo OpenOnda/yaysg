@@ -369,9 +369,9 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 @media (min-width:960px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
     "wx air cp cp"
-    "fx coe d4 toto"
-    "fx td d4 toto"
-    "fx mv d4 toto";grid-auto-flow:row}
+    "td mv d4 toto"
+    "fx mv d4 toto"
+    "fx coe d4 toto";grid-auto-flow:row}
   #wx{grid-area:wx}#air{grid-area:air}#cp{grid-area:cp}#fxc{grid-area:fx}#coe{grid-area:coe}
   #d4{grid-area:d4}#toto{grid-area:toto}#td{grid-area:td}#mv{grid-area:mv}
   #hs{display:none!important}
@@ -380,7 +380,49 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
   #fxc .fxg{flex:1 1 auto;grid-auto-rows:1fr;align-content:stretch}
   #fxc .fxg div{display:flex;flex-direction:column;justify-content:center}
   #td .hol-next{padding-bottom:6px}
+  /* 4D and TOTO stretch to fill their columns, no blank space at the bottom */
+  #d4,#toto{display:flex;flex-direction:column}
+  #d4 .ltop{flex:1.4 1 auto;align-items:stretch}
+  #d4 .ltop div{display:flex;flex-direction:column;justify-content:center}
+  #d4 .ltop b{font-size:24px}
+  #d4 .lg{flex:1 1 auto;grid-auto-rows:1fr}
+  #d4 .lg span{display:flex;align-items:center;justify-content:center;font-size:14px}
+  #d4 .lsub{margin-top:12px}
+  #toto .balls{margin:6px 0 4px}
+  #toto .tg{flex:1 1 auto;display:flex;flex-direction:column;margin-top:10px;padding:6px 12px}
+  #toto .tg-r{flex:1 1 auto;align-items:center;font-size:13.5px}
+  #toto .tg-r b{font-size:16px}
+  #toto .tg-r.g1r b{font-size:20px}
+  #toto .tg-snow{margin-top:10px;font-size:12.5px;color:var(--ink2)}
+  #toto .next{margin-top:10px;padding:10px 12px}
+  #toto .next .nj b{font-size:24px}
+  #d4 .lnote,#toto .lnote{margin-top:10px}
 }
+.mrt-ok{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--good);margin:0 0 6px}
+.dotg{width:7px;height:7px;border-radius:50%;background:currentColor;flex:0 0 auto}
+.inc{display:grid;grid-template-columns:1fr auto;gap:1px 8px;align-items:baseline;padding:5px 0;border-top:1px solid var(--hair);font-size:12px;line-height:1.35}
+.inc .inc-m{grid-column:1 / -1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){.inc .inc-m{white-space:normal}}
+.inc-t{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.inc-m{color:var(--ink2)}
+.inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
+.inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
+.ti-top{margin-bottom:6px}
+:root{--tic:#C2410C}
+.mrt{font-size:12.5px}
+.mrt b{color:var(--tic);font-weight:800}
+.mrt .mrt-ok{display:inline-flex;align-items:center;gap:6px}
+.mrt-ok{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--good)}
+.mrt-bad{font-size:12px;font-weight:700;color:var(--bad)}
+.ti-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:4px 18px}
+.ti-g{border-top:1px solid var(--hair);padding:6px 0 2px}
+.gh{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;font-weight:800;margin-bottom:2px}
+.gh span{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--faint)}
+.it{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:1.5;color:var(--ink2)}
+.it span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it b{font-weight:700;color:var(--ink)}
+.it time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
+.it-more{font-size:11px}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -431,6 +473,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card wide" id="cp"><h2>Causeway &amp; Second Link <small>Live LTA cameras</small></h2><div class="cams"><span class="skel" style="height:160px"></span><span class="skel" style="height:160px"></span></div></section>
 
+    <section class="card" id="mv" hidden><h2>Traffic incidents</h2></section>
+
     <section class="card" id="fxc"><h2>Exchange rate · 1 SGD buys</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
@@ -441,7 +485,6 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card" id="td"><h2>Public holidays</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card" id="mv" hidden><h2>Roads &amp; MRT</h2></section>
 
     <section class="card home" id="hs" hidden>
       <h2 data-i18n="Keep it handy">Keep it handy</h2>
@@ -515,8 +558,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Singapore Pools': '新加坡博彩', ' · Draw {n}': ' · 第{n}期', '1st': '头奖', '2nd': '二奖', '3rd': '三奖',
     'Starter': '入围奖', 'Consolation': '安慰奖', 'Winning numbers · Additional': '中奖号码 · 附加号码',
     'Group 1 prize': '头奖奖金', 'TOTO': '多多',
-    'No Group 1 winner, the jackpot snowballs.': '本期头奖无人中，奖金滚入下一期。', '4D results': '4D开彩成绩', 'TOTO results': '多多开彩成绩', 'Next draw': '下期开彩', 'Estimated jackpot': '预计头奖', 'Jackpot': '头奖',
-    'Always verify with Singapore Pools. 18 and above.': '请以新加坡博彩公司公布为准。仅限18岁及以上。', '18 and above. NCPG helpline 1800-6-668-668.': '仅限18岁及以上。NCPG求助热线 1800-6-668-668。', 'Wind': '风', 'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
+    'Jackpot rollover!': '头奖滚存！', 'No Group 1 winner, jackpot snowballs.': '本期头奖无人中，奖金滚入下一期。', '4D results': '4D开彩成绩', 'TOTO results': '多多开彩成绩', 'Next draw': '下期开彩', 'Estimated jackpot': '预计头奖', 'Jackpot': '头奖',
+    '18 and above only. NCPG Helpline 1800-6-668-668.': '仅限18岁及以上。NCPG求助热线 1800-6-668-668。', 'Wind': '风', 'Prize group': '奖级', 'Share amount': '每注奖金', 'Winners': '中奖注数', 'Group {n}': '第{n}组', 'No winner': '无人中奖',
     '4D results not available right now.': '暂时无法获取4D成绩。', 'TOTO results not available right now.': '暂时无法获取多多成绩。',
     'Results are for information only, always verify with Singapore Pools. 18 and above. Gamble responsibly, NCPG helpline 1800-6-668-668.': '开彩成绩仅供参考，请以新加坡博彩公司公布为准。仅限18岁及以上。理性博彩，NCPG求助热线 1800-6-668-668。',
     "New Year's Day": '元旦', 'Chinese New Year': '农历新年', 'Chinese New Year (Day 2)': '农历新年（第二天）',
@@ -527,6 +570,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'MRT status not available right now.': '暂时无法获取地铁状况。', 'Train service disruption': '列车服务中断',
     'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
     'Live · {t}': '实时 · {t}',
+    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
     'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
   };
   const T = (key, vars) => {
@@ -542,7 +586,13 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function fitToScreen() {
     const w = window.innerWidth, h = window.innerHeight;
     if (w < 960) { document.body.style.zoom = ''; return; }
-    const z = Math.max(0.68, Math.min(1, w / 1280, h / 700));
+    document.body.style.zoom = '';
+    const wz = Math.min(1, w / 1280);
+    document.body.style.zoom = wz < 0.995 ? String(wz) : '';
+    // Height of everything down to the end of the boxes, at the current zoom
+    const grid = document.querySelector('.grid');
+    const natural = grid ? grid.getBoundingClientRect().bottom / (wz || 1) + 12 : 700;
+    const z = Math.max(0.62, Math.min(1, wz, h / natural));
     document.body.style.zoom = z < 0.995 ? String(z) : '';
   }
   fitToScreen();
@@ -779,7 +829,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         </a>`).join('')}</div>${estNote}`;
   }
 
-  const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR', 'EUR', 'GBP', 'AUD'];
+  const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'VND', 'IDR', 'KRW', 'PHP'];
   function chg(pct) {
     if (pct == null || Math.abs(pct) < 0.05) return { cls: 'flat', txt: '0.0%' };
     return pct > 0 ? { cls: 'up', txt: '▲ ' + pct.toFixed(1) + '%' } : { cls: 'down', txt: '▼ ' + Math.abs(pct).toFixed(1) + '%' };
@@ -787,7 +837,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   function renderFx(f) {
     const el = $('fxc');
     if (!f || !f.rates) { el.innerHTML = unavailable('Exchange rate'); return; }
-    const tiles = f.rates.filter((r) => MAIN_FX.includes(r.code)).map((r) => {
+    const tiles = f.rates.filter((r) => MAIN_FX.includes(r.code)).sort((a, b) => MAIN_FX.indexOf(a.code) - MAIN_FX.indexOf(b.code)).map((r) => {
       const c = chg(r.changePct);
       return `<div><span class="h"><b>${r.code}</b><span class="${c.cls}">${c.txt}</span></span><div class="v">${fmtRate(r.rate)}</div></div>`;
     }).join('');
@@ -869,7 +919,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     // No Group 1 winner: the jackpot rolls over to the next draw
     const g1row = rows.find((r) => r.group === 1);
     const g1none = g1row && !Number(String(g1row.winners).replace(/[^\d]/g, ''));
-    const snow = '';
+    const snow = g1none ? `<div class="tg-snow">${T('No Group 1 winner, jackpot snowballs.')}</div>` : '';
     return `<div class="tg">
       <div class="tg-h"><span>${T('Prize group')}</span><span>${T('Share amount')}</span><span>${T('Winners')}</span></div>
       ${rows.map((r) => {
@@ -896,7 +946,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       </div>
       <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
       <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
-      <div class="lnote">${T('Always verify with Singapore Pools. 18 and above.')}</div>`;
+      <div class="lnote">${T('18 and above only. NCPG Helpline 1800-6-668-668.')}</div>`;
   }
 
   function renderToto(t, nx) {
@@ -913,7 +963,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <div class="nj"><small>${T(nx.estimate ? 'Estimated jackpot' : 'Jackpot')}</small><b>${esc(nx.jackpot)}</b></div>
       </div>` : '';
     el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}
-      <div class="lnote">${T('18 and above. NCPG helpline 1800-6-668-668.')}</div>`;
+      <div class="lnote">${T('18 and above only. NCPG Helpline 1800-6-668-668.')}</div>`;
   }
 
   function renderToday() {
@@ -936,23 +986,43 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     el.innerHTML = `<h2>${T('Public holidays')}</h2>${first}${rest}`;
   }
 
+  // Jams, accidents and MRT status (LTA DataMall)
+  const INC = {
+    'heavy traffic': ['Heavy traffic', '#C2410C'],
+    'accident': ['Accident', '#B42318'],
+    'vehicle breakdown': ['Breakdown', '#9A5B00'],
+    'obstacle': ['Obstacle', '#9A5B00'], 'road block': ['Road block', '#9A5B00'], 'unattended vehicle': ['Obstacle', '#9A5B00'],
+    'diversion': ['Diversion', '#5A6B65'], 'roadwork': ['Roadwork', '#5A6B65'],
+  };
+  // "Heavy traffic on CTE (towards AYE) after Braddell Rd Exit." -> "<b>CTE</b> to AYE, after Braddell Rd"
+  function shortInc(msg) {
+    const m = /\bon (.+?) \(towards (.+?)\)(?:\s+((?:after|at|before|near|between)\b.+?))?\.?\s*$/i.exec(msg);
+    if (!m) return esc(msg.replace(/^[^]*?\bon\s+/i, '').replace(/\.$/, ''));
+    const where = m[3] ? ', ' + esc(m[3].replace(/\s+Exit\b/i, '').replace(/\.\s.*$/, '')) : '';
+    return `<b>${esc(m[1])}</b> ${T('to')} ${esc(m[2])}${where}`;
+  }
+  const GROUPS = [
+    { name: 'Heavy traffic', color: 'var(--tic)', test: (k) => k === 'heavy traffic' },
+    { name: 'Accidents', color: 'var(--tic)', test: (k) => k === 'accident' },
+    { name: 'Breakdowns', color: 'var(--tic)', test: (k) => k === 'vehicle breakdown' },
+    { name: 'Obstacles', color: 'var(--tic)', test: (k) => k === 'obstacle' || k === 'road block' || k === 'unattended vehicle' },
+  ];
   function renderMove(l) {
     const el = $('mv');
     if (!l || !l.enabled) { el.hidden = true; $('hs').hidden = false; return; }
     el.hidden = false; $('hs').hidden = true;
-    let mrt = `<p class="muted">${T('MRT status not available right now.')}</p>`;
-    if (l.trains) {
-      mrt = l.trains.disrupted
-        ? `<div class="pill" style="background:var(--bad-bg);color:var(--bad);margin-top:0">${esc(l.trains.messages[0] || T('Train service disruption'))}</div>`
-        : `<div class="pill" style="background:var(--good-bg);color:var(--good);margin-top:0">${T('All MRT &amp; LRT lines running normally')}</div>`;
-    }
-    let roads = '';
-    if (l.incidents) {
-      roads = l.incidents.length
-        ? l.incidents.slice(0, 4).map((x) => `<div class="row" style="justify-content:flex-start;align-items:flex-start"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:50%;margin-top:6px;background:${/accident/i.test(x.type) ? 'var(--bad)' : '#C98A00'}"></span><span>${esc(x.message)}</span></div>`).join('')
-        : `<div class="row"><span>${T('No major road incidents')}</span></div>`;
-    }
-    el.innerHTML = `<h2>${T('Roads &amp; MRT')}</h2>${mrt}<div style="margin-top:8px">${roads}</div>`;
+    const mrt = !l.trains ? '' : l.trains.disrupted
+      ? `<span class="mrt"><b>${T('MRT &amp; LRT')}:</b> <span class="mrt-bad">${esc(l.trains.messages[0] || T('Train service disruption'))}</span></span>`
+      : `<span class="mrt"><b>${T('MRT &amp; LRT')}:</b> <span class="mrt-ok"><span class="dotg"></span>${T('running normally')}</span></span>`;
+    const list = l.incidents || [];
+    const groups = GROUPS.map((g) => ({ g, items: list.filter((x) => g.test(x.type.toLowerCase())) })).filter((x) => x.items.length);
+    const body = !l.incidents ? `<p class="muted">${T('Road incidents not available right now.')}</p>`
+      : !groups.length ? `<p class="muted">${T('No jams or accidents reported right now.')}</p>`
+      : `<div class="ti-groups">${groups.map(({ g, items }) => `
+          <div class="ti-g"><div class="gh" style="color:${g.color}">${T(g.name)}<span>${items.length}</span></div>
+          ${items.slice(0, 3).map((x) => `<div class="it" title="${esc(x.message)}"><span>${shortInc(x.message)}</span>${x.time ? `<time>${sgTime(x.time)}</time>` : ''}</div>`).join('')}
+          ${items.length > 3 ? `<div class="muted it-more">${T('+{n} more', { n: items.length - 3 })}</div>` : ''}</div>`).join('')}</div>`;
+    el.innerHTML = `<h2>${T('Traffic incidents')} <small>LTA · live</small></h2><div class="ti-top">${mrt}</div>${body}`;
   }
 
   // ---------- load ----------
@@ -982,6 +1052,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       renderToday();
       renderMove(d.lta);
       $('upd').textContent = T('Live');
+      requestAnimationFrame(fitToScreen);
       $('upd').title = 'Data refreshed ' + sgTime(d.updated);
   }
   let lastData = null;
