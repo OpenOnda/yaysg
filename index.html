@@ -514,23 +514,22 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 /* ===== Desktop: tighter boxes so the page can be shown bigger ===== */
 @media (min-width:960px){
   .cam{aspect-ratio:2/1}
-  .later svg{width:20px;height:20px;margin:0}
-  #wx .later div{flex-direction:row;align-items:center;gap:6px;padding:5px 7px}
-  #wx .later div b{flex:0 0 100%;margin-bottom:-2px}
-  #wx .later div{flex-wrap:wrap}
   #d4 .ltop div{padding:6px 8px}
   #d4 .ltop b{font-size:21px}
   .lsec{padding-bottom:7px;margin-bottom:6px}
   .lhead2{margin-bottom:5px}
   .more-btn{margin-top:5px}
   .nextline{margin-top:6px}
-  .alm-day{margin-bottom:3px}
-  .alm-row{padding:1px 0}
   .evs{gap:5px}
   .ev{padding:5px 8px;gap:10px}
   .ev-d{flex-basis:38px;height:38px}
   .ev-d b{font-size:15px}
   .bars{gap:2px}
+  #d4{display:flex;flex-direction:column}
+  #d4 .lsec.alm{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;gap:6px;padding-top:8px}
+  #d4 .alm .lhead2{margin-bottom:0}
+  #d4 .alm-day{font-size:14px;margin:2px 0}
+  #d4 .alm-row{font-size:13px;line-height:1.5;padding:5px 0;border-top:1px dashed var(--hair);grid-template-columns:92px 1fr}
   .ti-g{padding:4px 0 1px}
   .gh{margin-bottom:0}
   .ti-g .it{line-height:1.38}
@@ -738,7 +737,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     let z = Math.min(1, w / 1120);  // start at 100%, may grow on big screens below
     apply(z);
     // Widening makes the boxes a bit taller, so settle the size over a few rounds
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 10; i++) {
       const next = Math.max(0.55, Math.min(1.3, w / 1120, h / natural(z)));
       if (Math.abs(next - z) < 0.004) { z = next; break; }
       z = next; apply(z);
@@ -753,6 +752,12 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   }
   fitToScreen();
   window.addEventListener('resize', fitToScreen);
+  let fitT, lastH = 0;
+  if (window.ResizeObserver) new ResizeObserver(() => {
+    const hh = document.querySelector('main') ? document.querySelector('main').scrollHeight : 0;
+    if (Math.abs(hh - lastH) < 2) return; lastH = hh;
+    clearTimeout(fitT); fitT = setTimeout(fitToScreen, 60);
+  }).observe(document.querySelector('main'));
 
   // ---------- light / dark switch ----------
   $('mode').addEventListener('click', function () {
@@ -886,7 +891,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       ${w.humidity != null ? `<div class="hum"><span>${T('Humidity')}</span><span class="t"><i style="width:${w.humidity}%"></i></span><b>${w.humidity}%</b></div>` : ''}
       ${windLine(w)}
       ${sunLine(w)}
-      ${floodPill(w)}${rain}`;
+      ${floodPill(w)}${rain}${later ? `<div class="later">${later}</div>` : ''}`;
   }
 
   const PSI_COLORS = ['#0F8A6B', '#C98A00', '#C2410C', '#B42318', '#7A1010'];
@@ -1182,16 +1187,16 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const d = lt.fourD, t = lt.toto, nx = lt.totoNext;
     const el = $('d4');
     if (!d && !t) { el.innerHTML = unavailable('4D &amp; TOTO'); return; }
-    const four = d ? `<div class="lsec"><div class="lhead2"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span><button class="more-btn" type="button" onclick="lotMore('4d')">${T('Show more')} ›</button></div>
+    const four = d ? `<div class="lsec"><div class="lhead2"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
       <div class="ltop">
         <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
         <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
         <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
-      </div></div>` : '';
-    const toto = t ? `<div class="lsec"><div class="lhead2"><b>TOTO</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span><button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>
+      </div><button class="more-btn" type="button" onclick="lotMore('4d')">${T('Show more')} ›</button></div>` : '';
+    const toto = t ? `<div class="lsec"><div class="lhead2"><b>TOTO</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
       <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
       ${nx ? `<div class="nextline"><span>${T('Next draw')} ${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span><b>${esc(nx.jackpot)}</b></div>` : ''}
-      </div>` : '';
+      <button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>` : '';
     el.innerHTML = `<h2>${T('4D &amp; TOTO')} <small>${T('Singapore Pools')}</small></h2>${four}${toto}${almanacHTML(alm)}`;
   }
   window.lotMore = (k) => {
