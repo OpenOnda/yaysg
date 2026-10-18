@@ -138,6 +138,7 @@ async function weather() {
       high: general.temperature?.high ?? null,
       low: general.temperature?.low ?? null,
       humidityHigh: general.relative_humidity?.high ?? null,
+      wind: general.wind ? { dir: general.wind.direction || null, low: general.wind.speed?.low ?? null, high: general.wind.speed?.high ?? null } : null,
     },
     periods,
   };
@@ -571,7 +572,10 @@ async function toto() {
   const c = cells(block);
   const balls = c.filter((x) => /^\d{1,2}$/.test(x)).map(Number).filter((n) => n >= 1 && n <= 49);
   if (balls.length < 7) throw new Error('toto: unexpected layout');
-  const g1 = block.match(/Group 1 Prize[\s\S]*?(\$[\d,]+)/i);
+  // Only read the cell straight after the "Group 1 Prize" heading, never a later table
+  const g1cell = block.match(/Group 1 Prize[\s\S]*?<td[^>]*>([\s\S]*?)<\/td>/i);
+  const g1text = g1cell ? decodeEntities(g1cell[1]) : '';
+  const g1 = /^\$[\d,]+$/.test(g1text) ? [null, g1text] : null;
   // Winning shares table: Group, share amount, number of winning shares
   const groups = [];
   const rowRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
@@ -591,9 +595,23 @@ async function toto() {
   };
 }
 
+// Next TOTO draw date and estimated jackpot
+async function totoNext() {
+  const html = await getText(POOLS + 'toto_next_draw_estimate_en.html');
+  const text = decodeEntities(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ');
+  const amount = (text.match(/\$[\d,]+/) || [])[0] || null;
+  if (!amount) throw new Error('toto next: no amount');
+  return {
+    date: (text.match(DATE_RE) || [])[0] || null,
+    time: (text.match(/\b\d{1,2}[.:]\d{2}\s*[ap]m\b/i) || [])[0] || null,
+    jackpot: amount,
+    estimate: /est/i.test(text),
+  };
+}
+
 async function lottery() {
-  const [d4, tt] = await Promise.allSettled([fourD(), toto()]);
-  const out = { fourD: d4.status === 'fulfilled' ? d4.value : null, toto: tt.status === 'fulfilled' ? tt.value : null };
+  const [d4, tt, nx] = await Promise.allSettled([fourD(), toto(), totoNext()]);
+  const out = { fourD: d4.status === 'fulfilled' ? d4.value : null, toto: tt.status === 'fulfilled' ? tt.value : null, totoNext: nx.status === 'fulfilled' ? nx.value : null };
   if (!out.fourD && !out.toto) throw new Error('no lottery results');
   return out;
 }
