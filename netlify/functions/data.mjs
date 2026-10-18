@@ -193,7 +193,7 @@ async function cams() {
 
 // ---------- exchange rates (ECB reference rates via Frankfurter) ----------
 
-const FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR', 'INR', 'AUD', 'GBP', 'EUR', 'KRW', 'HKD'];
+const FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR', 'KRW', 'PHP'];
 
 async function fx() {
   const start = new Date(Date.now() - 10 * 86400000).toISOString().slice(0, 10);
@@ -202,14 +202,29 @@ async function fx() {
   if (!dates.length) throw new Error('no fx');
   const last = j.rates[dates[dates.length - 1]];
   const prev = dates.length > 1 ? j.rates[dates[dates.length - 2]] : null;
-  return {
-    date: dates[dates.length - 1],
-    rates: FX.filter((c) => last[c] != null).map((c) => ({
-      code: c,
-      rate: last[c],
-      changePct: prev && prev[c] ? ((last[c] - prev[c]) / prev[c]) * 100 : null,
-    })),
-  };
+  const rates = FX.filter((c) => last[c] != null).map((c) => ({
+    code: c,
+    rate: last[c],
+    changePct: prev && prev[c] ? ((last[c] - prev[c]) / prev[c]) * 100 : null,
+  }));
+  const v = await vnd();
+  if (v) rates.push(v);
+  return { date: dates[dates.length - 1], rates };
+}
+
+// The ECB doesn't publish the Vietnamese dong, so VND comes from Yahoo Finance,
+// with open.er-api.com as a backup (that one has no daily change).
+async function vnd() {
+  try {
+    const q = await oneIndex({ sym: 'SGDVND=X', name: 'VND' });
+    if (q.price > 1000) return { code: 'VND', rate: q.price, changePct: q.changePct };
+  } catch {}
+  try {
+    const j = await getJSON('https://open.er-api.com/v6/latest/SGD');
+    const r = Number(j?.rates?.VND);
+    if (r > 1000) return { code: 'VND', rate: r, changePct: null };
+  } catch {}
+  return null;
 }
 
 // ---------- COE ----------
@@ -372,10 +387,27 @@ async function lta() {
     getJSON(`${base}/TrafficIncidents`, { headers }).catch(() => null),
     getJSON(`${base}/TrainServiceAlerts`, { headers }).catch(() => null),
   ]);
+  // Jams, accidents and other incidents, most important first, newest first within each type
+  const PRIORITY = { 'heavy traffic': 0, 'accident': 1, 'vehicle breakdown': 2, 'obstacle': 3, 'road block': 3, 'unattended vehicle': 3, 'diversion': 4, 'roadwork': 5 };
+  const now = new Date();
   const incidents = (inc?.value || [])
-    .filter((x) => /accident|vehicle breakdown|roadwork|obstacle|heavy traffic/i.test(x.Type || ''))
-    .map((x) => ({ type: x.Type, message: x.Message }))
-    .slice(0, 6);
+    .map((x) => {
+      const type = String(x.Type || '').trim();
+      const key = type.toLowerCase();
+      if (!(key in PRIORITY)) return null;
+      // Messages start with "(18/10)18:30 ": pull out the time, keep the rest
+      const msg = String(x.Message || '');
+      const m = /^\((\d{1,2})\/(\d{1,2})\)(\d{1,2}):(\d{2})\s*/.exec(msg);
+      let time = null;
+      if (m) {
+        const d = new Date(Date.UTC(now.getUTCFullYear(), Number(m[2]) - 1, Number(m[1]), Number(m[3]) - 8, Number(m[4])));
+        time = d.toISOString();
+      }
+      return { type, rank: PRIORITY[key], message: m ? msg.slice(m[0].length) : msg, time };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.rank - b.rank || String(b.time).localeCompare(String(a.time)))
+    .slice(0, 40);
   const v = trains?.value || {};
   const disrupted = Number(v.Status) === 2;
   const segs = (v.AffectedSegments || []).map((s) => ({ line: s.Line, direction: s.Direction, stations: s.Stations }));
