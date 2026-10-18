@@ -431,7 +431,7 @@ main .keep{margin-left:0;margin-right:0}
 .share-row{display:flex;justify-content:center;margin:0 0 10px}
 .share-big{text-align:center;display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-weight:800;font-size:14px;padding:11px 22px;border-radius:999px}
 @media (min-width:960px){.share-row{display:none}}
-@media (min-width:960px){.keep{display:none}main{padding-bottom:6px}footer{display:grid;grid-template-columns:1fr auto 1fr;padding:4px 16px 8px;align-items:center}footer .flinks{grid-column:2}footer .copy{grid-column:3;justify-self:end}}
+@media (min-width:960px){.keep{display:none}main{padding-bottom:6px}footer{display:flex;justify-content:space-between;padding:4px 16px 8px;align-items:center}}
 .flinks{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .flinks button{all:unset;cursor:pointer;font-weight:600;color:var(--muted)}
 .flinks button:hover{color:var(--ink);text-decoration:underline}
@@ -571,7 +571,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   const ZH = {
     'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟',
     'UV': '紫外线', 'Low': '低', 'Extreme': '极高', 'Sunrise · sunset': '日出 · 日落', ' (+{n} more)': '（另有{n}处）',
-    'School holidays': '学校假期', 'until {d}': '至{d}', 'On now': '进行中',
+    'MOE school holidays': '教育部学校假期', 'until {d}': '至{d}', 'On now': '进行中',
     'Keep yay.sg handy': '把 yay.sg 放在手边', 'Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".': '加到手机主屏幕。iPhone：点“分享”，再选“添加到主屏幕”。Android：点菜单，再选“添加到主屏幕”。',
     'Share yay.sg': '分享 yay.sg', 'Enjoying yay.sg? Tell your friends about it!': '喜欢 yay.sg？告诉你的朋友吧！', 'Disclaimer': '免责声明', 'About': '关于我们', 'Feedback': '意见反馈', 'Contact': '联系我们', 'Send feedback on WhatsApp': '用 WhatsApp 发送反馈',
     "Start your day with a yay. Here's Singapore at a glance.": '每天从一声 yay 开始。新加坡一览，尽在这里。',
@@ -1045,11 +1045,11 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   ];
   function schoolRow(today, days, fmt) {
     const cur = SCHOOL_HOLS.find(([a, b]) => a <= today && today <= b);
-    if (cur) return `<div class="row"><span>${T('School holidays')}<span class="muted"> · ${T('until {d}', { d: fmt(cur[1]) })}</span></span><span class="k">${T('On now')}</span></div>`;
+    if (cur) return `<div class="row"><span>${T('MOE school holidays')}<span class="muted"> · ${T('until {d}', { d: fmt(cur[1]) })}</span></span><span class="k">${T('On now')}</span></div>`;
     const nx = SCHOOL_HOLS.find(([a]) => a > today);
     if (!nx) return '';
     const n = days(nx[0]);
-    return `<div class="row"><span>${T('School holidays')}<span class="muted"> · ${fmt(nx[0])} – ${fmt(nx[1])}</span></span><span class="k">${n === 1 ? T('Tomorrow') : T('in {n} days', { n })}</span></div>`;
+    return `<div class="row"><span>${T('MOE school holidays')}<span class="muted"> · ${fmt(nx[0])} – ${fmt(nx[1])}</span></span><span class="k">${n === 1 ? T('Tomorrow') : T('in {n} days', { n })}</span></div>`;
   }
   const HOLIDAYS = [
     ['2026-01-01', "New Year's Day"], ['2026-02-17', 'Chinese New Year'], ['2026-02-18', 'Chinese New Year (Day 2)'],
