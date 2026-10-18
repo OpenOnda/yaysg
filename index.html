@@ -60,11 +60,16 @@ button{font-family:inherit}
 .fx .pair{color:#9FB3AC}
 .fx .up{color:#5FD3B8}.fx .down{color:#F59A92}.fx .flat{color:#9FB3AC}
 .news{background:var(--red);color:#fff}
-.news .tag{flex:0 0 auto;position:relative;z-index:1;display:flex;align-items:center;padding:0 16px;background:var(--red-dk);font-family:var(--mono);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.news .tag{display:none!important;flex:0 0 auto;position:relative;z-index:1;display:flex;align-items:center;padding:0 16px;background:var(--red-dk);font-family:var(--mono);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
 .news .clip{flex:1 1 auto;min-width:0;overflow:hidden}
 .news a{display:inline-flex;align-items:center;gap:10px;padding:10px 26px;color:#fff;text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}
 .news a:hover{text-decoration:underline;color:#fff}
 .news a i{width:6px;height:6px;border-radius:50%;background:#FFD2CE;flex:0 0 auto}
+.nm-tag{display:inline-flex;align-items:center;align-self:center;margin:0 6px 0 26px;padding:3px 9px;border-radius:5px;background:var(--red-dk);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.nm{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;font-family:var(--mono);font-size:14px;white-space:nowrap;color:#fff}
+.nm span{color:#FFD2CE}.nm b{font-weight:600}
+.nm em{font-style:normal;font-size:12px;font-weight:600}.nm .up{color:#C9F8E4}.nm .down{color:#FFE08A}.nm .flat{color:#FFD2CE}
+.nm-note{align-self:center;padding:0 26px 0 10px;font-size:11px;font-style:italic;color:#FFD2CE;white-space:nowrap}
 .news a small{font-family:var(--mono);font-size:11px;font-weight:400;color:#FFD2CE}
 /* Reduce Motion on: no auto-scroll, but people can swipe the strips sideways */
 @media (prefers-reduced-motion:reduce){.ticker .track{animation:none}.dot{animation:none}.ticker.fx,.news .clip{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.ticker.fx::-webkit-scrollbar,.news .clip::-webkit-scrollbar{display:none}}
@@ -532,7 +537,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   let LANG = 'en';
   try { const saved = localStorage.getItem('yay-lang'); if (saved === 'zh' || saved === 'en') LANG = saved; } catch (e) {}
   const ZH = {
-    'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟', 'Start your day with a yay.': '每天从一声 yay 开始。', ' Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
+    'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟', 'Markets': '股市', 'Start your day with a yay.': '每天从一声 yay 开始。', ' Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
     'Causeway &amp; Second Link': '长堤与第二通道', 'Exchange rate · 1 SGD buys': '汇率 · 1新元可兑换', 'Exchange rate': '汇率',
     'COE prices': '拥车证价格', '4D &amp; TOTO results': '4D与多多开彩成绩', 'Public holidays': '公共假期',
     'Roads &amp; MRT': '道路与地铁', 'Keep it handy': '随手可查',
@@ -894,18 +899,18 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     el.innerHTML = `<h2>${T('Exchange rate · 1 SGD buys')} <small>${sgDate(f.date, { day: 'numeric', month: 'short' })}</small></h2><div class="fxg">${tiles}</div>`;
   }
 
+  // Indexes now ride along in the red world-news strip, after the headlines
+  let mktHTML = '';
   function renderMarkets(list) {
-    const box = $('mkt');
-    // Hide the strip rather than show a half-empty one
-    if (!list || list.length < 3) { box.hidden = true; return; }
-    box.hidden = false;
+    $('mkt').hidden = true;
+    mktHTML = '';
+    if (!list || list.length < 3) return;
     const fmt = (v) => v.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const items = list.map((m) => {
       const c = chg(m.changePct);
-      return `<span class="it"><span class="pair">${esc(T(m.name))}</span><b>${fmt(m.price)}</b><span class="${c.cls}" style="font-size:12px">${c.txt}</span></span>`;
+      return `<span class="nm"><span>${esc(T(m.name))}</span><b>${fmt(m.price)}</b><em class="${c.cls}">${c.txt}</em></span>`;
     }).join('');
-    const note = `<span class="it mk-note">${T('Prices are 15 min delayed')}</span>`;
-    $('mktTrack').innerHTML = items + note + items + note;
+    mktHTML = `${items}<span class="nm-note">${T('Prices are 15 min delayed')}</span>`;
   }
 
   function renderCoe(c) {
@@ -955,7 +960,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     if (!list) { bar.hidden = true; return; }
     bar.hidden = false;
     $('wnTag').textContent = T(tag);
-    const items = list.map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('');
+    const items = list.map((x) => `<a href="${esc(x.link)}" target="_blank" rel="noopener"><i></i>${esc(x.title)}<small>${esc(x.src)}</small></a>`).join('') + mktHTML;
     $('newsTrack').innerHTML = items + items;
   }
 
