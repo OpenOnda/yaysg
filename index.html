@@ -233,9 +233,17 @@ footer{padding:0 16px 18px;font-size:11px}
 .cam{aspect-ratio:2/1}
 @media (max-width:560px){.cam{aspect-ratio:16/9}}
 .coe .row{padding:3px 0}
-.eta{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;padding:5px 9px;border-radius:9px;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);line-height:1.15}
+.etas{position:absolute;top:8px;left:8px;display:flex;gap:6px}
+.eta{display:flex;flex-direction:column;padding:4px 9px;border-radius:9px;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);line-height:1.15}
 .eta b{font-size:15px;font-weight:800;letter-spacing:-.01em}
 .eta small{font-size:10px;font-weight:500;opacity:.92}
+.etas.stale .eta{filter:saturate(.25) brightness(.9);opacity:.85}
+.eta-note{display:flex;gap:8px;align-items:flex-start;margin-top:6px;font-size:11px;line-height:1.45;color:var(--faint)}
+.eta-note b{color:var(--ink2)}
+.eta-note .lv,.eta-note .pz{flex:0 0 auto;width:7px;height:7px;border-radius:50%;margin-top:4px}
+.eta-note .lv{background:#2BB08F}
+.eta-note .pz{background:#C98A00}
+.eta-note.paused{color:var(--ink2)}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -281,7 +289,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
     <section class="card" id="air"><h2>Air quality</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card wide" id="cp"><h2>Checkpoints to JB <small>Live LTA cameras</small></h2><div class="cams"><span class="skel" style="height:160px"></span><span class="skel" style="height:160px"></span></div></section>
+    <section class="card wide" id="cp"><h2>Causeway &amp; Second Link <small>Live LTA cameras</small></h2><div class="cams"><span class="skel" style="height:160px"></span><span class="skel" style="height:160px"></span></div></section>
 
     <section class="card" id="fxc"><h2>S$1 buys</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
@@ -441,19 +449,44 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
 
   function renderCams(c, xings) {
     const el = $('cp');
-    if (!c || !c.length) { el.innerHTML = unavailable('Checkpoints to JB'); return; }
+    if (!c || !c.length) { el.innerHTML = unavailable('Causeway &amp; Second Link'); return; }
     const ests = (xings && xings.list) || [];
     const LV = { smooth: ['Smooth', '#0A5A51'], moderate: ['Moderate', '#9A5B00'], heavy: ['Heavy', '#B42318'] };
-    const est = (camId) => {
-      const e = ests.find((k) => k.cam === camId);
+    const badge = (e, to) => {
       if (!e) return '';
       const [label, bg] = LV[e.level] || LV.moderate;
-      return `<span class="eta" style="background:${bg}"><b>${e.low}–${e.high} min</b><small>${label} · to cross</small></span>`;
+      return `<span class="eta" style="background:${bg}"><small>${to}</small><b>${e.low}–${e.high} min</b><small>${label}</small></span>`;
     };
-    const estNote = ests.length ? `<div class="muted" style="margin-top:6px;font-size:11px">Estimates use live Google traffic, updated ${sgTime(xings.updated)}. Immigration clearance may add more time.</div>` : '';
+    const est = (camId) => {
+      const jb = ests.find((k) => k.cam === camId && k.dir === 'jb');
+      const sg = ests.find((k) => k.cam === camId && k.dir === 'sg');
+      if (!jb && !sg) return '';
+      return `<span class="etas${estState === 'paused' ? ' stale' : ''}">${badge(jb, 'To JB')}${badge(sg, 'To SG')}</span>`;
+    };
+    // Tell viewers whether crossing times are live, paused overnight, or delayed
+    let estNote = '';
+    let estState = 'live';
+    if (ests.length) {
+      const updated = Date.parse(xings.updated);
+      const ageMin = (Date.now() - updated) / 60000;
+      const hourNow = Number(new Date().toLocaleString('en-GB', { timeZone: TZ, hour: 'numeric', hour12: false }));
+      const last = sgTime(xings.updated);
+      const next = sgTime(new Date(updated + 30 * 60000).toISOString());
+      let msg;
+      if (hourNow >= 1 && hourNow < 5) {
+        estState = 'paused';
+        msg = `<b>Overnight pause.</b> Crossing times last updated at ${last}. Live updates resume at 5am.`;
+      } else if (ageMin > 45) {
+        estState = 'paused';
+        msg = `<b>Update delayed.</b> Crossing times last updated at ${last}. Check the camera photos for the latest view.`;
+      } else {
+        msg = `Crossing times updated ${last}, next update around ${next}. Checkpoint to checkpoint, from live Google traffic. Immigration clearance may add more.`;
+      }
+      estNote = `<div class="eta-note ${estState}">${estState === 'paused' ? '<span class="pz" aria-hidden="true"></span>' : '<span class="lv" aria-hidden="true"></span>'}<span>${msg}</span></div>`;
+    }
     const main = c.filter((x) => x.id === '2701' || x.id === '4703');
     const list = (main.length ? main : c).slice(0, 2);
-    el.innerHTML = `<h2>Checkpoints to JB <small>Live cameras<span class="hide-sm"> · tap to enlarge</span></small></h2>
+    el.innerHTML = `<h2>Causeway &amp; Second Link <small>Live cameras<span class="hide-sm"> · tap to enlarge</span></small></h2>
       <div class="cams">${list.map((x) => `
         <a class="cam" href="${esc(x.url)}" target="_blank" rel="noopener">
           <img src="${esc(x.url)}" alt="Live traffic camera at ${esc(x.label)}, ${esc(x.sub)}" loading="lazy" onerror="this.parentNode.classList.add('off')">
