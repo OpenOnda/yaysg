@@ -535,10 +535,91 @@ async function markets() {
   return list;
 }
 
+// ---------- Singapore Pools 4D and TOTO (latest draw) ----------
+const POOLS = 'https://www.singaporepools.com.sg/DataFileArchive/Lottery/Output/';
+const DATE_RE = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{1,2} [A-Za-z]{3} \d{4}/;
+
+// The pages list several draws, newest first. Keep only the first one.
+function firstDraw(html) {
+  const re = new RegExp(DATE_RE.source, 'g');
+  const a = re.exec(html);
+  if (!a) return null;
+  const b = re.exec(html);
+  return html.slice(a.index, b ? b.index : undefined);
+}
+const cells = (block) => [...block.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((m) => decodeEntities(m[1]));
+
+async function fourD() {
+  const html = await getText(POOLS + 'fourd_result_top_draws_en.html');
+  const block = firstDraw(html);
+  if (!block) throw new Error('4d: no draw');
+  const nums = cells(block).filter((c) => /^\d{4}$/.test(c));
+  if (nums.length < 23) throw new Error('4d: unexpected layout');
+  return {
+    date: (block.match(DATE_RE) || [])[0] || null,
+    draw: (block.match(/Draw No\.?\s*(\d+)/i) || [])[1] || null,
+    first: nums[0], second: nums[1], third: nums[2],
+    starter: nums.slice(3, 13),
+    consolation: nums.slice(13, 23),
+  };
+}
+
+async function toto() {
+  const html = await getText(POOLS + 'toto_result_top_draws_en.html');
+  const block = firstDraw(html);
+  if (!block) throw new Error('toto: no draw');
+  const c = cells(block);
+  const balls = c.filter((x) => /^\d{1,2}$/.test(x)).map(Number).filter((n) => n >= 1 && n <= 49);
+  if (balls.length < 7) throw new Error('toto: unexpected layout');
+  const g1 = block.match(/Group 1 Prize[\s\S]*?(\$[\d,]+)/i);
+  // Winning shares table: Group, share amount, number of winning shares
+  const groups = [];
+  const rowRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  let m;
+  while ((m = rowRe.exec(block))) {
+    const tds = [...m[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((x) => decodeEntities(x[1]));
+    const g = tds.length >= 3 && /^Group\s*(\d)$/i.exec(tds[0]);
+    if (g && Number(g[1]) <= 3) groups.push({ group: Number(g[1]), amount: tds[1], winners: tds[2] });
+  }
+  return {
+    date: (block.match(DATE_RE) || [])[0] || null,
+    draw: (block.match(/Draw No\.?\s*(\d+)/i) || [])[1] || null,
+    winning: balls.slice(0, 6),
+    additional: balls[6],
+    group1: g1 ? g1[1] : null,
+    groups,
+  };
+}
+
+async function lottery() {
+  const [d4, tt] = await Promise.allSettled([fourD(), toto()]);
+  const out = { fourD: d4.status === 'fulfilled' ? d4.value : null, toto: tt.status === 'fulfilled' ? tt.value : null };
+  if (!out.fourD && !out.toto) throw new Error('no lottery results');
+  return out;
+}
+
+// ---------- Johor Bahru air quality (Open-Meteo, modelled US AQI, free) ----------
+function usAqiBand(v) {
+  if (v == null) return null;
+  if (v <= 50) return { label: 'Good', level: 0 };
+  if (v <= 100) return { label: 'Moderate', level: 1 };
+  if (v <= 150) return { label: 'Unhealthy for sensitive groups', level: 2 };
+  if (v <= 200) return { label: 'Unhealthy', level: 2 };
+  if (v <= 300) return { label: 'Very unhealthy', level: 3 };
+  return { label: 'Hazardous', level: 4 };
+}
+
+async function jbAir() {
+  const j = await getJSON('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=1.4927&longitude=103.7414&current=us_aqi,pm2_5&timezone=Asia%2FSingapore');
+  const aqi = Number(j?.current?.us_aqi);
+  if (!Number.isFinite(aqi)) throw new Error('no jb aqi');
+  return { aqi: Math.round(aqi), pm25: j.current.pm2_5 ?? null, band: usAqiBand(aqi), time: j.current.time || null };
+}
+
 // ---------- handler ----------
 
 export default async () => {
-  const [w, p, c, f, co, hk, n, l, x, mk, wn] = await Promise.all([
+  const [w, p, c, f, co, hk, n, l, x, mk, wn, lt, ja] = await Promise.all([
     cached('weather', 4 * MIN, weather),
     cached('psi', 10 * MIN, psi),
     cached('cams', 2 * MIN, cams),
@@ -550,12 +631,14 @@ export default async () => {
     cached('crossings', 5 * MIN, crossings),
     cached('markets', 10 * MIN, markets),
     cached('world', 10 * MIN, worldNews),
+    cached('lottery', 15 * MIN, lottery),
+    cached('jbair', 30 * MIN, jbAir),
   ]);
 
   const body = {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
-    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn,
+    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn, lottery: lt, jbAir: ja,
   };
 
   return new Response(JSON.stringify(body), {
