@@ -52,7 +52,8 @@ button{font-family:inherit}
 .ticker{overflow:hidden;display:flex}
 .ticker .track{display:flex;width:max-content;animation:scroll 70s linear infinite}
 .ticker.news .track{animation-duration:110s}
-.ticker:hover .track{animation-play-state:paused}
+/* Pause on hover only where there is a real mouse; on phones a tap would freeze it */
+@media (hover:hover) and (pointer:fine){.ticker:hover .track{animation-play-state:paused}}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .fx{background:var(--dark2);color:#F1F4F1;border-bottom:1px solid #22332E}
 .fx .it{display:inline-flex;align-items:center;gap:8px;padding:9px 26px;font-family:var(--mono);font-size:14px;white-space:nowrap}
@@ -65,7 +66,8 @@ button{font-family:inherit}
 .news a:hover{text-decoration:underline;color:#fff}
 .news a i{width:6px;height:6px;border-radius:50%;background:#FFD2CE;flex:0 0 auto}
 .news a small{font-family:var(--mono);font-size:11px;font-weight:400;color:#FFD2CE}
-@media (prefers-reduced-motion:reduce){.ticker .track{animation:none}.dot{animation:none}}
+/* Reduce Motion on: no auto-scroll, but people can swipe the strips sideways */
+@media (prefers-reduced-motion:reduce){.ticker .track{animation:none}.dot{animation:none}.ticker.fx,.news .clip{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.ticker.fx::-webkit-scrollbar,.news .clip::-webkit-scrollbar{display:none}}
 
 /* alert */
 .alert{max-width:1320px;margin:14px auto 0;padding:0 20px}
@@ -250,6 +252,14 @@ footer{padding:0 16px 18px;font-size:11px}
 .hol-count span{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
 .hol-count small{font-size:12px;font-weight:600}
 #td .row{font-size:12.5px}
+/* Smaller strips on phones */
+@media (max-width:600px){
+  .news a{font-size:12px;padding:5px 14px;gap:7px}
+  .news a small{font-size:9.5px}
+  .news .tag{font-size:9.5px;padding:0 9px;letter-spacing:.06em}
+  .fx .it{font-size:11px;padding:4px 14px;gap:6px}
+  .ticker.news .track{animation-duration:80s}
+}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -316,14 +326,13 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   </div>
 
   <div class="spon">
-    <span><span class="lbl">Advertise</span>Reach thousands of Singaporeans every day on Yay.sg.</span>
-    <a href="https://wa.me/6588224466?text=Hi%2C%20I%27m%20interested%20in%20advertising%20on%20Yay.sg" target="_blank" rel="noopener">WhatsApp us</a>
+    <span><span class="lbl">Advertise</span>Reach thousands of Singaporeans every day on yay.sg.</span>
+    <a href="https://wa.me/6588224466?text=Hi%2C%20I%27m%20interested%20in%20advertising%20on%20yay.sg" target="_blank" rel="noopener">WhatsApp us</a>
   </div>
 </main>
 
 <footer>
   <span>Data: NEA and LTA via data.gov.sg, LTA DataMall, ECB reference rates, Yahoo Finance (indexes, may be delayed), publisher RSS feeds. Not an official government service. Check rates with your money changer before you exchange.</span>
-  <span>An <a href="https://openonda.com" target="_blank" rel="noopener">OpenOnda</a> project</span>
 </footer>
 
 <script>
