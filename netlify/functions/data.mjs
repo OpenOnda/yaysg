@@ -91,12 +91,32 @@ function heatIndexC(tc, rh) {
 const RAINY = /rain|shower|thunder/i;
 
 async function weather() {
-  const [now2h, day24, temp, hum] = await Promise.all([
+  const [now2h, day24, temp, hum, uvj, fl] = await Promise.all([
     getJSON('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast'),
     getJSON('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast'),
     getJSON('https://api-open.data.gov.sg/v2/real-time/api/air-temperature').catch(() => null),
     getJSON('https://api-open.data.gov.sg/v2/real-time/api/relative-humidity').catch(() => null),
+    getJSON('https://api-open.data.gov.sg/v2/real-time/api/uv').catch(() => null),
+    getJSON('https://api-open.data.gov.sg/v2/real-time/api/weather/flood-alerts').catch(() => null),
   ]);
+
+  // UV index (NEA, hourly from 7am to 7pm). Only today's latest reading counts.
+  let uv = null;
+  const ur = uvj?.data?.records?.[0];
+  const uvLatest = ur?.index?.[0];
+  if (uvLatest && Number.isFinite(Number(uvLatest.value)) && String(ur.date || uvLatest.hour || '').slice(0, 10) === sgToday()) {
+    uv = { value: Math.round(Number(uvLatest.value)), hour: uvLatest.hour };
+  }
+
+  // PUB flash flood alerts issued in the last 2 hours (cancelled ones dropped)
+  const floods = [];
+  for (const rec of fl?.data?.records || []) {
+    const it = rec.item || {};
+    const when = Date.parse(rec.datetime || rec.updatedTimestamp || '');
+    if (!Number.isFinite(when) || Date.now() - when > 2 * 3600e3) continue;
+    if (String(it.msgType || '').toLowerCase() === 'cancel') continue;
+    for (const r of it.readings || []) if (r.description) floods.push({ text: r.description, instruction: r.instruction || '', time: new Date(when).toISOString() });
+  }
 
   const f2 = now2h?.items?.[0] || {};
   const forecasts = f2.forecasts || [];
@@ -133,6 +153,8 @@ async function weather() {
     rainAreas,
     areaCount: forecasts.length,
     validUntil: f2.valid_period?.end || null,
+    uv,
+    floods: floods.slice(0, 3),
     today: {
       forecast: general.forecast || null,
       high: general.temperature?.high ?? null,
