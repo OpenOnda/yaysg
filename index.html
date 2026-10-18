@@ -408,6 +408,8 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
+.psi24{display:flex;align-items:baseline;gap:7px;margin-top:8px;padding-top:7px;border-top:1px solid var(--hair);font-size:13px}
+.psi24 b{font-family:var(--mono);font-size:14px}
 .mk-note{font-size:11px;font-style:italic;opacity:.65}
 .it-more-btn{all:unset;cursor:pointer;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--tic)}
 .ti-modal{position:fixed;inset:0;z-index:50;background:rgba(10,20,17,.45);display:flex;align-items:center;justify-content:center;padding:16px}
@@ -549,7 +551,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Light Rain': '小雨', 'Moderate Rain': '中雨', 'Heavy Rain': '大雨', 'Passing Showers': '短暂阵雨',
     'Light Showers': '小阵雨', 'Showers': '阵雨', 'Heavy Showers': '大阵雨', 'Thundery Showers': '雷阵雨',
     'Heavy Thundery Showers': '强雷阵雨', 'Heavy Thundery Showers with Gusty Winds': '强雷阵雨伴有阵风',
-    '24-hr PSI': '24小时PSI', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
+    '24-hr PSI': '24小时PSI', '24-hr PSI, Singapore average': '24小时PSI全岛平均', 'Right now · 1-hr PM2.5': '当前 · 1小时PM2.5', 'Worst in the {r} · updated {t}': '{r}最高 · {t}更新', 'Normal': '正常', 'Elevated': '偏高', 'High': '高', 'Very high': '非常高', 'PM2.5 now': '当前PM2.5', 'Good': '良好', 'Moderate': '中等', 'Unhealthy': '不健康', 'Very unhealthy': '非常不健康', 'Hazardous': '危险',
     'North': '北部', 'South': '南部', 'East': '东部', 'West': '西部', 'Central': '中部',
     'Singapore average: <b>{avg}</b> · highest in the {r}': '全岛平均：<b>{avg}</b> · {r}最高',
     'Good air. Enjoy the outdoors.': '空气良好，适合户外活动。',
@@ -745,7 +747,35 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     return `<div class="jbrow"><span>${T('Johor Bahru')} <small>(US AQI)</small></span><b>${ja.aqi}</b><span class="jbl" style="color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
   }
 
+  // NEA 1-hour PM2.5 bands (µg/m³): what the air is like right now
+  // Singapore 24-hr PSI: the average of the 5 regions, with its own band
+  function psiAvg(p) { const v = Object.values(p.regions || {}); return v.length ? Math.round(v.reduce((x, y) => x + y, 0) / v.length) : p.max; }
+  function psiBandOf(v) { return v <= 50 ? [0, 'Good'] : v <= 100 ? [1, 'Moderate'] : v <= 200 ? [2, 'Unhealthy'] : v <= 300 ? [3, 'Very unhealthy'] : [4, 'Hazardous']; }
+  function psi24Line(p) {
+    const a = psiAvg(p); const [lv, label] = psiBandOf(a);
+    return `<div class="psi24"><span>${T('24-hr PSI, Singapore average')}</span><b>${a}</b><span style="color:${PSI_FG[lv]};font-weight:700">${T(label)}</span></div>`;
+  }
+  function pmBand(v) { return v <= 55 ? [0, 'Normal'] : v <= 150 ? [1, 'Elevated'] : v <= 250 ? [2, 'High'] : [3, 'Very high']; }
   function renderAir(p, ja) {
+    const el = $('air');
+    if (!p || p.max == null) { el.innerHTML = unavailable('Air quality'); return; }
+    const pm = p.pm1h;
+    if (!pm || pm.max == null) return renderAirPsi(p, ja);
+    const [lv, label] = pmBand(pm.max);
+    const top = Object.entries(pm.regions).sort((a, b) => b[1] - a[1])[0][0];
+    const bars = Object.entries(pm.regions).map(([k, v]) => {
+      const [b] = pmBand(v);
+      return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 2.5)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`;
+    }).join('');
+    el.innerHTML = `<h2>${T('Air quality')} <small>${T('Right now · 1-hr PM2.5')}</small></h2>
+      <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${pm.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>
+      <div class="sub">${T('Worst in the {r} · updated {t}', { r: T(top[0].toUpperCase() + top.slice(1)), t: sgTime(pm.timestamp) })}</div>
+      <div class="bars">${bars}</div>
+      ${psi24Line(p)}
+      ${jbLine(ja)}`;
+    $('alert').hidden = true;
+  }
+  function renderAirPsi(p, ja) {
     const el = $('air');
     if (!p || p.max == null) { el.innerHTML = unavailable('Air quality'); return; }
     const lv = p.band.level;
@@ -784,13 +814,18 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       }
     }
     if (p && p.max != null) {
-      const lv = p.band.level;
-      right = `<div class="nw-r"><small>PSI</small><b>${p.max}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(p.band.label)}</span></div>`;
-      lines.push(psiAvgLine(p));
+      if (p.pm1h && p.pm1h.max != null) {
+        const [lv, label] = pmBand(p.pm1h.max);
+        right = `<div class="nw-r"><small>${T('PM2.5 now')}</small><b>${p.pm1h.max}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>`;
+      } else {
+        const a = psiAvg(p); const [lv, label] = psiBandOf(a);
+        right = `<div class="nw-r"><small>PSI</small><b>${a}</b><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span></div>`;
+      }
     }
     el.innerHTML = `<h2>${T('Weather &amp; air')} <small>${T('Updated {t}', { t: sgTime(new Date().toISOString()) })}</small></h2>
       <div class="nw-top">${left}${right}</div>
       ${lines.map((l) => `<div class="sub">${l}</div>`).join('')}
+      ${p && p.max != null ? psi24Line(p) : ''}
       ${jbLine(ja)}
       ${pills}`;
   }
