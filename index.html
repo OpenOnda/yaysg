@@ -233,6 +233,9 @@ footer{padding:0 16px 18px;font-size:11px}
 .cam{aspect-ratio:2/1}
 @media (max-width:560px){.cam{aspect-ratio:16/9}}
 .coe .row{padding:3px 0}
+.eta{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;padding:5px 9px;border-radius:9px;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);line-height:1.15}
+.eta b{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.eta small{font-size:10px;font-weight:500;opacity:.92}
 /* Theme: dirty white */
 html[data-theme="paper"]{--bg:#EDE9E0;--card:#FAF8F3;--line:#DDD8CC;--soft:#F2EEE6;--hair:#E7E2D8}
 html[data-theme="paper"] body{background:var(--bg)}
@@ -436,9 +439,18 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     } else { al.hidden = true; }
   }
 
-  function renderCams(c) {
+  function renderCams(c, xings) {
     const el = $('cp');
     if (!c || !c.length) { el.innerHTML = unavailable('Checkpoints to JB'); return; }
+    const ests = (xings && xings.list) || [];
+    const LV = { smooth: ['Smooth', '#0A5A51'], moderate: ['Moderate', '#9A5B00'], heavy: ['Heavy', '#B42318'] };
+    const est = (camId) => {
+      const e = ests.find((k) => k.cam === camId);
+      if (!e) return '';
+      const [label, bg] = LV[e.level] || LV.moderate;
+      return `<span class="eta" style="background:${bg}"><b>${e.low}–${e.high} min</b><small>${label} · to cross</small></span>`;
+    };
+    const estNote = ests.length ? `<div class="muted" style="margin-top:6px;font-size:11px">Estimates use live Google traffic, updated ${sgTime(xings.updated)}. Immigration clearance may add more time.</div>` : '';
     const main = c.filter((x) => x.id === '2701' || x.id === '4703');
     const list = (main.length ? main : c).slice(0, 2);
     el.innerHTML = `<h2>Checkpoints to JB <small>Live cameras<span class="hide-sm"> · tap to enlarge</span></small></h2>
@@ -446,7 +458,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <a class="cam" href="${esc(x.url)}" target="_blank" rel="noopener">
           <img src="${esc(x.url)}" alt="Live traffic camera at ${esc(x.label)}, ${esc(x.sub)}" loading="lazy" onerror="this.parentNode.classList.add('off')">
           <span class="cap"><span><b>${esc(x.label)}</b><small>${esc(x.sub)}</small></span><time>${sgTime(x.timestamp)}</time></span>
-        </a>`).join('')}</div>`;
+          ${est(x.id)}
+        </a>`).join('')}</div>${estNote}`;
   }
 
   const MAIN_FX = ['MYR', 'USD', 'CNY', 'THB', 'JPY', 'IDR'];
@@ -543,7 +556,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       const d = await res.json();
       renderWeather(d.weather);
       renderAir(d.psi);
-      renderCams(d.cams);
+      renderCams(d.cams, d.crossings);
       renderFx(d.fx);
       renderCoe(d.coe);
       renderNews(d.news);
