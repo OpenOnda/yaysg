@@ -801,7 +801,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const grid = (arr) => `<div class="lg">${arr.map((n) => `<span>${esc(n)}</span>`).join('')}</div>`;
     const four = d ? `
       <div class="lcol">
-        <div class="lhead"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
+        <div class="lhead"><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
         <div class="ltop">
           <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
           <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
@@ -812,7 +812,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       </div>` : `<div class="lcol"><p class="muted">${T('4D results not available right now.')}</p></div>`;
     const tot = t ? `
       <div class="lcol">
-        <div class="lhead"><b>${T('TOTO')}</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
+        <div class="lhead"><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
         <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
         <div class="lsub" style="margin-top:6px">${T('Winning numbers · Additional')}</div>
         ${groupsTable(t)}
