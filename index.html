@@ -379,7 +379,7 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 @media (min-width:960px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:
     "wx air cp cp"
-    "wx mv d4 toto"
+    "wx air d4 toto"
     "td mv d4 toto"
     "fx coe d4 toto";grid-auto-flow:row}
   #wx{grid-area:wx}#air{grid-area:air}#cp{grid-area:cp}#fxc{grid-area:fx}#coe{grid-area:coe}
@@ -418,6 +418,8 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
+.alm-h{display:block!important;margin:0 0 4px!important}
+.alm-h small{display:block;margin-top:3px}
 .lhead2.lot span{margin-left:0;text-align:left}
 .lsec>.more-btn,#toto>.more-btn{display:block;width:max-content;margin-left:auto}
 .fxl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
@@ -425,6 +427,14 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .fxr b{font-family:var(--mono);font-weight:600;font-size:13px;color:var(--muted);flex:0 0 auto}
 .fxr i{flex:1}
 .fxr span{font-weight:800;letter-spacing:-.01em}
+.aq-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}
+.aq3{background:var(--soft);border-radius:10px;padding:8px 10px;min-width:0}
+.aq3 small{display:block;font-size:11px;color:var(--muted);line-height:1.25;min-height:2.5em}
+.aq3 .big{margin:2px 0 1px}
+.aq3 em{font-style:normal;font-size:12.5px;font-weight:700}
+.aq-sub{margin:2px 0 6px}
+#air{display:flex;flex-direction:column}
+#air .aq-more{display:block;width:max-content;margin-left:auto;margin-top:auto;padding-top:6px}
 .aq-top{display:flex;align-items:center;gap:12px}
 .aq-lab{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
 .aq-lab small{font-size:12px;line-height:1.3;color:var(--muted)}
@@ -536,6 +546,7 @@ body.measuring #toto .evs,body.measuring #d4 .lsec.alm{flex:none!important}
 body.measuring #d4 .lnote{margin-top:0!important}
 body.measuring .later div{justify-content:flex-start!important}
 body.measuring #wx .later{flex:none!important}
+body.measuring #air .aq-more{margin-top:0!important}
 #td .row>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #td .row .k{white-space:nowrap}
 /* ===== Desktop: tighter boxes so the page can be shown bigger ===== */
@@ -557,7 +568,7 @@ body.measuring #wx .later{flex:none!important}
   .ev-d b{font-size:15px}
   .bars{gap:2px}
   #d4{display:flex;flex-direction:column}
-  #d4 .lsec.alm{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;gap:6px;padding-top:8px}
+  #d4 .lsec.alm{flex:1;display:flex;flex-direction:column;justify-content:flex-start;gap:4px;padding-top:0;border-top:0}
   #d4 .alm .lhead2{margin-bottom:0}
   #d4 .alm-day{font-size:14px;margin:2px 0}
   #d4 .alm-row{font-size:13px;line-height:1.5;padding:5px 0;border-top:1px dashed var(--hair);grid-template-columns:92px 1fr}
@@ -591,10 +602,19 @@ body.measuring #wx .later{flex:none!important}
 @media (min-width:960px){
   .coe .row{padding:5px 0;border-top:0;border-bottom:1px solid var(--hair)}
   .coe .cat{font-size:13px}
-  .coe .lab{font-size:13px;color:var(--muted)}
+  .coe .lab{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .coe .pr{font-size:15px;font-weight:800;letter-spacing:-.01em}
   .coe .ch{font-size:13px;width:66px}
 }
+/* Air quality region readings bigger, and the box fills its height */
+@media (min-width:960px){
+  #air .bars{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:4px}
+  #air .bar{grid-template-columns:62px 1fr 38px;font-size:14px}
+  #air .bar span:last-child{font-size:14px;font-weight:700}
+  #air .bar .t{height:8px}
+  #mv .it-more-btn{display:block;width:max-content;margin-left:auto}
+}
+body.measuring #air .bars{flex:none!important}
 </style>
 </head>
 <body>
@@ -686,6 +706,8 @@ body.measuring #wx .later{flex:none!important}
     'Starter (10 numbers)': '入围奖（10个号码）', 'Consolation (10 numbers)': '安慰奖（10个号码）',
     'What each bet costs': '各类投注费用', 'Bet type': '投注方式', 'Numbers picked': '选号数', 'Cost': '费用', 'Ordinary': '普通', 'System 7': '系统7', 'System 8': '系统8', 'System 9': '系统9', 'System 10': '系统10', 'System 11': '系统11', 'System 12': '系统12',
     TOTO_NOTE: '每组6个号码的组合收费$1。系统投注包含所选号码的所有组合，例如系统8共28组。详情请参阅新加坡博彩公司网站。',
+    'Singapore averages': '全岛平均', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
+    AIR_NOTE: '1小时PM2.5反映当前空气（正常≤55，偏高56至150，高151至250，非常高>250）。24小时PSI是NEA的每日健康指标（良好≤50，中等51至100，不健康101至200）。新山数据来自Open-Meteo的美国AQI模型估算。',
     PZ4_NOTE: '以上为每$1注的奖金。“大”可中全部23个号码；“小”只中前三奖，但奖金较高。iBet 包含4个数字的所有排列，奖金按比例分配。详情请参阅新加坡博彩公司网站。',
     '4D &amp; TOTO': '4D与多多', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
     'Good for': '', 'Avoid': '', 'Clash': '', 'Evil spirits in the {d}': '煞{d}', 'Major events': '重大活动', 'Concerts, sports &amp; more': '演唱会、体育赛事等',
@@ -752,12 +774,13 @@ body.measuring #wx .later{flex:none!important}
     'MRT status not available right now.': '暂时无法获取地铁状况。', 'Train service disruption': '列车服务中断',
     'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
     'Live · {t}': '实时 · {t}',
-    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
+    'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'See all': '查看全部', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
     'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气',
   };
   // Longer English texts for the footer pop-ups
   const EN = {
     TOTO_NOTE: 'Each combination of 6 numbers costs $1. A System bet covers every combination of the numbers you pick, so System 8 is 28 combinations. Check singaporepools.com.sg for full rules.',
+    AIR_NOTE: '1-hr PM2.5 shows the air right now (Normal up to 55, Elevated 56 to 150, High 151 to 250, Very high above 250). The 24-hr PSI is NEA\'s official daily health guide (Good up to 50, Moderate 51 to 100, Unhealthy 101 to 200). Johor Bahru uses the US AQI scale from Open-Meteo, a modelled estimate.',
     PZ4_NOTE: 'Prize for each $1 bet. A Big bet wins on all 23 numbers; a Small bet wins only on the top 3 but pays more. With iBet, every order of your 4 digits is covered and the prize is shared. Check singaporepools.com.sg for full rules.',
     POP_ABOUT: '<p>yay.sg puts the things Singaporeans check every day on one page: weather, air quality, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.</p><p>One glance, and you know how to plan your day.</p><p>yay.sg is a project by OpenOnda Pte. Ltd., Singapore.</p>',
     POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p>Data: NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p><p>4D and TOTO results are shown for information only. Gambling is only for those aged 18 and above. If gambling is becoming a problem for you or someone you know, call the NCPG Helpline at 1800-6-668-668.</p><p>The Chinese almanac is traditional cultural information, shown for interest only, not advice.</p>',
@@ -794,25 +817,45 @@ body.measuring #wx .later{flex:none!important}
     // Measure every box's space first, before anything changes (rows grow if content grows)
     const rooms = new Map(cards.map((c) => [c, room(c)]));
     const mainH = document.querySelector('main').getBoundingClientRect().height;
+    // Line up the almanac heading with the Exchange Rate and COE headings (before sizing text)
+    const almH = document.querySelector('#d4 .alm-h'), alm = almH && almH.parentElement, ref = document.querySelector('#fxc h2');
+    if (alm && ref) {
+      alm.style.paddingTop = '';
+      const zb = parseFloat(document.body.style.zoom) || 1;
+      const diff = (ref.getBoundingClientRect().top - almH.getBoundingClientRect().top) / zb;
+      delete alm.dataset.pt0;
+      if (diff > 0 && diff < 200) { alm.style.paddingTop = diff + 'px'; alm.dataset.pt0 = String(diff); if (used($('d4')) > rooms.get($('d4'))) alm.style.paddingTop = ''; }
+    }
     // Major events: show more of them only while they fit in the box's original space
     const ev = $('toto');
     if (ev) for (const e of extras) {
       e.hidden = false;
       if (used(ev) > rooms.get(ev) - 2 || document.querySelector('main').getBoundingClientRect().height > mainH + 1) { e.hidden = true; break; }
     }
-    const plan = cards.map((c) => { const u = used(c), r = rooms.get(c); return [c, u > 0 ? Math.max(1, Math.min(c.id === 'wx' ? 1.45 : 1.3, (r / u) * 0.97)) : 1]; });
+    const plan = cards.map((c) => { const u = used(c), r = rooms.get(c); return [c, u > 0 ? Math.max(1, Math.min(c.id === 'wx' ? 1.45 : ['td', 'fxc', 'coe'].includes(c.id) ? 1.2 : 1.3, (r / u) * 0.97)) : 1]; });
     // Exchange rate and COE use the same size, so their text matches
     const pf = plan.find(([c]) => c.id === 'fxc'), pc = plan.find(([c]) => c.id === 'coe');
     if (pf && pc) { const m = Math.min(pf[1], pc[1]); pf[1] = m; pc[1] = m; }
+    const pw = plan.find(([c]) => c.id === 'wx'), pa2 = plan.find(([c]) => c.id === 'air');
+    if (pw && pa2) { const m = Math.min(pw[1], pa2[1]); pw[1] = m; pa2[1] = m; }
     document.body.classList.remove('measuring');
     // Apply, and back off if anything would push the page past the screen
     const grew = () => document.querySelector('main').getBoundingClientRect().height > mainH + 1 || !fits();
     for (let k = 0; k < 5; k++) {
       const shrink = k === 4 ? 0 : Math.pow(0.6, k);
-      plan.forEach(([c, f]) => { const z = 1 + (f - 1) * shrink; [...c.children].forEach((kid) => { kid.style.zoom = z > 1.01 ? z.toFixed(3) : ''; }); });
+      plan.forEach(([c, f]) => { const z = 1 + (f - 1) * shrink; if (c.id === 'd4' && alm && alm.dataset.pt0) alm.style.paddingTop = (parseFloat(alm.dataset.pt0) / z) + 'px'; [...c.children].forEach((kid) => { kid.style.zoom = z > 1.01 ? z.toFixed(3) : ''; }); });
       if (!grew()) break;
     }
     if (grew()) extras.forEach((e) => { e.hidden = true; });
+    // Fine-tune the almanac line-up after the text sizes are set
+    if (alm && ref) for (let i = 0; i < 2; i++) {
+      const zb = parseFloat(document.body.style.zoom) || 1, zk = parseFloat(alm.style.zoom) || 1;
+      const d = (ref.getBoundingClientRect().top - almH.getBoundingClientRect().top) / (zb * zk);
+      if (Math.abs(d) < 0.5) break;
+      const prev = alm.style.paddingTop, nv = Math.max(0, (parseFloat(prev) || 0) + d);
+      alm.style.paddingTop = nv + 'px';
+      if (grew()) { alm.style.paddingTop = prev; break; }
+    }
     setTimeout(() => { filling = false; }, 120);
   }
   function fitToScreen() {
@@ -1035,6 +1078,14 @@ body.measuring #wx .later{flex:none!important}
   }
   function pmBand(v) { return v <= 55 ? [0, 'Normal'] : v <= 150 ? [1, 'Elevated'] : v <= 250 ? [2, 'High'] : [3, 'Very high']; }
   const pmAvg = (pm) => { const v = Object.values(pm.regions || {}); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : pm.max; };
+  window.airMore = () => {
+    const a = window.__air; if (!a) return;
+    popup(`<h2>${T('Air quality')} <small>NEA · Open-Meteo</small></h2><div class="pop-body">
+      <div class="lsub">${T('Right now, 1-hr PM2.5 by region')}</div><div class="bars">${a.bars}</div>
+      <div class="lsub" style="margin-top:14px">${T('24-hr PSI by region')}</div>
+      <div class="bars">${Object.entries(a.p.regions).map(([k, v]) => { const [b] = psiBandOf(v); return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 3)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`; }).join('')}</div>
+      <p style="margin-top:14px">${T('AIR_NOTE')}</p></div>`, 'pop-sheet lot-pop');
+  };
   function renderAir(p, ja) {
     const el = $('air');
     if (!p || p.max == null) { el.innerHTML = unavailable('Air quality'); return; }
@@ -1048,11 +1099,14 @@ body.measuring #wx .later{flex:none!important}
       return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 2.5)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`;
     }).join('');
     const pa = psiAvg(p); const [plv, plabel] = psiBandOf(pa);
-    const jb = ja && ja.aqi != null ? `<div class="aq-t"><small>${T('Johor Bahru')} · US AQI</small><b>${ja.aqi}</b><em style="color:${PSI_FG[ja.band ? ja.band.level : 0]}">${T(ja.band ? ja.band.label : '')}</em></div>` : '';
-    el.innerHTML = `<h2>${T('Air quality')} <small>PM2.5</small></h2>
-      <div class="aq-top"><div class="big">${avg}</div><div class="aq-lab"><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${T(label)}</span><small>${T('Singapore average')}<br>${T('Right now, 1-hr reading')}</small></div></div>
-      <div class="aq-tiles"><div class="aq-t"><small>${T('24-hr PSI, SG average')}</small><b>${pa}</b><em style="color:${PSI_FG[plv]}">${T(plabel)}</em></div>${jb}</div>
-      <div class="bars">${bars}</div>`;
+    const tile = (lab, v, band, col) => `<div class="aq3"><small>${lab}</small><div class="big">${v}</div><em style="color:${col}">${band}</em></div>`;
+    const jbT = ja && ja.aqi != null ? tile(T('Johor Bahru, US AQI'), ja.aqi, T(ja.band ? ja.band.label : ''), PSI_FG[ja.band ? ja.band.level : 0]) : '';
+    el.innerHTML = `<h2>${T('Air quality')} <small>${T('Singapore averages')}</small></h2>
+      <div class="aq-row">${tile(T('Right now, 1-hr PM2.5'), avg, T(label), PSI_FG[lv])}${tile(T('24-hr PSI'), pa, T(plabel), PSI_FG[plv])}${jbT}</div>
+      <div class="sub aq-sub">${T('Highest right now: {r} {v}', { v: pm.max, r: T(top[0].toUpperCase() + top.slice(1)) })}</div>
+      <div class="bars">${bars}</div>
+      <button class="more-btn aq-more" type="button" onclick="airMore()">${T('Show more')} ›</button>`;
+    window.__air = { p, ja, bars, avg, pa };
     $('alert').hidden = true;
   }
   function renderAirPsi(p, ja) {
@@ -1317,7 +1371,7 @@ body.measuring #wx .later{flex:none!important}
       : `<div class="alm-day bad"><span>●</span> ${zh ? '今日是黑道日，不算吉日' : 'Today is not an auspicious day'}</div>`;
     const clash = zh ? `冲${a.clash.zh} · 煞${a.sha.zh}` : `Year of the ${esc(a.clash.en)} · Unlucky direction: ${esc(a.sha.en)}`;
     const yi = items(a.yi), ji = items(a.ji);
-    return `<div class="lsec alm"><div class="lhead2"><b>${zh ? '今日黄历' : "Today's Chinese almanac"}</b><span>${date}</span></div>${day}
+    return `<div class="lsec alm"><h2 class="alm-h">${zh ? '黄历' : 'Chinese Almanac'} <small>${date}</small></h2>${day}
       ${yi ? `<div class="alm-row"><em class="yi">${zh ? '宜' : 'Good for'}</em><span>${yi}</span></div>` : ''}
       ${ji ? `<div class="alm-row"><em class="ji">${zh ? '忌' : 'Avoid'}</em><span>${ji}</span></div>` : ''}
       <div class="alm-row"><em>${zh ? '冲煞' : 'Clashes with'}</em><span>${clash}</span></div></div>`;
@@ -1493,7 +1547,7 @@ body.measuring #wx .later{flex:none!important}
     const groups = GROUPS.map((g) => ({ g, items: list.filter((x) => g.test(x.type.toLowerCase())) })).filter((x) => x.items.length);
     // Keep the box the same size on busy days: at most 7 lines in total.
     // Every group gets one line first, then the rest go to the most serious groups.
-    const MAX_LINES = window.TI_OPEN ? 99 : 5;
+    const MAX_LINES = window.TI_OPEN ? 99 : (window.innerWidth >= 960 ? 3 : 5);
     groups.forEach((x) => { x.show = 1; });
     let left = MAX_LINES - groups.length;
     for (const x of groups) { const add = Math.min(left, Math.min(window.TI_OPEN ? 99 : 3, x.items.length) - 1); x.show += add; left -= add; }
@@ -1503,7 +1557,7 @@ body.measuring #wx .later{flex:none!important}
       : `<div class="ti-groups">${groups.map(({ g, items, show }) => `
           <div class="ti-g"><div class="gh" style="color:${g.color}">${T(g.name)}<span>${items.length}</span></div>
           ${items.slice(0, show).map((x) => `<div class="it" title="${esc(x.message)}"><span>${shortInc(x.message)}</span>${x.time ? `<time>${sgTime(x.time)}</time>` : ''}</div>`).join('')}</div>`).join('')}</div>
-          ${hidden ? `<button class="it-more-btn" onclick="tiMore()">${T('+{n} more, see all', { n: hidden })} ›</button>` : ''}`;
+          ${hidden ? `<button class="it-more-btn" onclick="tiMore()">${T('+{n} more, see all', { n: hidden })} ›</button>` : groups.length ? `<button class="it-more-btn" onclick="tiMore()">${T('See all')} ›</button>` : ''}`;
     el.innerHTML = `<h2>${T('Traffic incidents')} <small>LTA · live</small></h2><div class="ti-top">${mrt}</div>${body}`;
   }
 
