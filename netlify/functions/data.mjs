@@ -369,6 +369,57 @@ async function lta() {
   };
 }
 
+// ---------- Causeway / Second Link crossing estimate (Google Maps traffic, optional) ----------
+// Driving time from a point on the Singapore side, across the bridge, to the Malaysian checkpoint.
+// It reflects road traffic only. Immigration clearance can add time on top.
+const CROSSINGS = [
+  { id: 'woodlands', cam: '2701', origin: 'Kranji MRT Station, Singapore', destination: 'Bangunan Sultan Iskandar, Johor Bahru, Malaysia' },
+  { id: 'tuas', cam: '4703', origin: 'Tuas Link MRT Station, Singapore', destination: 'Kompleks Sultan Abu Bakar, Gelang Patah, Johor, Malaysia' },
+];
+
+const secs = (s) => (s ? Number(String(s).replace('s', '')) : null);
+
+async function crossings() {
+  const key = process.env.GOOGLE_MAPS_KEY;
+  if (!key) return null;
+  const results = await Promise.all(CROSSINGS.map(async (c) => {
+    const res = await fetch('https://routes.googleapis.com/directions/v2:computeRoutes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': key,
+        'X-Goog-FieldMask': 'routes.duration,routes.staticDuration',
+      },
+      body: JSON.stringify({
+        origin: { address: c.origin },
+        destination: { address: c.destination },
+        travelMode: 'DRIVE',
+        routingPreference: 'TRAFFIC_AWARE',
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) throw new Error(`routes ${res.status}`);
+    const j = await res.json();
+    const r = j.routes?.[0];
+    const now = secs(r?.duration);
+    const free = secs(r?.staticDuration);
+    if (!now) return null;
+    const mins = now / 60;
+    const ratio = free ? now / free : 1;
+    const down5 = (m) => Math.max(5, Math.floor(m / 5) * 5);
+    const up5 = (m) => Math.ceil(m / 5) * 5;
+    return {
+      id: c.id,
+      cam: c.cam,
+      minutes: Math.round(mins),
+      low: down5(mins),
+      high: up5(mins * 1.25 + 5),
+      level: ratio < 1.4 ? 'smooth' : ratio < 2.2 ? 'moderate' : 'heavy',
+    };
+  }));
+  return { updated: new Date().toISOString(), list: results.filter(Boolean) };
+}
+
 // ---------- handler ----------
 
 export default async () => {
@@ -382,11 +433,13 @@ export default async () => {
     cached('news', 10 * MIN, news),
     cached('lta', 3 * MIN, lta),
   ]);
+  // Every 20 minutes keeps Google usage inside the free monthly allowance
+  const x = await cached('crossings', 20 * MIN, crossings);
 
   const body = {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
-    holiday: nextHoliday(), news: n, lta: l,
+    holiday: nextHoliday(), news: n, lta: l, crossings: x,
   };
 
   return new Response(JSON.stringify(body), {
