@@ -421,11 +421,12 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .lsec:last-of-type{border-bottom:0;margin-bottom:0}
 .lhead2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:7px}
 .lhead2 b{font-size:15px;font-weight:800}
-.lhead2 span{font-family:var(--mono);font-size:10.5px;color:var(--faint);text-align:right}
+.lhead2 span{font-family:var(--mono);font-size:10.5px;color:var(--faint);text-align:right;margin-left:auto}
+.lhead2 .more-btn{margin-top:0;white-space:nowrap}
 .nextline{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:9px;font-size:12px;color:var(--muted)}
 .nextline b{color:var(--red);font-size:17px;font-weight:800}
 .more-btn{all:unset;cursor:pointer;display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--red)}
-.alm .lhead2{flex-direction:column;align-items:flex-start;gap:2px}.alm .lhead2 span{text-align:left}
+.alm .lhead2{flex-direction:column;align-items:flex-start;gap:2px}.alm .lhead2 span{text-align:left;margin-left:0}
 .alm-day{font-size:13px;font-weight:700;margin-bottom:6px}.alm-day i{font-style:normal;font-weight:500;color:var(--muted)}
 .alm-day.bad{color:var(--bad)}.alm-day.good{color:var(--good)}.alm-day span{font-size:9px;vertical-align:2px}
 .alm-row{display:grid;grid-template-columns:78px 1fr;gap:8px;font-size:12px;line-height:1.45;padding:3px 0;color:var(--ink2)}
@@ -439,6 +440,10 @@ a.ev:hover{outline:1px solid var(--line)}
 .ev-t span{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev em{font-style:normal;flex:0 0 auto;font-size:10px;font-weight:700;color:var(--good);background:var(--good-bg);padding:3px 7px;border-radius:999px}
 .lot-pop{width:min(540px,100%)}
+.pz4 .tg-h,.pz4 .tg-r{grid-template-columns:1.6fr 1fr 1fr}
+.pz4 .tg-r b{font-size:14px;font-weight:700;text-align:right}
+.pz4 .tg-r span{font-size:12.5px;color:var(--ink2)}
+.pz-note{margin-top:8px;font-size:11.5px;line-height:1.5;color:var(--muted)}
 @media (min-width:960px){#d4 .ltop b{font-size:24px}#d4 .ltop div{padding:10px 8px}#d4 .lnote{margin-top:auto}#toto{display:flex;flex-direction:column}#toto .evs{flex:1;justify-content:flex-start}}
 .slg2{margin-left:.3em}@media (max-width:560px){.slg2{margin-left:0}}
 .keep{max-width:var(--maxw,1440px);margin:16px auto 14px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 22px;border-radius:18px;background:var(--red);color:#fff}
@@ -506,6 +511,36 @@ html[data-theme="dark"] body{background:var(--bg)}
 html[data-theme="dark"] .spon{background:#2A2615;border-color:#6B5A22}
 html[data-theme="dark"] .spon .lbl,html[data-theme="dark"] .spon a{color:#F5C842}
 html[data-theme="dark"] a:hover{color:#FF8A80}
+/* ===== Desktop: tighter boxes so the page can be shown bigger ===== */
+@media (min-width:960px){
+  .cam{aspect-ratio:2/1}
+  .later svg{width:20px;height:20px;margin:0}
+  #wx .later div{flex-direction:row;align-items:center;gap:6px;padding:5px 7px}
+  #wx .later div b{flex:0 0 100%;margin-bottom:-2px}
+  #wx .later div{flex-wrap:wrap}
+  #d4 .ltop div{padding:6px 8px}
+  #d4 .ltop b{font-size:21px}
+  .lsec{padding-bottom:7px;margin-bottom:6px}
+  .lhead2{margin-bottom:5px}
+  .more-btn{margin-top:5px}
+  .nextline{margin-top:6px}
+  .alm-day{margin-bottom:3px}
+  .alm-row{padding:1px 0}
+  .evs{gap:5px}
+  .ev{padding:5px 8px;gap:10px}
+  .ev-d{flex-basis:38px;height:38px}
+  .ev-d b{font-size:15px}
+  .bars{gap:2px}
+  .ti-g{padding:4px 0 1px}
+  .gh{margin-bottom:0}
+  .ti-g .it{line-height:1.38}
+  .ti-top{margin-bottom:3px}
+  .coe .row{padding:3px 0}
+  /* slightly larger small print, easier to read */
+  .card h2{font-size:11.5px}
+  .card h2 small{font-size:10.5px}
+  .lhead2 span{font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -593,6 +628,11 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   try { const saved = localStorage.getItem('yay-lang'); if (saved === 'zh' || saved === 'en') LANG = saved; } catch (e) {}
   const ZH = {
     'Singapore at a glance': '新加坡一览', 'Prices are 15 min delayed': '价格延迟15分钟',
+    'What $1 wins': '每$1可赢', 'Prize': '奖项', 'Big bet': '大', 'Small bet': '小', '1st prize': '头奖', '2nd prize': '二奖', '3rd prize': '三奖',
+    'Starter (10 numbers)': '入围奖（10个号码）', 'Consolation (10 numbers)': '安慰奖（10个号码）',
+    'What each bet costs': '各类投注费用', 'Bet type': '投注方式', 'Numbers picked': '选号数', 'Cost': '费用', 'Ordinary': '普通', 'System 7': '系统7', 'System 8': '系统8', 'System 9': '系统9', 'System 10': '系统10', 'System 11': '系统11', 'System 12': '系统12',
+    TOTO_NOTE: '每组6个号码的组合收费$1。系统投注包含所选号码的所有组合，例如系统8共28组。详情请参阅新加坡博彩公司网站。',
+    PZ4_NOTE: '以上为每$1注的奖金。“大”可中全部23个号码；“小”只中前三奖，但奖金较高。iBet 包含4个数字的所有排列，奖金按比例分配。详情请参阅新加坡博彩公司网站。',
     '4D &amp; TOTO': '4D与多多', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
     'Good for': '', 'Avoid': '', 'Clash': '', 'Evil spirits in the {d}': '煞{d}', 'Major events': '重大活动', 'Concerts, sports &amp; more': '演唱会、体育赛事等',
     'See all events': '查看全部活动', 'This weekend': '本周末', 'till {d}': '至{d}', 'Upcoming events will appear here.': '近期活动将在这里显示。',
@@ -663,6 +703,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   };
   // Longer English texts for the footer pop-ups
   const EN = {
+    TOTO_NOTE: 'Each combination of 6 numbers costs $1. A System bet covers every combination of the numbers you pick, so System 8 is 28 combinations. Check singaporepools.com.sg for full rules.',
+    PZ4_NOTE: 'Prize for each $1 bet. A Big bet wins on all 23 numbers; a Small bet wins only on the top 3 but pays more. With iBet, every order of your 4 digits is covered and the prize is shared. Check singaporepools.com.sg for full rules.',
     POP_ABOUT: '<p>yay.sg puts the things Singaporeans check every day on one page: weather, air quality, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.</p><p>One glance, and you know how to plan your day.</p><p>yay.sg is a project by OpenOnda Pte. Ltd., Singapore.</p>',
     POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p>Data: NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p><p>4D and TOTO results are shown for information only. Gambling is only for those aged 18 and above. If gambling is becoming a problem for you or someone you know, call the NCPG Helpline at 1800-6-668-668.</p><p>The Chinese almanac is traditional cultural information, shown for interest only, not advice.</p>',
     POP_ADVERTISE: '<p>Singaporeans open yay.sg every day to check for important information.</p><p>Want them to see your brand? WhatsApp us and we\'ll get back to you.</p>',
@@ -687,17 +729,17 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       return last ? last.getBoundingClientRect().bottom / z + 10 : 700;
     };
     const apply = (z) => {
-      body.style.zoom = z < 0.995 ? String(z) : '';
+      body.style.zoom = Math.abs(z - 1) > 0.005 ? String(z) : '';
       // When the page is shrunk to fit the height, let it use the full width too,
       // so there are no empty columns on the left and right
-      root.style.setProperty('--maxw', z < 0.995 ? Math.floor(w / z) + 'px' : '1440px');
+      root.style.setProperty('--maxw', Math.abs(z - 1) > 0.005 ? Math.floor(w / z) + 'px' : '1440px');
     };
     if (w < 960) { body.style.zoom = ''; root.style.removeProperty('--maxw'); return; }
-    let z = Math.min(1, w / 1280);
+    let z = Math.min(1, w / 1120);  // start at 100%, may grow on big screens below
     apply(z);
     // Widening makes the boxes a bit taller, so settle the size over a few rounds
     for (let i = 0; i < 4; i++) {
-      const next = Math.max(0.55, Math.min(1, w / 1280, h / natural(z)));
+      const next = Math.max(0.55, Math.min(1.3, w / 1120, h / natural(z)));
       if (Math.abs(next - z) < 0.004) { z = next; break; }
       z = next; apply(z);
     }
@@ -1136,16 +1178,16 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const d = lt.fourD, t = lt.toto, nx = lt.totoNext;
     const el = $('d4');
     if (!d && !t) { el.innerHTML = unavailable('4D &amp; TOTO'); return; }
-    const four = d ? `<div class="lsec"><div class="lhead2"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span></div>
+    const four = d ? `<div class="lsec"><div class="lhead2"><b>4D</b><span>${drawDate(d.date)}${d.draw ? T(' · Draw {n}', { n: esc(d.draw) }) : ''}</span><button class="more-btn" type="button" onclick="lotMore('4d')">${T('Show more')} ›</button></div>
       <div class="ltop">
         <div><small>${T('1st')}</small><b>${esc(d.first)}</b></div>
         <div><small>${T('2nd')}</small><b>${esc(d.second)}</b></div>
         <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
-      </div><button class="more-btn" type="button" onclick="lotMore('4d')">${T('Show more')} ›</button></div>` : '';
-    const toto = t ? `<div class="lsec"><div class="lhead2"><b>TOTO</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span></div>
+      </div></div>` : '';
+    const toto = t ? `<div class="lsec"><div class="lhead2"><b>TOTO</b><span>${drawDate(t.date)}${t.draw ? T(' · Draw {n}', { n: esc(t.draw) }) : ''}</span><button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>
       <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
       ${nx ? `<div class="nextline"><span>${T('Next draw')} ${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span><b>${esc(nx.jackpot)}</b></div>` : ''}
-      <button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>` : '';
+      </div>` : '';
     el.innerHTML = `<h2>${T('4D &amp; TOTO')} <small>${T('Singapore Pools')}</small></h2>${four}${toto}${almanacHTML(alm)}`;
   }
   window.lotMore = (k) => {
@@ -1194,8 +1236,8 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     evList = (ev && ev.list) || [];
     const head = `<h2>${T('Major events')} <small>${T('Concerts, sports &amp; more')}</small></h2>`;
     if (!evList.length) { el.innerHTML = `${head}<p class="muted">${T('Upcoming events will appear here.')}</p>`; return; }
-    el.innerHTML = `${head}<div class="evs">${evList.slice(0, 6).map((e) => evRow(e, today)).join('')}</div>
-      ${evList.length > 6 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
+    el.innerHTML = `${head}<div class="evs">${evList.slice(0, 5).map((e) => evRow(e, today)).join('')}</div>
+      ${evList.length > 5 ? `<button class="more-btn" type="button" onclick="evMore()">${T('See all events')} ›</button>` : ''}`;
   }
   window.evMore = () => {
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
@@ -1213,7 +1255,14 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <div><small>${T('3rd')}</small><b>${esc(d.third)}</b></div>
       </div>
       <div class="lsub">${T('Starter')}</div>${grid(d.starter)}
-      <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}`;
+      <div class="lsub">${T('Consolation')}</div>${grid(d.consolation)}
+      <div class="lsub" style="margin-top:14px">${T('What $1 wins')}</div>
+      <div class="tg pz4">
+        <div class="tg-h"><span>${T('Prize')}</span><span>${T('Big bet')}</span><span>${T('Small bet')}</span></div>
+        ${[['1st prize', '$2,000', '$3,000'], ['2nd prize', '$1,000', '$2,000'], ['3rd prize', '$490', '$800'], ['Starter (10 numbers)', '$250', '–'], ['Consolation (10 numbers)', '$60', '–']]
+          .map(([k, b, sm]) => `<div class="tg-r"><span>${T(k)}</span><b>${b}</b><b>${sm}</b></div>`).join('')}
+      </div>
+      <div class="pz-note">${T('PZ4_NOTE')}</div>`;
   }
 
   function renderToto(t, nx, tgt) {
@@ -1229,7 +1278,14 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
         <div><small>${T('Next draw')}</small><span>${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span></div>
         <div class="nj"><small>${T(nx.estimate ? 'Estimated jackpot' : 'Jackpot')}</small><b>${esc(nx.jackpot)}</b></div>
       </div>` : '';
-    el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}`;
+    const sys = tgt ? `<div class="lsub" style="margin-top:14px">${T('What each bet costs')}</div>
+      <div class="tg pz4">
+        <div class="tg-h"><span>${T('Bet type')}</span><span>${T('Numbers picked')}</span><span>${T('Cost')}</span></div>
+        ${[['Ordinary', 6, '$1'], ['System 7', 7, '$7'], ['System 8', 8, '$28'], ['System 9', 9, '$84'], ['System 10', 10, '$210'], ['System 11', 11, '$462'], ['System 12', 12, '$924']]
+          .map(([k, n, c]) => `<div class="tg-r"><span>${T(k)}</span><b>${n}</b><b>${c}</b></div>`).join('')}
+      </div>
+      <div class="pz-note">${T('TOTO_NOTE')}</div>` : '';
+    el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}${sys}`;
   }
 
   function renderToday() {
@@ -1322,7 +1378,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     const groups = GROUPS.map((g) => ({ g, items: list.filter((x) => g.test(x.type.toLowerCase())) })).filter((x) => x.items.length);
     // Keep the box the same size on busy days: at most 7 lines in total.
     // Every group gets one line first, then the rest go to the most serious groups.
-    const MAX_LINES = window.TI_OPEN ? 99 : 7;
+    const MAX_LINES = window.TI_OPEN ? 99 : 5;
     groups.forEach((x) => { x.show = 1; });
     let left = MAX_LINES - groups.length;
     for (const x of groups) { const add = Math.min(left, Math.min(window.TI_OPEN ? 99 : 3, x.items.length) - 1); x.show += add; left -= add; }
