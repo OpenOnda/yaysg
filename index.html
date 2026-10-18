@@ -449,6 +449,16 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     'Avoid prolonged or strenuous outdoor activity.',
     'Avoid outdoor activity.',
   ];
+  // "Singapore average: 150 · highest in the West"
+  function psiAvgLine(p) {
+    const entries = Object.entries(p.regions || {});
+    if (!entries.length) return '';
+    const avg = Math.round(entries.reduce((sum, [, v]) => sum + v, 0) / entries.length);
+    const top = entries.sort((a, b) => b[1] - a[1])[0][0];
+    const name = top[0].toUpperCase() + top.slice(1);
+    return `Singapore average: <b>${avg}</b> · highest in the ${name}`;
+  }
+
   function renderAir(p) {
     const el = $('air');
     if (!p || p.max == null) { el.innerHTML = unavailable('Air quality'); return; }
@@ -459,7 +469,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     }).join('');
     el.innerHTML = `<h2>Air quality <small>24-hr PSI</small></h2>
       <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${p.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${p.band.label}</span></div>
-      <div class="sub">${p.min !== p.max ? `Ranges ${p.min} to ${p.max} across Singapore` : 'Across Singapore'}</div>
+      <div class="sub">${psiAvgLine(p)}</div>
       <div class="bars">${bars}</div>
       <div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${PSI_TIP[lv]}</div>`;
 
