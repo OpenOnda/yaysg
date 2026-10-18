@@ -1,7 +1,7 @@
 {
   "name": "Yay.sg",
   "short_name": "Yay.sg",
-  "description": "Singapore at a glance: weather, haze, Causeway, rates, COE and news.",
+  "description": "Start your day with a yay. Here's Singapore at a glance.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#EEF1EE",
