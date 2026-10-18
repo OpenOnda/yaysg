@@ -357,6 +357,20 @@ const WORLD_FEEDS = [
   { src: 'The Straits Times', url: 'https://www.straitstimes.com/news/world/rss.xml' },
 ];
 
+// Chinese world headlines for the 中文 view, from news outlets that publish in Chinese
+const WORLD_FEEDS_ZH = [
+  { src: 'BBC中文', url: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml' },
+  { src: '德国之声', url: 'https://rss.dw.com/rdf/rss-chi-all' },
+];
+
+async function worldNewsZh() {
+  const results = await Promise.allSettled(WORLD_FEEDS_ZH.map((f) => getText(f.url).then((x) => parseRSS(x, f.src))));
+  const all = results.flatMap((r) => (r.status === 'fulfilled' ? r.value.slice(0, 5) : []));
+  all.sort((a, b) => (b.time || 0) - (a.time || 0));
+  if (!all.length) throw new Error('no chinese world news');
+  return all.slice(0, 8);
+}
+
 async function worldNews() {
   const results = await Promise.allSettled(WORLD_FEEDS.map((f) => getText(f.url).then((x) => parseRSS(x, f.src))));
   const perFeed = results.map((r) => (r.status === 'fulfilled' ? r.value : []));
@@ -669,7 +683,7 @@ async function jbAir() {
 // ---------- handler ----------
 
 export default async () => {
-  const [w, p, c, f, co, hk, n, l, x, mk, wn, lt, ja] = await Promise.all([
+  const [w, p, c, f, co, hk, n, l, x, mk, wn, lt, ja, wz] = await Promise.all([
     cached('weather', 4 * MIN, weather),
     cached('psi', 10 * MIN, psi),
     cached('cams', 2 * MIN, cams),
@@ -683,12 +697,13 @@ export default async () => {
     cached('world', 10 * MIN, worldNews),
     cached('lottery', 15 * MIN, lottery),
     cached('jbair', 30 * MIN, jbAir),
+    cached('worldzh', 10 * MIN, worldNewsZh),
   ]);
 
   const body = {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
-    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn, lottery: lt, jbAir: ja,
+    holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn, worldZh: wz, lottery: lt, jbAir: ja,
   };
 
   return new Response(JSON.stringify(body), {
