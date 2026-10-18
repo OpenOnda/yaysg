@@ -420,6 +420,13 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
   const PSI_COLORS = ['#0F8A6B', '#C98A00', '#C2410C', '#B42318', '#7A1010'];
   const PSI_BG = ['var(--good-bg)', 'var(--warn-bg)', '#FDE6D8', 'var(--bad-bg)', '#F6D4D4'];
   const PSI_FG = ['var(--good)', 'var(--warn)', '#8A2E07', 'var(--bad)', 'var(--vbad)'];
+  const PSI_TIP = [
+    'Good air. Enjoy the outdoors.',
+    'Fine for normal activities.',
+    'Go easy outdoors. Kids, elderly, heart or lung conditions: take care.',
+    'Avoid outdoor exercise. Kids, elderly, heart or lung conditions: stay in.',
+    'Stay indoors where you can.',
+  ];
   const PSI_ADVICE = [
     'Normal activities.',
     'Normal activities.',
@@ -438,13 +445,10 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     el.innerHTML = `<h2>Air quality <small>24-hr PSI</small></h2>
       <div style="display:flex;align-items:baseline;gap:12px"><div class="big">${p.max}</div><span class="chip" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${p.band.label}</span></div>
       <div class="sub">${p.min !== p.max ? `Ranges ${p.min} to ${p.max} across Singapore` : 'Across Singapore'}</div>
-      <div class="bars">${bars}</div>`;
+      <div class="bars">${bars}</div>
+      <div class="pill" style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}">${PSI_TIP[lv]}</div>`;
 
-    const al = $('alert');
-    if (lv >= 2) {
-      al.hidden = false;
-      al.innerHTML = `<div style="background:${PSI_BG[lv]};color:${PSI_FG[lv]}"><strong>Haze alert: PSI ${p.max}, ${p.band.label.toLowerCase()}.</strong><span>${PSI_ADVICE[lv]} Elderly, children and those with heart or lung conditions, take extra care. See NEA for advisories.</span></div>`;
-    } else { al.hidden = true; }
+    $('alert').hidden = true;
   }
 
   function renderCams(c, xings) {
