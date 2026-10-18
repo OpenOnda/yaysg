@@ -70,15 +70,30 @@ async function cached(key, ttlMs, fn) {
 
 const MIN = 60 * 1000;
 
+// "Feels like" temperature: the US National Weather Service heat index formula
+function heatIndexC(tc, rh) {
+  const T = tc * 9 / 5 + 32;
+  let HI = 0.5 * (T + 61 + (T - 68) * 1.2 + rh * 0.094);
+  if ((HI + T) / 2 >= 80) {
+    HI = -42.379 + 2.04901523 * T + 10.14333127 * rh - 0.22475541 * T * rh
+      - 0.00683783 * T * T - 0.05481717 * rh * rh + 0.00122874 * T * T * rh
+      + 0.00085282 * T * rh * rh - 0.00000199 * T * T * rh * rh;
+    if (rh < 13 && T >= 80 && T <= 112) HI -= ((13 - rh) / 4) * Math.sqrt((17 - Math.abs(T - 95)) / 17);
+    else if (rh > 85 && T >= 80 && T <= 87) HI += ((rh - 85) / 10) * ((87 - T) / 5);
+  }
+  return Math.max(tc, (HI - 32) * 5 / 9);
+}
+
 // ---------- weather ----------
 
 const RAINY = /rain|shower|thunder/i;
 
 async function weather() {
-  const [now2h, day24, temp] = await Promise.all([
+  const [now2h, day24, temp, hum] = await Promise.all([
     getJSON('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast'),
     getJSON('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast'),
-    getJSON('https://api.data.gov.sg/v1/environment/air-temperature').catch(() => null),
+    getJSON('https://api-open.data.gov.sg/v2/real-time/api/air-temperature').catch(() => null),
+    getJSON('https://api-open.data.gov.sg/v2/real-time/api/relative-humidity').catch(() => null),
   ]);
 
   const f2 = now2h?.items?.[0] || {};
@@ -97,14 +112,21 @@ async function weather() {
     regions: p.regions || {},
   }));
 
-  let tempNow = null;
-  const readings = temp?.items?.[0]?.readings || [];
-  if (readings.length) {
-    tempNow = Math.round(readings.reduce((s, r) => s + r.value, 0) / readings.length);
-  }
+  // Island-wide averages from all NEA stations reporting right now
+  const avg = (j) => {
+    const vals = (j?.data?.readings?.[0]?.data || []).map((r) => Number(r.value)).filter((v) => Number.isFinite(v));
+    return vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
+  };
+  const tAvg = avg(temp);
+  const hAvg = avg(hum);
+  const tempNow = tAvg != null ? Math.round(tAvg) : null;
+  const humidity = hAvg != null ? Math.round(hAvg) : null;
+  const feelsLike = tAvg != null && hAvg != null ? Math.round(heatIndexC(tAvg, hAvg)) : null;
 
   return {
     tempNow,
+    feelsLike,
+    humidity,
     nowCondition,
     rainAreas,
     areaCount: forecasts.length,
