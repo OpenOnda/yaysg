@@ -431,7 +431,7 @@ main .keep{margin-left:0;margin-right:0}
 .share-row{display:flex;justify-content:center;margin:0 0 10px}
 .share-big{text-align:center;display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-weight:800;font-size:14px;padding:11px 22px;border-radius:999px}
 @media (min-width:960px){.share-row{display:none}}
-@media (min-width:960px){.keep{display:none}main{padding-bottom:6px}footer{display:grid;grid-template-columns:1fr auto 1fr;padding:4px 16px 8px;align-items:center}footer .copy{justify-self:end}}
+@media (min-width:960px){.keep{display:none}main{padding-bottom:6px}footer{display:flex;justify-content:center;gap:18px;padding:4px 16px 8px;align-items:center}}
 .flinks{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .flinks button{all:unset;cursor:pointer;font-weight:600;color:var(--muted)}
 .flinks button:hover{color:var(--ink);text-decoration:underline}
@@ -544,7 +544,6 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
       <p data-i18n='Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".'>Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".</p>
     </div>
   </section>
-  <div class="share-row"><span class="share-big" data-i18n="Enjoying yay.sg? Tell your friends about it!">Enjoying yay.sg? Tell your friends about it!</span></div>
 </main>
 
 <footer>
@@ -555,8 +554,7 @@ html[data-theme="dark"] a:hover{color:#FF8A80}
     <button type="button" data-pop="disclaimer" data-i18n="Disclaimer">Disclaimer</button><i>·</i>
     <a href="https://wa.me/6588224466?text=Hi%20yay.sg" target="_blank" rel="noopener" data-i18n="Contact">Contact</a>
   </nav>
-  <span class="share-mini" data-i18n="Enjoying yay.sg? Tell your friends about it!">Enjoying yay.sg? Tell your friends about it!</span>
-  <span class="copy">© 2026 yay.sg</span>
+    <span class="copy">© 2026 yay.sg</span>
 </footer>
 
 <script>
