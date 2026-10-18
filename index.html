@@ -420,8 +420,9 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
 .inc time{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 .inc-more{padding-top:5px;border-top:1px solid var(--hair);font-size:11px}
 .ti-top{margin-bottom:6px}
-.alm-h{display:block!important;margin:0 0 4px!important}
-.alm-h small{display:block;margin-top:3px}
+.alm-h{display:flex!important;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 4px!important}
+.alm-h{white-space:nowrap}
+.alm-h small{text-align:right;white-space:normal;min-width:0}
 .lhead2.lot span{margin-left:0;text-align:left}
 .lsec>.more-btn,#toto>.more-btn{display:block;width:max-content;margin-left:auto}
 .fxl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
@@ -623,7 +624,8 @@ body.measuring #air .bars{flex:none!important}
   #wx .later div{font-size:14px}
   #wx .later b{font-size:12.5px}
   #wx .later svg{width:50px;height:50px;margin:0 auto}
-  .coe .ch{width:auto!important;min-width:50px;white-space:nowrap;padding-left:8px}
+  .coe .ch{width:72px!important;flex:0 0 72px;white-space:nowrap;text-align:right}
+  .coe .pr{text-align:right;font-variant-numeric:tabular-nums}
 }
 .aq3{text-align:center}
 .aq3 small{min-height:0}
@@ -695,7 +697,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
 
     <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card tall" id="d4"><h2>4D &amp; TOTO</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="d4"><h2>Huat Corner</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
     <section class="card tall" id="toto"><h2>Major events</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
@@ -745,7 +747,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
     'Singapore averages': '全岛平均', '1-hr PM2.5': '1小时PM2.5', 'JB AQI': '新山AQI', 'Right now, 1-hr PM2.5': '当前1小时PM2.5', 'Johor Bahru, US AQI': '新山（美国AQI）', 'Highest right now: {r} {v}': '当前最高：{r} {v}', 'Right now, 1-hr PM2.5 by region': '各区当前1小时PM2.5', '24-hr PSI by region': '各区24小时PSI',
     AIR_NOTE: '1小时PM2.5反映当前空气（正常≤55，偏高56至150，高151至250，非常高>250）。24小时PSI是NEA的每日健康指标（良好≤50，中等51至100，不健康101至200）。新山数据来自Open-Meteo的美国AQI模型估算。',
     PZ4_NOTE: '以上为每$1注的奖金。“大”可中全部23个号码；“小”只中前三奖，但奖金较高。iBet 包含4个数字的所有排列，奖金按比例分配。详情请参阅新加坡博彩公司网站。',
-    '4D &amp; TOTO': '4D与多多', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
+    'Huat Corner': '发财角', 'Show more': '查看更多', 'Chinese almanac': '黄历', 'Auspicious day': '吉日', 'Not an auspicious day': '非吉日',
     'Good for': '', 'Avoid': '', 'Clash': '', 'Evil spirits in the {d}': '煞{d}', 'Major events': '重大活动', 'Concerts, sports &amp; more': '演唱会、体育赛事等',
     'See all events': '查看全部活动', 'This weekend': '本周末', 'till {d}': '至{d}', 'Upcoming events will appear here.': '近期活动将在这里显示。',
     'UV': '紫外线', 'Low': '低', 'Extreme': '极高', 'Sunrise · sunset': '日出 · 日落', ' (+{n} more)': '（另有{n}处）',
@@ -789,7 +791,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
     'Woodlands Checkpoint': '兀兰关卡', 'Tuas Checkpoint': '大士关卡', 'Checkpoint area': '关卡一带',
     '<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 5am.': '<b>夜间暂停。</b>通关时间最后更新于{last}，早上5点恢复实时更新。',
     '<b>Update delayed.</b> Crossing times last updated at {last}. Check the camera photos for the latest view.': '<b>更新延迟。</b>通关时间最后更新于{last}，请参考摄像头画面。',
-    'Crossing times updated {last}, next update at {next}. Data from live Google traffic.': '通关时间于{last}更新，下次更新：{next}。数据来自Google实时交通。',
+    'Crossing times updated {last}, next update at {next}.': '通关时间于{last}更新，下次更新：{next}。',
     'STI': '海峡时报指数', 'KLCI': '吉隆坡综合指数', 'Nikkei 225': '日经225', 'Hang Seng': '恒生指数',
     'Shanghai': '上证指数', 'Dow Jones': '道琼斯', 'Nasdaq': '纳斯达克', 'S&P 500': '标普500',
     'Cars up to 1600cc': '1600cc及以下汽车', 'Cars above 1600cc': '1600cc以上汽车', 'Goods & buses': '货车与巴士',
@@ -1243,7 +1245,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
         estState = 'paused';
         msg = T('<b>Update delayed.</b> Crossing times last updated at {last}. Check the camera photos for the latest view.', { last });
       } else {
-        msg = T('Crossing times updated {last}, next update at {next}. Data from live Google traffic.', { last, next });
+        msg = T('Crossing times updated {last}, next update at {next}.', { last, next });
       }
       estNote = `<div class="eta-note ${estState}">${estState === 'paused' ? '<span class="pz" aria-hidden="true"></span>' : '<span class="lv" aria-hidden="true"></span>'}<span>${msg}</span></div>`;
     }
@@ -1393,7 +1395,7 @@ html[data-theme="dark"] .grid > .card > h2{background:#0B1512}
       <div class="balls">${t.winning.map((n) => `<span>${n}</span>`).join('')}<i>+</i><span class="add">${t.additional}</span></div>
       ${nx ? `<div class="nextline"><span>${T('Next draw')} ${shortDate(nx.date)}${nx.time ? ', ' + esc(nx.time) : ''}</span><b>${esc(nx.jackpot)}</b></div>` : ''}
       <button class="more-btn" type="button" onclick="lotMore('toto')">${T('Show more')} ›</button></div>` : '';
-    el.innerHTML = `<h2>${T('4D &amp; TOTO')} <small>${T('Singapore Pools')}</small></h2>${four}${toto}${almanacHTML(alm)}`;
+    el.innerHTML = `<h2>${T('Huat Corner')} <small>${T('Singapore Pools')}</small></h2>${four}${toto}${almanacHTML(alm)}`;
   }
   window.lotMore = (k) => {
     const box = document.createElement('section');
