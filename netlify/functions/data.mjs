@@ -517,15 +517,37 @@ async function crossings() {
 
 // ---------- stock market indexes (Yahoo Finance public chart feed, unofficial) ----------
 const INDEXES = [
-  { sym: '^STI', name: 'STI' },
-  { sym: '^KLSE', name: 'KLCI' },
-  { sym: '^N225', name: 'Nikkei 225' },
-  { sym: '^HSI', name: 'Hang Seng' },
-  { sym: '000001.SS', name: 'Shanghai' },
-  { sym: '^DJI', name: 'Dow Jones' },
-  { sym: '^IXIC', name: 'Nasdaq' },
-  { sym: '^GSPC', name: 'S&P 500' },
+  { sym: '^STI', cnbc: '.STI', name: 'STI' },
+  { sym: '^KLSE', cnbc: '.KLSE', name: 'KLCI' },
+  { sym: '^N225', cnbc: '.N225', name: 'Nikkei 225' },
+  { sym: '^HSI', cnbc: '.HSI', name: 'Hang Seng' },
+  { sym: '000001.SS', cnbc: '.SSEC', name: 'Shanghai' },
+  { sym: '^DJI', cnbc: '.DJI', name: 'Dow Jones' },
+  { sym: '^IXIC', cnbc: '.IXIC', name: 'Nasdaq' },
+  { sym: '^GSPC', cnbc: '.SPX', name: 'S&P 500' },
 ];
+
+// Backup source when Yahoo blocks the server: CNBC's public quote feed, all indexes in one request
+const num = (x) => { const v = Number(String(x ?? '').replace(/[^\d.\-]/g, '')); return Number.isFinite(v) ? v : null; };
+async function cnbcIndexes() {
+  const url = 'https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol?symbols=' +
+    encodeURIComponent(INDEXES.map((ix) => ix.cnbc).join('|')) + '&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json';
+  const j = await getJSON(url, { headers: { 'User-Agent': YAHOO_UA, Accept: 'application/json' } });
+  let rows = j?.FormattedQuoteResult?.FormattedQuote || [];
+  if (!Array.isArray(rows)) rows = [rows];
+  const out = new Map();
+  for (const r of rows) {
+    const ix = INDEXES.find((x) => x.cnbc === r.symbol);
+    const price = num(r.last);
+    if (!ix || price == null) continue;
+    let pct = String(r.change_pct || '').toUpperCase() === 'UNCH' ? 0 : num(r.change_pct);
+    const prev = num(r.previous_day_closing);
+    if (pct == null && prev) pct = ((price - prev) / prev) * 100;
+    out.set(ix.name, { name: ix.name, price, changePct: pct, time: r.last_time ? Date.parse(r.last_time) || null : null });
+  }
+  return out;
+}
+const marketsDiag = { yahoo: null, cnbc: null };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const YAHOO_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';
@@ -582,15 +604,30 @@ async function markets() {
     }
   } catch (e) { console.error('[blobs]', e.message); }
   let fresh = 0;
+  const got = new Set();
   for (const ix of INDEXES) {
     if (Date.now() > deadline) break;
     try {
       const v = await oneIndex(ix);
-      if (v) { lastGood.set(ix.name, v); fresh++; }
+      if (v) { lastGood.set(ix.name, v); fresh++; got.add(ix.name); }
+      marketsDiag.yahoo = 'ok';
     } catch (e) {
       console.error('[markets]', e.message);
+      marketsDiag.yahoo = e.message;
+      // Yahoo blocked the very first request: don't keep knocking, go straight to the backup
+      if (!got.size) break;
     }
     await sleep(250);
+  }
+  if (got.size < INDEXES.length) {
+    try {
+      const backup = await cnbcIndexes();
+      for (const [name, v] of backup) if (!got.has(name)) { lastGood.set(name, v); fresh++; }
+      marketsDiag.cnbc = backup.size ? 'ok ' + backup.size : 'empty';
+    } catch (e) {
+      console.error('[markets cnbc]', e.message);
+      marketsDiag.cnbc = e.message;
+    }
   }
   const list = INDEXES.map((ix) => lastGood.get(ix.name)).filter(Boolean);
   if (!list.length) throw new Error('no market data');
@@ -720,6 +757,7 @@ export default async () => {
     updated: new Date().toISOString(),
     weather: w, psi: p, cams: c, fx: f, coe: co, hawkers: hk,
     holiday: nextHoliday(), news: n, lta: l, crossings: x, markets: mk, world: wn, worldZh: wz, lottery: lt, jbAir: ja,
+    diag: { markets: marketsDiag },
   };
 
   return new Response(JSON.stringify(body), {
