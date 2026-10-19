@@ -823,7 +823,7 @@ body.measuring #wx .later{margin-top:8px!important}
     'Smooth': '畅通', 'Heavy': '拥堵', 'To JB': '往新山', 'To SG': '往新加坡', '{a}–{b} min': '{a}–{b} 分钟',
     'Woodlands Causeway': '兀兰长堤', 'Tuas Second Link': '大士第二通道', 'Towards Johor': '往柔佛方向',
     'Woodlands Checkpoint': '兀兰关卡', 'Tuas Checkpoint': '大士关卡', 'Checkpoint area': '关卡一带',
-    '<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 5am.': '<b>夜间暂停。</b>通关时间最后更新于{last}，早上5点恢复实时更新。',
+    '<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 6am.': '<b>夜间暂停。</b>通关时间最后更新于{last}，早上6点恢复实时更新。',
     '<b>Update delayed.</b> Crossing times last updated at {last}. Check the camera photos for the latest view.': '<b>更新延迟。</b>通关时间最后更新于{last}，请参考摄像头画面。',
     'Crossing times updated {last}, next update at {next}.': '通关时间于{last}更新，下次更新：{next}。',
     'STI': '海峡时报指数', 'KLCI': '吉隆坡综合指数', 'Nikkei 225': '日经225', 'Hang Seng': '恒生指数',
@@ -1296,11 +1296,11 @@ body.measuring #wx .later{margin-top:8px!important}
       const ageMin = (Date.now() - updated) / 60000;
       const hourNow = Number(new Date().toLocaleString('en-GB', { timeZone: TZ, hour: 'numeric', hour12: false }));
       const last = sgTime(xings.updated);
-      const next = sgTime(new Date(updated + 30 * 60000).toISOString());
+      const next = sgTime(new Date(updated + 27 * 60000).toISOString());
       let msg;
-      if (hourNow >= 1 && hourNow < 5) {
+      if (hourNow < 6) {
         estState = 'paused';
-        msg = T('<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 5am.', { last });
+        msg = T('<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 6am.', { last });
       } else if (ageMin > 45) {
         estState = 'paused';
         msg = T('<b>Update delayed.</b> Crossing times last updated at {last}. Check the camera photos for the latest view.', { last });
