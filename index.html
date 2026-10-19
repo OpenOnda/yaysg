@@ -733,6 +733,9 @@ body.measuring #wx .later{margin-top:8px!important}
 .hlinks button:hover,.hlinks a:hover{color:#fff;text-decoration:underline}
 @media (min-width:960px){.hlinks{display:flex}footer{display:none!important}}
 .pop-sheet .pop-body .pop-copy{margin-top:14px;padding-top:10px;border-top:1px solid rgba(127,127,127,.2);font-size:12.5px;color:var(--muted)}
+.hol-tap{cursor:pointer}
+.hol-tap:hover b,.row.hol-tap:hover>span:first-child{text-decoration:underline;text-decoration-color:rgba(127,127,127,.5)}
+.hol-yr{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);margin:8px 0 0;padding-top:6px;border-top:1px dashed var(--hair)}
 </style>
 </head>
 <body>
@@ -1656,26 +1659,94 @@ body.measuring #wx .later{margin-top:8px!important}
     el.innerHTML = `<h2>${T('TOTO results')} <small>${T('Singapore Pools')}</small></h2>${last}${next}${sys}`;
   }
 
+  // What each public holiday is about (opened by tapping a holiday)
+  const HOL_INFO = {
+    "New Year's Day": {
+      en: ['The first day of the new year on the Western calendar.', 'Singapore counts down on 31 Dec with fireworks at Marina Bay, and many people spend New Year\'s Day resting with family or out at brunch. Shops and malls stay open.', 'Happy New Year!'],
+      zh: ['公历新年的第一天。', '新加坡在12月31日晚上于滨海湾倒数并放烟花。元旦当天，许多人和家人休息或外出用餐，商场照常营业。', '新年快乐！'] },
+    'Chinese New Year': {
+      en: ['The start of the lunar new year and the biggest festival for Chinese families. Singapore gives two days off.', 'The eve is for the reunion dinner at home. Over the next days people visit relatives, give red packets (hongbao), exchange mandarin oranges and toss yusheng for luck. Chinatown is lit up for weeks before, and many hawker stalls and small shops close for a few days.', 'Gong Xi Fa Cai, or 新年快乐'],
+      zh: ['农历新年是华人家庭最重要的节日，新加坡放假两天。', '除夕晚上一家人吃团圆饭。之后几天走亲访友、派红包、互换柑橘、捞鱼生。节前几周牛车水张灯结彩，不少小贩和小店会休息几天。', '恭喜发财、新年快乐'] },
+    'Hari Raya Puasa': {
+      en: ['Also called Eid al-Fitr. It marks the end of Ramadan, the Muslim month of fasting. The date follows the Islamic calendar and the sighting of the new moon.', 'Families wear new baju kurung and baju Melayu, ask each other for forgiveness and hold open houses with rendang, ketupat and kueh. In the weeks before, Geylang Serai has a bazaar and street lights.', 'Selamat Hari Raya, maaf zahir dan batin'],
+      zh: ['又称开斋节，标志伊斯兰教斋戒月的结束。日期按伊斯兰历及新月出现而定。', '家人穿上新衣，互相请求原谅，并举办开放式聚会，招待仁当、马来粽和糕点。节前几周芽笼士乃有市集和灯饰。', 'Selamat Hari Raya（开斋节快乐）'] },
+    'Good Friday': {
+      en: ['The Friday before Easter, when Christians remember the crucifixion of Jesus.', 'Churches hold quiet services and some Catholics join the candlelight procession at St Joseph\'s Church on Victoria Street. It is a solemn day, so people don\'t usually greet each other for it. Easter Sunday follows two days later.', ''],
+      zh: ['复活节前的星期五，基督徒纪念耶稣受难。', '教堂会举行礼拜，部分天主教徒参加维多利亚街圣约瑟堂的烛光游行。这是庄严的日子，一般不互相祝贺。两天后是复活节。', ''] },
+    'Labour Day': {
+      en: ['A day to honour workers, held around the world on 1 May.', 'In Singapore it is marked with a May Day Rally by NTUC and the Prime Minister. For most people it is simply a day off.', 'Happy Labour Day!'],
+      zh: ['向劳动者致敬的日子，世界各地都在5月1日庆祝。', '新加坡职工总会和总理会出席五一劳动节集会。对大多数人来说，就是休息的一天。', '劳动节快乐！'] },
+    'Hari Raya Haji': {
+      en: ['Also called Eid al-Adha, the Festival of Sacrifice. It falls during the Haj pilgrimage season and remembers Prophet Ibrahim\'s willingness to sacrifice his son.', 'Muslims attend morning prayers at the mosque. Many mosques carry out the korban, the sacrifice of sheep or cattle, and share the meat with families and those in need.', 'Selamat Hari Raya Haji'],
+      zh: ['又称哈芝节或宰牲节，在朝圣季节期间，纪念先知易卜拉欣愿意献出儿子的信心。', '穆斯林早上到清真寺祈祷。不少清真寺进行宰牲仪式，把肉分给家人及有需要的人。', 'Selamat Hari Raya Haji（哈芝节快乐）'] },
+    'Vesak Day': {
+      en: ['The most important day for Buddhists, remembering the birth, enlightenment and passing of the Buddha. The date follows the lunar calendar.', 'Temples such as Kong Meng San Phor Kark See and the Buddha Tooth Relic Temple are busy from early morning. Devotees pray, make offerings, release birds or do acts of charity, and many eat vegetarian food.', 'Happy Vesak Day'],
+      zh: ['佛教徒最重要的日子，纪念佛陀的诞生、成道与涅槃，日期按农历计算。', '光明山普觉禅寺、佛牙寺等一早就很多人。信众礼佛、供养、做善事，许多人当天吃素。', '卫塞节快乐'] },
+    'National Day': {
+      en: ['Singapore\'s birthday, marking independence on 9 August 1965.', 'The National Day Parade brings fly-pasts, the Red Lions parachute team and fireworks. Flats are hung with flags, and the Prime Minister\'s National Day Rally follows a week or two later.', 'Happy National Day, Majulah Singapura!'],
+      zh: ['新加坡的生日，纪念1965年8月9日独立。', '国庆庆典有飞机表演、红狮跳伞队和烟花。组屋挂满国旗，总理的国庆群众大会在一两周后举行。', '国庆日快乐！'] },
+    'Deepavali': {
+      en: ['The Hindu festival of lights, celebrating the victory of light over darkness and good over evil. The date follows the Hindu calendar.', 'Little India is lit up with street lights and a bazaar for weeks before. Families clean and decorate their homes, light oil lamps, wear new clothes, visit temples and share sweets with friends and neighbours.', 'Happy Deepavali'],
+      zh: ['印度教的灯节，象征光明战胜黑暗、善战胜恶，日期按印度历计算。', '节前几周小印度张灯结彩，还有市集。家人打扫和装饰房子、点油灯、穿新衣、到庙里祈福，并和亲友邻居分享甜点。', '屠妖节快乐'] },
+    'Christmas Day': {
+      en: ['The Christian celebration of the birth of Jesus.', 'Orchard Road is lit up from mid-November. Churches hold midnight and morning services, and many families of all backgrounds meet for a meal and exchange presents.', 'Merry Christmas!'],
+      zh: ['基督教庆祝耶稣诞生的日子。', '乌节路从11月中开始亮灯。教堂有子夜和早上的礼拜，许多不同背景的家庭都会聚餐、交换礼物。', '圣诞快乐！'] },
+  };
+  let holRows = [];
+  window.holPop = (i) => {
+    const h = holRows[i]; if (!h) return;
+    const zh = LANG === 'zh', info = HOL_INFO[h.name];
+    const [what, sg, greet] = info ? (zh ? info.zh : info.en) : ['', '', ''];
+    const fmtY = (d) => sgDate(d, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+    const dates = h.end ? `${fmtY(h.d)} – ${fmtY(h.end)}` : fmtY(h.d);
+    const off = h.off ? (zh ? `<p><b>补假</b><br>${fmtY(h.off)}。公共假期若逢星期日，下一个星期一放假。</p>` : `<p><b>Day off in lieu</b><br>${fmtY(h.off)}. When a public holiday falls on a Sunday, the Monday after is a holiday.</p>`) : '';
+    popup(`<h2>${esc(T(h.name))} <small>${h.n === 0 ? T('Today!') : h.n === 1 ? T('Tomorrow') : T('in {n} days', { n: h.n })}</small></h2><div class="pop-body">
+      <p><b>${zh ? '日期' : 'Date'}</b><br>${dates}</p>${off}
+      ${what ? `<p><b>${zh ? '这是什么节日' : 'What it is'}</b><br>${what}</p>` : ''}
+      ${sg ? `<p><b>${zh ? '在新加坡' : 'In Singapore'}</b><br>${sg}</p>` : ''}
+      ${greet ? `<p><b>${zh ? '怎么祝贺' : 'What to say'}</b><br>${greet}</p>` : ''}
+      <p class="gd-note">${zh ? '日期以人力部公布的公共假期为准。' : 'Dates are the public holidays gazetted by MOM.'}</p></div>`, 'pop-sheet');
+  };
+
   function renderToday() {
     const el = $('td');
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
     const days = (ymd) => Math.round((Date.parse(ymd + 'T00:00:00Z') - Date.parse(today + 'T00:00:00Z')) / 86400000);
     const yr = Number(today.slice(0, 4));
-    const isDec = today.slice(5, 7) === '12';
-    // This year's holidays only. From December, next year's are added too.
-    const up = HOLIDAYS.filter(([d]) => d >= today && (Number(d.slice(0, 4)) === yr || (isDec && Number(d.slice(0, 4)) === yr + 1))).slice(0, 4);
+    // Join the two Chinese New Year days into one entry
+    const merged = [];
+    HOLIDAYS.forEach(([d, n, o]) => {
+      const base = n.replace(/ \(Day 2\)$/, '');
+      const prev = merged[merged.length - 1];
+      if (prev && prev.name === base && base !== n) { prev.end = d; if (o) prev.off = o; return; }
+      merged.push({ d, name: base, off: o || null });
+    });
+    // The rest of this year's holidays, plus the first 3 of next year
+    const left = merged.filter((h) => (h.end || h.d) >= today && Number(h.d.slice(0, 4)) === yr);
+    const nextYr = merged.filter((h) => Number(h.d.slice(0, 4)) === yr + 1).slice(0, 3);
+    const up = left.concat(nextYr).map((h) => ({ ...h, n: Math.max(0, days(h.d)) }));
+    holRows = up;
     const fmtS = (d) => sgDate(d, { day: 'numeric', month: 'short' });
     const school = schoolRow(today, days, fmtS);
     if (!up.length) { el.innerHTML = `<h2>${T('Holidays')}</h2><p class="muted">${T('No more public holidays this year.')}</p>${school}`; return; }
     const when = (n) => n === 0 ? T('Today!') : n === 1 ? T('Tomorrow') : T('in {n} days', { n });
-    const off = (d) => T('{d} off', { d: fmt(d) });
+    // Next year's rows sit under a year label, so the dates don't repeat the year
     const fmt = (d) => sgDate(d, { weekday: 'short', day: 'numeric', month: 'short' });
-    const [d0, n0, o0] = up[0];
-    const n0d = days(d0);
-    const count = n0d === 0 ? `<span>${T('Today!')}</span>` : LANG === 'zh' ? `<small>还有</small><span>${n0d}</span><small>天</small>` : `<small>in</small><span>${n0d}</span><small>${n0d === 1 ? 'day' : 'days'}</small>`;
-    const first = `<div class="hol-next"><div><b>${esc(T(n0))}</b><div class="muted">${fmt(d0)}${o0 ? ' · ' + off(o0) : ''}</div></div><div class="hol-count">${count}</div></div>`;
-    const rest = up.slice(1).map(([d, n, o]) => `<div class="row"><span>${esc(T(n))}<span class="muted"> · ${fmt(d)}${o ? ', ' + off(o) : ''}</span></span><span class="k">${when(days(d))}</span></div>`).join('');
-    el.innerHTML = `<h2>${T('Holidays')}</h2>${first}${rest}${school}`;
+    const off = (d) => T('{d} off', { d: fmt(d) });
+    const span = (h) => h.end ? `${sgDate(h.d, { day: 'numeric' })}–${sgDate(h.end, { day: 'numeric', month: 'short' })}` : fmt(h.d);
+    const h0 = up[0];
+    const count = h0.n === 0 ? `<span>${T('Today!')}</span>` : LANG === 'zh' ? `<small>还有</small><span>${h0.n}</span><small>天</small>` : `<small>in</small><span>${h0.n}</span><small>${h0.n === 1 ? 'day' : 'days'}</small>`;
+    const first = `<div class="hol-next hol-tap" onclick="holPop(0)"><div><b>${esc(T(h0.name))}</b><div class="muted">${span(h0)}${h0.off ? ' · ' + off(h0.off) : ''}</div></div><div class="hol-count">${count}</div></div>`;
+    let lastYr = yr, schoolUsed = false;
+    const rest = up.slice(1).map((h, i) => {
+      const y = Number(h.d.slice(0, 4));
+      // MOE school holidays sit with this year's holidays, before next year's
+      const sep = y !== lastYr ? `${school}<div class="hol-yr">${y}</div>` : '';
+      if (y !== lastYr) schoolUsed = true;
+      lastYr = y;
+      return `${sep}<div class="row hol-tap" onclick="holPop(${i + 1})"><span>${esc(T(h.name))}<span class="muted"> · ${span(h)}${h.off ? ', ' + off(h.off) : ''}</span></span><span class="k">${when(h.n)}</span></div>`;
+    }).join('');
+    el.innerHTML = `<h2>${T('Holidays')}</h2>${first}${rest}${schoolUsed ? '' : school}`;
   }
 
   // Jams, accidents and MRT status (LTA DataMall)
