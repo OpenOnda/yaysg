@@ -600,7 +600,8 @@ async function routeTime(c, key) {
 // Google allows 5,000 free traffic requests a month. Four routes every 30 minutes,
 // paused 1am to 5am, comes to about 4,800. The last result is saved in Netlify's
 // storage so restarts never trigger extra requests.
-const XING_TTL = 30 * 60 * 1000;
+// Every 27 minutes from 6am to midnight = 40 refreshes x 4 routes a day, inside Google's free monthly limit
+const XING_TTL = 27 * 60 * 1000;
 
 function sgHour() {
   return Number(new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: 'numeric', hour12: false }).format(new Date()));
@@ -619,7 +620,7 @@ async function crossings() {
   }
   const age = saved ? Date.now() - Date.parse(saved.updated) : Infinity;
   const h = sgHour();
-  const quietHours = h >= 1 && h < 5;
+  const quietHours = h < 6; // paused from midnight to 6am
   if (saved && (age < XING_TTL || quietHours)) return saved;
 
   const results = await Promise.allSettled(CROSSINGS.map((c) => routeTime(c, key)));
