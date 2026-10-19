@@ -495,8 +495,6 @@ main .keep{margin-left:0;margin-right:0}
 .flinks button{all:unset;cursor:pointer;font-weight:600;color:var(--muted)}
 .flinks button:hover{color:var(--ink);text-decoration:underline}
 .flinks i{font-style:normal;color:var(--faint)}
-.pop-sheet .pop-body{font-size:14px;line-height:1.6;color:var(--ink2)}
-.pop-sheet .pop-body p{margin:0 0 10px}
 .pop-btn{display:inline-block;margin-top:8px;padding:10px 18px;border-radius:999px;background:#1FA855;color:#fff;font-weight:700;text-decoration:none}
 @media (max-width:600px){.keep{flex-direction:column;align-items:center;text-align:center;padding:14px 16px;gap:10px}.keep b{font-size:16px}footer{flex-direction:column;align-items:center;text-align:center}.flinks{justify-content:center}}
 .psi24{display:flex;align-items:baseline;gap:7px;margin-top:8px;padding-top:7px;border-top:1px solid var(--hair);font-size:13px}
@@ -704,16 +702,27 @@ body.measuring #wx .later{margin-top:8px!important}
 .zc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.zc-row .zc{margin-bottom:0}
 .zc-note{margin:12px 0 0;font-size:12px;color:var(--muted);line-height:1.5}
 @media (max-width:600px){.zc-row{grid-template-columns:1fr}}
-.uv-t{cursor:pointer}
-.uvg-list{display:flex;flex-direction:column;gap:8px;margin:12px 0}
-.uvg{display:flex;gap:12px;align-items:flex-start;padding:8px 10px;border-radius:10px}
-.uvg.now{background:var(--chip,rgba(127,127,127,.12));outline:1px solid var(--line,rgba(127,127,127,.25))}
-.uvg-r{flex:0 0 52px;text-align:center;padding:5px 0;border-radius:7px;color:#fff;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
-.uvg b{display:block;font-size:14px}
-.uvg b em{font-style:normal;font-weight:700;font-size:11px;margin-left:8px;padding:2px 7px;border-radius:99px;background:var(--ink);color:var(--bg)}
-.pop-body .uvg p{margin:2px 0 0;font-size:13px;line-height:1.45}
-.pop-body .uvg-list{gap:2px}.pop-body .uvg{padding:7px 10px}
-.uvg-note{font-size:12px;color:var(--faint)}
+.tap-t{cursor:pointer}
+.pop-sheet .pop-body{font-size:14.5px;line-height:1.65;color:var(--ink2)}
+.pop-sheet .pop-body p{margin:0 0 12px;max-width:62ch}
+.pop-sheet .pop-body p:last-child{margin-bottom:0}
+.pop-sheet .pop-body b{color:var(--ink)}
+.gd-list{display:flex;flex-direction:column;gap:2px;margin:6px 0 14px}
+.gd{display:flex;gap:12px;align-items:flex-start;padding:8px 10px;border-radius:10px}
+.gd.now{background:rgba(127,127,127,.12);outline:1px solid rgba(127,127,127,.25)}
+.gd-r{flex:0 0 64px;text-align:center;padding:5px 0;border-radius:7px;color:#fff;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.gd b{display:block;font-size:14px;line-height:1.3}
+.gd b em{font-style:normal;font-weight:700;font-size:11px;margin-left:8px;padding:2px 7px;border-radius:99px;background:var(--ink);color:var(--bg);vertical-align:1px}
+.pop-sheet .pop-body .gd p{margin:3px 0 0;font-size:13.5px;line-height:1.5}
+.pop-sheet .pop-body .gd-note{font-size:12.5px;line-height:1.55;color:var(--muted);border-top:1px solid rgba(127,127,127,.2);padding-top:10px;margin-top:4px}
+.gd-sec{margin:10px 0 14px}
+.gd-sec>b{display:block;font-size:14px}
+.pop-sheet .pop-body .gd-sec p{margin:2px 0 6px;font-size:13.5px;line-height:1.5}
+.gd-chips{display:flex;flex-wrap:wrap;gap:6px}
+.gd-chips span{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 9px;border-radius:99px;background:rgba(127,127,127,.12);color:var(--ink2);font-variant-numeric:tabular-nums}
+.gd-chips i{width:8px;height:8px;border-radius:50%}
+.more-btn,.it-more-btn{all:unset;cursor:pointer;display:inline-block;margin-top:8px;font-size:13px;font-weight:500;color:var(--red);line-height:1.4}
+.more-btn:hover,.it-more-btn:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -817,7 +826,7 @@ body.measuring #wx .later{margin-top:8px!important}
     'Share yay.sg': '分享 yay.sg', 'Enjoying yay.sg? Tell your friends about it!': '喜欢 yay.sg？告诉你的朋友吧！', 'Disclaimer': '免责声明', 'About': '关于我们', 'Feedback': '意见反馈', 'Contact': '联系我们', 'Send feedback on WhatsApp': '用 WhatsApp 发送反馈',
     "Start your day with a yay. Here's Singapore at a glance.": '每天从一声 yay 开始。新加坡一览，尽在这里。',
     POP_ABOUT: '<p>yay.sg 把新加坡每天最常查的资讯放在一个页面：天气、空气质量、长堤与第二通道的通关时间、交通状况、汇率、拥车证价格、4D与多多成绩，以及公共假期。</p><p>打开一次，就知道今天该怎么安排。</p><p>yay.sg 是新加坡公司 OpenOnda Pte. Ltd. 的项目。</p>',
-    POP_DISCLAIMER: '<p>yay.sg 不是政府官方服务，与所列的任何政府机构或媒体均无关联。</p><p>资料来源：NEA与LTA（data.gov.sg）、LTA DataMall、PUB、欧洲央行参考汇率、open.er-api.com、Yahoo Finance与CNBC（股市指数，延迟约15分钟）、新加坡博彩公司、Google交通资料及各媒体RSS。</p><p>资料可能有延迟或误差。换汇请以兑换商报价为准，开彩成绩请以新加坡博彩公司为准，出行前请留意官方通告。</p><p>4D与多多成绩仅供参考。博彩仅限18岁及以上人士。如您或身边的人受赌博问题困扰，请拨打NCPG求助热线 1800-6-668-668。</p><p>黄历为传统文化资讯，仅供参考，并非建议。</p>',
+    POP_DISCLAIMER: '<p>yay.sg 不是政府官方服务，与所列的任何政府机构或媒体均无关联。</p><p><b>资料来源</b><br>NEA与LTA（data.gov.sg）、LTA DataMall、PUB、欧洲央行参考汇率、open.er-api.com、Yahoo Finance与CNBC（股市指数，延迟约15分钟）、新加坡博彩公司、Google交通资料及各媒体RSS。</p><p><b>准确性</b><br>资料可能有延迟或误差。换汇请以兑换商报价为准，开彩成绩请以新加坡博彩公司为准，出行前请留意官方通告。</p><p><b>4D与多多</b><br>成绩仅供参考。博彩仅限18岁及以上人士。如您或身边的人受赌博问题困扰，请拨打NCPG求助热线 1800-6-668-668。</p><p><b>黄历</b><br>黄历为传统文化资讯，仅供参考，并非建议。</p>',
     POP_ADVERTISE: '<p>每天都有新加坡人打开 yay.sg 查看重要资讯。</p><p>想让他们看到您的品牌？欢迎通过 WhatsApp 联系我们。</p>',
     POP_FEEDBACK: '<p>发现错误、资料不对，或有任何意见和建议？</p><p>请通过 WhatsApp 告诉我们，我们会尽快处理。</p>', 'Markets': '股市', 'Start your day with a yay.': '每天从一声 yay 开始。', 'Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
     'Causeway &amp; Second Link': '长堤与第二通道', 'Exchange rate · 1 SGD buys': '汇率 · 1新元可兑换', 'Exchange rate': '汇率',
@@ -882,7 +891,7 @@ body.measuring #wx .later{margin-top:8px!important}
     AIR_NOTE: '1-hr PM2.5 shows the air right now (Normal up to 55, Elevated 56 to 150, High 151 to 250, Very high above 250). The 24-hr PSI is NEA\'s official daily health guide (Good up to 50, Moderate 51 to 100, Unhealthy 101 to 200). Johor Bahru uses the US AQI scale from Open-Meteo, a modelled estimate.',
     PZ4_NOTE: 'Prize for each $1 bet. A Big bet wins on all 23 numbers; a Small bet wins only on the top 3 but pays more. With iBet, every order of your 4 digits is covered and the prize is shared. Check singaporepools.com.sg for full rules.',
     POP_ABOUT: '<p>yay.sg puts the things Singaporeans check every day on one page: weather, air quality, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.</p><p>One glance, and you know how to plan your day.</p><p>yay.sg is a project by OpenOnda Pte. Ltd., Singapore.</p>',
-    POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p>Data: NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p><p>4D and TOTO results are shown for information only. Gambling is only for those aged 18 and above. If gambling is becoming a problem for you or someone you know, call the NCPG Helpline at 1800-6-668-668.</p><p>The Chinese almanac is traditional cultural information, shown for interest only, not advice.</p>',
+    POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p><b>Where the data comes from</b><br>NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p><b>Accuracy</b><br>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p><p><b>4D and TOTO</b><br>Results are shown for information only. Gambling is only for those aged 18 and above. If gambling is becoming a problem for you or someone you know, call the NCPG Helpline at 1800-6-668-668.</p><p><b>Chinese almanac</b><br>The almanac is traditional cultural information, shown for interest only, not advice.</p>',
     POP_ADVERTISE: '<p>Singaporeans open yay.sg every day to check for important information.</p><p>Want them to see your brand? WhatsApp us and we\'ll get back to you.</p>',
     POP_FEEDBACK: '<p>Spotted a bug, wrong information, or have a complaint or idea?</p><p>Tell us on WhatsApp and we\'ll look into it as soon as we can.</p>',
   };
@@ -967,6 +976,16 @@ body.measuring #wx .later{margin-top:8px!important}
       root.style.setProperty('--etasz', (parseFloat(getComputedStyle(t).fontSize) * kz).toFixed(1) + 'px');
     }
     equalEta();
+    syncMore();
+  }
+  // "Show more" and "See all" links look the same size in every box, even when a box's text is enlarged
+  function syncMore() {
+    document.querySelectorAll('.more-btn,.it-more-btn').forEach((b) => {
+      b.style.fontSize = '';
+      let z = 1;
+      for (let el = b; el && el !== document.body; el = el.parentElement) z *= parseFloat(el.style.zoom) || 1;
+      if (Math.abs(z - 1) > 0.01) b.style.fontSize = (13 / z).toFixed(2) + 'px';
+    });
   }
   // All four crossing badges share the width of the widest one, so "7–11" is not smaller than "24–37"
   function equalEta() {
@@ -1126,8 +1145,9 @@ body.measuring #wx .later{margin-top:8px!important}
     else if (uv) { const [, label, lv] = UV_BANDS.find(([max]) => uv.value <= max); uvT = tile(T('UV index'), uv.value, T(label), PSI_FG[lv]); }
     else uvT = tile(T('UV index'), '–', T(hr >= 19 || hr < 7 ? 'After sunset' : hr < 9 ? 'First reading ~8am' : 'Not available'), 'var(--muted)');
     window.__uv = uv ? uv.value : null;
-    uvT = uvT.replace('<div class="aq3">', '<div class="aq3 uv-t" data-pop="uv">');
-    return tile(T('Actual'), temp, '&nbsp;', 'var(--muted)') + (fl != null ? tile(T('Feels like'), fl + '°', flBand[0], flBand[1]) : '') + uvT;
+    window.__wxg = { t: w.tempNow, fl, hum: w.humidity, low: w.today && w.today.low, high: w.today && w.today.high };
+    const tap = (html, k) => html.replace('<div class="aq3">', `<div class="aq3 tap-t" data-pop="${k}">`);
+    return tap(tile(T('Actual'), temp, '&nbsp;', 'var(--muted)'), 'temp') + (fl != null ? tap(tile(T('Feels like'), fl + '°', flBand[0], flBand[1]), 'feel') : '') + tap(uvT, 'uv');
   }
   function sunOnly() {
     const st = sunTimes(new Date(Date.now() + 8 * 3600e3));
@@ -1223,13 +1243,25 @@ body.measuring #wx .later{margin-top:8px!important}
   }
   function pmBand(v) { return v <= 55 ? [0, 'Normal'] : v <= 150 ? [1, 'Elevated'] : v <= 250 ? [2, 'High'] : [3, 'Very high']; }
   const pmAvg = (pm) => { const v = Object.values(pm.regions || {}); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : pm.max; };
+  function airGuide() {
+    const zh = LANG === 'zh';
+    const chips = (list) => `<div class="gd-chips">${list.map(([r, lv, n]) => `<span><i style="background:${PSI_COLORS[lv]}"></i>${r} ${n}</span>`).join('')}</div>`;
+    const sec = (h, p, list) => `<div class="gd-sec"><b>${h}</b><p>${p}</p>${chips(list)}</div>`;
+    return `<div class="lsub" style="margin-top:16px">${zh ? '如何看这些数字' : 'How to read these'}</div>` + (zh
+      ? sec('1小时PM2.5', '此刻的空气状况，适合决定现在是否外出运动。', [['0–55', 0, '正常'], ['56–150', 1, '偏高'], ['151–250', 2, '高'], ['251+', 3, '非常高']])
+        + sec('24小时PSI', 'NEA的官方每日健康指标，以过去24小时计算。', [['0–50', 0, '良好'], ['51–100', 1, '中等'], ['101–200', 2, '不健康'], ['201–300', 3, '非常不健康'], ['301+', 4, '危险']])
+        + sec('柔佛AQI', '新山的空气，采用美国AQI标准，由Open-Meteo模型估算。', [['0–50', 0, '良好'], ['51–100', 1, '中等'], ['101–150', 2, '敏感人群不健康'], ['151–200', 2, '不健康'], ['201+', 3, '非常不健康']])
+      : sec('1-hr PM2.5', 'The air right now. Best for deciding whether to exercise outdoors now.', [['0–55', 0, 'Normal'], ['56–150', 1, 'Elevated'], ['151–250', 2, 'High'], ['251+', 3, 'Very high']])
+        + sec('24-hr PSI', "NEA's official daily health guide, based on the past 24 hours.", [['0–50', 0, 'Good'], ['51–100', 1, 'Moderate'], ['101–200', 2, 'Unhealthy'], ['201–300', 3, 'Very unhealthy'], ['301+', 4, 'Hazardous']])
+        + sec('Johor AQI', 'Air in Johor Bahru on the US AQI scale, a modelled estimate from Open-Meteo.', [['0–50', 0, 'Good'], ['51–100', 1, 'Moderate'], ['101–150', 2, 'Unhealthy for sensitive groups'], ['151–200', 2, 'Unhealthy'], ['201+', 3, 'Very unhealthy']]));
+  }
   window.airMore = () => {
     const a = window.__air; if (!a) return;
     popup(`<h2>${T('Air quality')} <small>NEA · Open-Meteo</small></h2><div class="pop-body">
       <div class="lsub">${T('Right now, 1-hr PM2.5 by region')}</div><div class="bars">${a.bars}</div>
       <div class="lsub" style="margin-top:14px">${T('24-hr PSI by region')}</div>
       <div class="bars">${Object.entries(a.p.regions).map(([k, v]) => { const [b] = psiBandOf(v); return `<div class="bar"><span>${T(k[0].toUpperCase() + k.slice(1))}</span><span class="t"><i style="width:${Math.min(100, v / 3)}%;background:${PSI_COLORS[b]}"></i></span><span>${v}</span></div>`; }).join('')}</div>
-      <p style="margin-top:14px">${T('AIR_NOTE')}</p></div>`, 'pop-sheet lot-pop');
+      ${airGuide()}</div>`, 'pop-sheet lot-pop');
   };
   function renderAir(p, ja) {
     const el = $('air');
@@ -1687,27 +1719,83 @@ body.measuring #wx .later{margin-top:8px!important}
   zodSet();
   // Footer pop-ups
   const WA = 'https://wa.me/6588224466?text=';
-  // UV index guide, opened by tapping the UV tile. Bands follow NEA and WHO.
-  const UV_GUIDE = [
-    { r: '0–2', lv: 0, en: ['Low', 'Safe to be outdoors. Sunglasses on bright days.'], zh: ['低', '可安心在户外活动，阳光强时可戴太阳眼镜。'] },
-    { r: '3–5', lv: 1, en: ['Moderate', 'Seek shade around midday. Wear a hat, sunglasses and sunscreen (SPF 30+) if you are out for long.'], zh: ['中等', '中午时段尽量待在阴凉处。长时间在户外请戴帽子、太阳眼镜并涂防晒霜（SPF 30以上）。'] },
-    { r: '6–7', lv: 2, en: ['High', 'Cut down time in the sun from 11am to 3pm. Hat, sunglasses, sunscreen and light long sleeves. Reapply sunscreen every 2 hours.'], zh: ['高', '上午11点至下午3点减少日晒。戴帽子和太阳眼镜，涂防晒霜，穿轻薄长袖，每2小时补涂一次。'] },
-    { r: '8–10', lv: 3, en: ['Very high', 'Avoid the sun from 11am to 3pm if you can. Unprotected skin can burn in about 15 to 20 minutes. Take extra care with children and the elderly.'], zh: ['很高', '尽量避免在上午11点至下午3点外出。皮肤若无防护，约15至20分钟就可能晒伤。儿童与长者需特别注意。'] },
-    { r: '11+', lv: 4, en: ['Extreme', 'Stay indoors or in the shade around midday. Unprotected skin can burn in under 10 minutes. Full protection if you must go out.'], zh: ['极高', '中午前后请留在室内或阴凉处。皮肤若无防护，不到10分钟就可能晒伤。必须外出时请做好全面防护。'] },
-  ];
+  // Explanation pop-ups for the weather tiles. One shared layout: short intro, coloured levels, a note.
+  function guideHTML(g) {
+    const rows = g.rows.map((r, i) => `<div class="gd${i === g.cur ? ' now' : ''}">
+      <span class="gd-r" style="background:${PSI_COLORS[r.lv]}">${r.r}</span>
+      <div><b style="color:${PSI_FG[r.lv]}">${r.name}${i === g.cur ? `<em>${g.nowTag}</em>` : ''}</b><p>${r.tip}</p></div></div>`).join('');
+    return `<h2>${g.title} <small>${g.src}</small></h2><div class="pop-body guide">
+      ${g.intro.map((x) => `<p>${x}</p>`).join('')}
+      ${rows ? `<div class="gd-list">${rows}</div>` : ''}
+      ${(g.after || []).map((x) => `<p>${x}</p>`).join('')}
+      ${g.note ? `<p class="gd-note">${g.note}</p>` : ''}</div>`;
+  }
+  const row = (r, lv, name, tip) => ({ r, lv, name, tip });
   function uvPop() {
     const zh = LANG === 'zh', v = window.__uv;
     const cur = v == null ? -1 : UV_BANDS.findIndex(([max]) => v <= max);
-    const rows = UV_GUIDE.map((g, i) => { const [name, tip] = zh ? g.zh : g.en; return `<div class="uvg${i === cur ? ' now' : ''}">
-      <span class="uvg-r" style="background:${PSI_COLORS[Math.min(g.lv, PSI_COLORS.length - 1)]}">${g.r}</span>
-      <div><b style="color:${PSI_FG[g.lv]}">${name}${i === cur ? `<em>${zh ? '现在' : 'Now'} ${v}</em>` : ''}</b><p>${tip}</p></div></div>`; }).join('');
-    return `<h2>${zh ? '如何看紫外线指数' : 'Reading the UV index'} <small>NEA</small></h2><div class="pop-body">
-      <p>${zh ? '紫外线指数显示阳光对皮肤的伤害程度，数字越高，越快晒伤。新加坡位于赤道附近，晴天中午常达8以上，即使阴天也可能偏高。' : 'The UV index tells you how strong the sun\'s rays are on your skin. The higher the number, the faster you burn. Singapore is near the equator, so on a clear day it often goes above 8 around midday, and it can still be high when it is cloudy.'}</p>
-      <div class="uvg-list">${rows}</div>
-      <p class="uvg-note">${zh ? '紫外线通常在上午11点至下午3点最强。读数由NEA每小时更新，日落后不显示。' : 'UV is usually strongest from 11am to 3pm. NEA updates the reading every hour, and it is not shown after sunset.'}</p></div>`;
+    return guideHTML(zh ? {
+      title: '如何看紫外线指数', src: 'NEA', cur, nowTag: '现在 ' + v,
+      intro: ['紫外线指数显示阳光对皮肤的伤害程度。数字越高，越快晒伤。', '新加坡靠近赤道，晴天中午常达8以上，阴天也可能偏高。'],
+      rows: [row('0–2', 0, '低', '可安心在户外活动，阳光强时戴太阳眼镜。'),
+        row('3–5', 1, '中等', '中午尽量待在阴凉处。长时间在户外请戴帽子、太阳眼镜，涂防晒霜（SPF 30以上）。'),
+        row('6–7', 2, '高', '上午11点至下午3点减少日晒。戴帽子和太阳眼镜，涂防晒霜，每2小时补涂一次。'),
+        row('8–10', 3, '很高', '尽量避免在上午11点至下午3点外出。皮肤无防护时，约15至20分钟就可能晒伤。'),
+        row('11+', 4, '极高', '中午前后留在室内或阴凉处。皮肤无防护时，不到10分钟就可能晒伤。')],
+      note: '紫外线通常在上午11点至下午3点最强。读数由NEA每小时更新，日落后不显示。',
+    } : {
+      title: 'Reading the UV index', src: 'NEA', cur, nowTag: 'Now ' + v,
+      intro: ['The UV index tells you how strong the sun is on your skin. The higher the number, the faster you burn.', 'Singapore is near the equator, so on a clear day it often goes above 8 around midday. It can still be high when it is cloudy.'],
+      rows: [row('0–2', 0, 'Low', 'Safe to be outdoors. Sunglasses on bright days.'),
+        row('3–5', 1, 'Moderate', 'Seek shade around midday. If you are out for long, wear a hat, sunglasses and sunscreen (SPF 30+).'),
+        row('6–7', 2, 'High', 'Spend less time in the sun from 11am to 3pm. Hat, sunglasses and sunscreen, reapplied every 2 hours.'),
+        row('8–10', 3, 'Very high', 'Avoid the sun from 11am to 3pm if you can. Unprotected skin can burn in 15 to 20 minutes.'),
+        row('11+', 4, 'Extreme', 'Stay indoors or in the shade around midday. Unprotected skin can burn in under 10 minutes.')],
+      note: 'UV is usually strongest from 11am to 3pm. NEA updates the reading every hour, and it is not shown after sunset.',
+    });
+  }
+  function feelPop() {
+    const zh = LANG === 'zh', g = window.__wxg || {}, v = g.fl;
+    const cur = v == null ? -1 : v <= 30 ? 0 : v <= 35 ? 1 : v <= 40 ? 2 : 3;
+    const now = v != null && g.t != null && g.hum != null
+      ? (zh ? `现在气温${g.t}°，湿度${g.hum}%，所以体感约${v}°。` : `Right now it is ${g.t}° with ${g.hum}% humidity, so it feels like about ${v}°.`) : '';
+    return guideHTML(zh ? {
+      title: '什么是体感温度', src: 'NEA数据', cur, nowTag: '现在 ' + v + '°',
+      intro: ['体感温度是身体实际感受到的热度，由气温和湿度一起计算。', '湿度高时，汗水不容易蒸发，身体难以散热，所以会觉得比实际气温更热。' + now],
+      rows: [row('≤30°', 0, '舒适', '大多数人感觉还好，适合户外活动。'),
+        row('31–35°', 1, '温暖', '容易出汗。多喝水，户外运动时多休息。'),
+        row('36–40°', 2, '炎热', '长时间在户外容易疲劳或中暑。避开中午的阳光，每小时喝水，穿轻薄浅色衣服。'),
+        row('41°+', 3, '酷热', '中暑风险高。减少户外活动，尤其是长者、儿童和户外工作者。头晕或恶心时请到阴凉处休息并补充水分。')],
+      note: '体感温度以阴凉处计算。在阳光直射下，可能再热好几度。',
+    } : {
+      title: 'What "feels like" means', src: 'NEA data', cur, nowTag: 'Now ' + v + '°',
+      intro: ['"Feels like" is how hot it feels on your body. It combines the air temperature with the humidity.', 'When the air is humid, sweat dries slowly and your body cannot cool down as well, so it feels hotter than the actual temperature. ' + now],
+      rows: [row('≤30°', 0, 'Comfortable', 'Fine for most people and for being outdoors.'),
+        row('31–35°', 1, 'Warm', 'You will sweat more. Drink water and take breaks if you exercise outdoors.'),
+        row('36–40°', 2, 'Hot', 'Long periods outdoors can tire you out or lead to heat exhaustion. Avoid the midday sun, drink water every hour and wear light, loose clothing.'),
+        row('41°+', 3, 'Very hot', 'High risk of heat stroke. Cut down on outdoor activity, especially for the elderly, children and outdoor workers. If you feel dizzy or sick, rest in the shade and drink water.')],
+      note: 'Feels like is worked out for the shade. In direct sun it can feel several degrees hotter.',
+    });
+  }
+  function tempPop() {
+    const zh = LANG === 'zh', g = window.__wxg || {};
+    const range = g.low != null && g.high != null;
+    return guideHTML(zh ? {
+      title: '什么是实际气温', src: 'NEA', rows: [],
+      intro: ['实际气温是空气本身的温度。NEA在全岛各地设有气象站，在阴凉通风处、离地约1.5米的高度测量。这里显示的是所有气象站此刻的平均值。'],
+      after: [`<b>和体感温度有什么不同？</b><br>实际气温只看空气有多热，不计湿度、阳光或风。体感温度把湿度也算进去，所以在新加坡通常更高。`,
+        `<b>新加坡的一般气温</b><br>白天大多在31°至34°，晚上和清晨在24°至27°。${range ? `今天预计${g.low}°至${g.high}°。` : ''}`],
+      note: '站在阳光下、马路或停车场上，会觉得比这个数字热很多，因为地面和墙壁也在散热。',
+    } : {
+      title: 'What "actual" temperature means', src: 'NEA', rows: [],
+      intro: ['The actual temperature is how warm the air itself is. NEA measures it at weather stations across Singapore, in a shaded, airy spot about 1.5m above the ground. The number here is the average of all the stations right now.'],
+      after: [`<b>How is it different from feels like?</b><br>The actual temperature only measures the air. It leaves out humidity, sun and wind. Feels like adds the humidity, which is why it is usually higher in Singapore.`,
+        `<b>A normal day in Singapore</b><br>Afternoons are usually 31° to 34°, and nights and early mornings 24° to 27°.${range ? ` Today's forecast is ${g.low}° to ${g.high}°.` : ''}`],
+      note: 'Standing in the sun, on a road or in a car park will feel much hotter than this number, because the ground and walls give off heat too.',
+    });
   }
   const POPS = {
-    uv: uvPop,
+    uv: uvPop, feel: feelPop, temp: tempPop,
     about: () => `<h2>${T('About')}</h2><div class="pop-body">${T('POP_ABOUT')}</div>`,
     disclaimer: () => `<h2>${T('Disclaimer')}</h2><div class="pop-body">${T('POP_DISCLAIMER')}</div>`,
     advertise: () => `<h2>${T('Advertise')}</h2><div class="pop-body">${T('POP_ADVERTISE')}</div>
