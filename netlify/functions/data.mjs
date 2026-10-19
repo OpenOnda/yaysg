@@ -564,6 +564,12 @@ const CROSSINGS = [
 
 const secs = (s) => (s ? Number(String(s).replace('s', '')) : null);
 
+// Colour follows the first number shown on the badge (the low end of the range):
+//   under 15 min smooth (green), 15 to 29 moderate (orange), 30 to 59 heavy (red), 60 or more very heavy (dark red)
+function crossingLevel(low) {
+  return low < 15 ? 'smooth' : low < 30 ? 'moderate' : low < 60 ? 'heavy' : 'veryheavy';
+}
+
 async function routeTime(c, key) {
   const res = await fetch('https://routes.googleapis.com/directions/v2:computeRoutes', {
     method: 'POST',
@@ -587,13 +593,13 @@ async function routeTime(c, key) {
   const free = secs(r?.staticDuration);
   if (!now) return null;
   const mins = now / 60;
-  const ratio = free ? now / free : 1;
+  const low = Math.max(3, Math.round(mins * 0.9));
   return {
     id: c.id, cam: c.cam, dir: c.dir,
     minutes: Math.round(mins),
-    low: Math.max(3, Math.round(mins * 0.9)),
+    low,
     high: Math.max(5, Math.round(mins * 1.4)),
-    level: ratio < 1.5 ? 'smooth' : ratio < 2.5 ? 'moderate' : 'heavy',
+    level: crossingLevel(low),
   };
 }
 
