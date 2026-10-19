@@ -704,6 +704,16 @@ body.measuring #wx .later{margin-top:8px!important}
 .zc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.zc-row .zc{margin-bottom:0}
 .zc-note{margin:12px 0 0;font-size:12px;color:var(--muted);line-height:1.5}
 @media (max-width:600px){.zc-row{grid-template-columns:1fr}}
+.uv-t{cursor:pointer}
+.uvg-list{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.uvg{display:flex;gap:12px;align-items:flex-start;padding:8px 10px;border-radius:10px}
+.uvg.now{background:var(--chip,rgba(127,127,127,.12));outline:1px solid var(--line,rgba(127,127,127,.25))}
+.uvg-r{flex:0 0 52px;text-align:center;padding:5px 0;border-radius:7px;color:#fff;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
+.uvg b{display:block;font-size:14px}
+.uvg b em{font-style:normal;font-weight:700;font-size:11px;margin-left:8px;padding:2px 7px;border-radius:99px;background:var(--ink);color:var(--bg)}
+.pop-body .uvg p{margin:2px 0 0;font-size:13px;line-height:1.45}
+.pop-body .uvg-list{gap:2px}.pop-body .uvg{padding:7px 10px}
+.uvg-note{font-size:12px;color:var(--faint)}
 </style>
 </head>
 <body>
@@ -837,7 +847,7 @@ body.measuring #wx .later{margin-top:8px!important}
     'Avoid outdoor exercise. Kids, elderly, heart or lung conditions: stay in.': '避免户外运动。儿童、年长者及心肺病患者请留在室内。',
     'Stay indoors where you can.': '尽量留在室内。',
     'Live cameras': '实时摄像头', ' · click photo to enlarge': ' · 点击照片放大',
-    'Smooth': '畅通', 'Heavy': '拥堵', 'To JB': '往新山', 'To SG': '往新加坡', '{a}–{b} min': '{a}–{b} 分钟',
+    'Smooth': '畅通', 'Heavy': '拥堵', 'Very heavy': '严重拥堵', 'To JB': '往新山', 'To SG': '往新加坡', '{a}–{b} min': '{a}–{b} 分钟',
     'Woodlands Causeway': '兀兰长堤', 'Tuas Second Link': '大士第二通道', 'Towards Johor': '往柔佛方向',
     'Woodlands Checkpoint': '兀兰关卡', 'Tuas Checkpoint': '大士关卡', 'Checkpoint area': '关卡一带',
     '<b>Overnight pause.</b> Crossing times last updated at {last}. Live updates resume at 6am.': '<b>夜间暂停。</b>通关时间最后更新于{last}，早上6点恢复实时更新。',
@@ -1115,6 +1125,8 @@ body.measuring #wx .later{margin-top:8px!important}
     if (uv && uv.value === 0) uvT = tile(T('UV index'), '–', T('Sun still low'), 'var(--muted)');
     else if (uv) { const [, label, lv] = UV_BANDS.find(([max]) => uv.value <= max); uvT = tile(T('UV index'), uv.value, T(label), PSI_FG[lv]); }
     else uvT = tile(T('UV index'), '–', T(hr >= 19 || hr < 7 ? 'After sunset' : hr < 9 ? 'First reading ~8am' : 'Not available'), 'var(--muted)');
+    window.__uv = uv ? uv.value : null;
+    uvT = uvT.replace('<div class="aq3">', '<div class="aq3 uv-t" data-pop="uv">');
     return tile(T('Actual'), temp, '&nbsp;', 'var(--muted)') + (fl != null ? tile(T('Feels like'), fl + '°', flBand[0], flBand[1]) : '') + uvT;
   }
   function sunOnly() {
@@ -1304,10 +1316,12 @@ body.measuring #wx .later{margin-top:8px!important}
     const el = $('cp');
     if (!c || !c.length) { el.innerHTML = unavailable('Causeway &amp; Second Link'); return; }
     const ests = (xings && xings.list) || [];
-    const LV = { smooth: ['Smooth', '#0A5A51'], moderate: ['Moderate', '#9A5B00'], heavy: ['Heavy', '#B42318'] };
+    // Same bands as the server: first number under 15 green, 15-29 orange, 30-59 red, 60+ dark red
+    const LV = { smooth: ['Smooth', '#0A5A51'], moderate: ['Moderate', '#9A5B00'], heavy: ['Heavy', '#B42318'], veryheavy: ['Very heavy', '#5E0B0B'] };
+    const lvOf = (e) => e.low < 15 ? 'smooth' : e.low < 30 ? 'moderate' : e.low < 60 ? 'heavy' : 'veryheavy';
     const badge = (e, to) => {
       if (!e) return '';
-      const [label, bg] = LV[e.level] || LV.moderate;
+      const [label, bg] = LV[lvOf(e)];
       return `<span class="eta" style="background:${bg}"><small>${T(to)}</small><b>${e.low}–${e.high}<i>${T('min')}</i></b><small>${T(label)}</small></span>`;
     };
     const est = (camId) => {
@@ -1673,7 +1687,27 @@ body.measuring #wx .later{margin-top:8px!important}
   zodSet();
   // Footer pop-ups
   const WA = 'https://wa.me/6588224466?text=';
+  // UV index guide, opened by tapping the UV tile. Bands follow NEA and WHO.
+  const UV_GUIDE = [
+    { r: '0–2', lv: 0, en: ['Low', 'Safe to be outdoors. Sunglasses on bright days.'], zh: ['低', '可安心在户外活动，阳光强时可戴太阳眼镜。'] },
+    { r: '3–5', lv: 1, en: ['Moderate', 'Seek shade around midday. Wear a hat, sunglasses and sunscreen (SPF 30+) if you are out for long.'], zh: ['中等', '中午时段尽量待在阴凉处。长时间在户外请戴帽子、太阳眼镜并涂防晒霜（SPF 30以上）。'] },
+    { r: '6–7', lv: 2, en: ['High', 'Cut down time in the sun from 11am to 3pm. Hat, sunglasses, sunscreen and light long sleeves. Reapply sunscreen every 2 hours.'], zh: ['高', '上午11点至下午3点减少日晒。戴帽子和太阳眼镜，涂防晒霜，穿轻薄长袖，每2小时补涂一次。'] },
+    { r: '8–10', lv: 3, en: ['Very high', 'Avoid the sun from 11am to 3pm if you can. Unprotected skin can burn in about 15 to 20 minutes. Take extra care with children and the elderly.'], zh: ['很高', '尽量避免在上午11点至下午3点外出。皮肤若无防护，约15至20分钟就可能晒伤。儿童与长者需特别注意。'] },
+    { r: '11+', lv: 4, en: ['Extreme', 'Stay indoors or in the shade around midday. Unprotected skin can burn in under 10 minutes. Full protection if you must go out.'], zh: ['极高', '中午前后请留在室内或阴凉处。皮肤若无防护，不到10分钟就可能晒伤。必须外出时请做好全面防护。'] },
+  ];
+  function uvPop() {
+    const zh = LANG === 'zh', v = window.__uv;
+    const cur = v == null ? -1 : UV_BANDS.findIndex(([max]) => v <= max);
+    const rows = UV_GUIDE.map((g, i) => { const [name, tip] = zh ? g.zh : g.en; return `<div class="uvg${i === cur ? ' now' : ''}">
+      <span class="uvg-r" style="background:${PSI_COLORS[Math.min(g.lv, PSI_COLORS.length - 1)]}">${g.r}</span>
+      <div><b style="color:${PSI_FG[g.lv]}">${name}${i === cur ? `<em>${zh ? '现在' : 'Now'} ${v}</em>` : ''}</b><p>${tip}</p></div></div>`; }).join('');
+    return `<h2>${zh ? '如何看紫外线指数' : 'Reading the UV index'} <small>NEA</small></h2><div class="pop-body">
+      <p>${zh ? '紫外线指数显示阳光对皮肤的伤害程度，数字越高，越快晒伤。新加坡位于赤道附近，晴天中午常达8以上，即使阴天也可能偏高。' : 'The UV index tells you how strong the sun\'s rays are on your skin. The higher the number, the faster you burn. Singapore is near the equator, so on a clear day it often goes above 8 around midday, and it can still be high when it is cloudy.'}</p>
+      <div class="uvg-list">${rows}</div>
+      <p class="uvg-note">${zh ? '紫外线通常在上午11点至下午3点最强。读数由NEA每小时更新，日落后不显示。' : 'UV is usually strongest from 11am to 3pm. NEA updates the reading every hour, and it is not shown after sunset.'}</p></div>`;
+  }
   const POPS = {
+    uv: uvPop,
     about: () => `<h2>${T('About')}</h2><div class="pop-body">${T('POP_ABOUT')}</div>`,
     disclaimer: () => `<h2>${T('Disclaimer')}</h2><div class="pop-body">${T('POP_DISCLAIMER')}</div>`,
     advertise: () => `<h2>${T('Advertise')}</h2><div class="pop-body">${T('POP_ADVERTISE')}</div>
