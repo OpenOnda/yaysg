@@ -241,7 +241,7 @@ footer{padding:0 16px 18px;font-size:11px}
 .cam{aspect-ratio:2/1}
 @media (max-width:560px){.cam{aspect-ratio:16/9}}
 .coe .row{padding:3px 0}
-.etas{position:absolute;top:8px;left:8px;display:flex;gap:6px}
+.etas{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .eta{display:flex;flex-direction:column;padding:4px 9px;border-radius:9px;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);line-height:1.15}
 .eta b{font-size:15px;font-weight:800;letter-spacing:-.01em}
 .eta small{font-size:10px;font-weight:500;opacity:.92}
@@ -328,7 +328,7 @@ html[lang^="zh"] .card h2{letter-spacing:.04em}
   /* Cameras stacked full width on phones, so the photos are big enough to read */
   .cams{grid-template-columns:1fr;gap:8px}
   .cam{aspect-ratio:16/10}
-  .etas{flex-direction:row;gap:6px;top:8px;left:8px}
+  .etas{flex-direction:column;gap:6px;top:8px;left:8px}
   .eta{padding:4px 9px;border-radius:8px}
   .eta b{font-size:15px}
   .eta small{font-size:10px}
