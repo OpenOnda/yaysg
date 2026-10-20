@@ -1266,8 +1266,8 @@ body.measuring #wx .later{margin-top:8px!important}
 
   function jbLine(ja) {
     if (!ja || ja.aqi == null) return '';
-    const lv = ja.band ? ja.band.level : 0;
-    return `<div class="jbrow"><span>${T('Johor Bahru')} <small>(US AQI)</small></span><b>${ja.aqi}</b><span class="jbl" style="color:${PSI_FG[lv]}">${T(ja.band ? ja.band.label : '')}</span></div>`;
+    const [lv, label] = psiBandOf(ja.aqi);
+    return `<div class="jbrow"><span>${T('Johor Bahru')} <small>(US AQI)</small></span><b>${ja.aqi}</b><span class="jbl" style="color:${PSI_FG[lv]}">${T(label)}</span></div>`;
   }
 
   // NEA 1-hour PM2.5 bands (µg/m³): what the air is like right now
@@ -1287,10 +1287,10 @@ body.measuring #wx .later{margin-top:8px!important}
     return `<div class="lsub" style="margin-top:16px">${zh ? '如何看这些数字' : 'How to read these'}</div>` + (zh
       ? sec('1小时PM2.5', '此刻的空气状况，适合决定现在是否外出运动。', [['0–55', 0, '正常'], ['56–150', 1, '偏高'], ['151–250', 2, '高'], ['251+', 3, '非常高']])
         + sec('24小时PSI', 'NEA的官方每日健康指标，以过去24小时计算。', [['0–50', 0, '良好'], ['51–100', 1, '中等'], ['101–200', 2, '不健康'], ['201–300', 3, '非常不健康'], ['301+', 4, '危险']])
-        + sec('柔佛AQI', '新山的空气，采用美国AQI标准，由Open-Meteo模型估算。', [['0–50', 0, '良好'], ['51–100', 1, '中等'], ['101–150', 2, '敏感人群不健康'], ['151–200', 2, '不健康'], ['201+', 3, '非常不健康']])
+        + sec('柔佛AQI', '新山的空气，采用美国AQI标准，由Open-Meteo模型估算。级别和PSI相同。', [['0–50', 0, '良好'], ['51–100', 1, '中等'], ['101–200', 2, '不健康'], ['201–300', 3, '非常不健康'], ['301+', 4, '危险']])
       : sec('1-hr PM2.5', 'The air right now. Best for deciding whether to exercise outdoors now.', [['0–55', 0, 'Normal'], ['56–150', 1, 'Elevated'], ['151–250', 2, 'High'], ['251+', 3, 'Very high']])
         + sec('24-hr PSI', "NEA's official daily health guide, based on the past 24 hours.", [['0–50', 0, 'Good'], ['51–100', 1, 'Moderate'], ['101–200', 2, 'Unhealthy'], ['201–300', 3, 'Very unhealthy'], ['301+', 4, 'Hazardous']])
-        + sec('Johor AQI', 'Air in Johor Bahru on the US AQI scale, a modelled estimate from Open-Meteo.', [['0–50', 0, 'Good'], ['51–100', 1, 'Moderate'], ['101–150', 2, 'Unhealthy for sensitive groups'], ['151–200', 2, 'Unhealthy'], ['201+', 3, 'Very unhealthy']]));
+        + sec('Johor AQI', 'Air in Johor Bahru on the US AQI scale, a modelled estimate from Open-Meteo. Same levels as the PSI.', [['0–50', 0, 'Good'], ['51–100', 1, 'Moderate'], ['101–200', 2, 'Unhealthy'], ['201–300', 3, 'Very unhealthy'], ['301+', 4, 'Hazardous']]));
   }
   // NEA's 47 forecast areas, grouped by region for the rain pop-up
   const RAIN_REGIONS = [
@@ -1351,7 +1351,9 @@ body.measuring #wx .later{margin-top:8px!important}
     const tile = (lab, v, band, col) => `<div class="aq3"><small>${lab}</small><div class="big">${v}</div><em style="color:${col}">${band}</em></div>`;
     // Each tile opens its own explanation pop-up, like the weather tiles
     const tap = (html, k) => html.replace('<div class="aq3">', `<div class="aq3 tap-t" data-pop="${k}">`);
-    const jbT = ja && ja.aqi != null ? tap(tile(T('Johor AQI'), ja.aqi, T(ja.band ? ja.band.label : ''), PSI_FG[ja.band ? ja.band.level : 0]), 'jbaqi') : '';
+    // Johor AQI uses the same five levels as the PSI tile (US AQI and PSI share the same number bands)
+    const [jlv, jlabel] = ja && ja.aqi != null ? psiBandOf(ja.aqi) : [0, ''];
+    const jbT = ja && ja.aqi != null ? tap(tile(T('Johor AQI'), ja.aqi, T(jlabel), PSI_FG[jlv]), 'jbaqi') : '';
     el.innerHTML = `<h2>${T('Air quality')} <small>${T('Singapore averages')}</small></h2>
       <div class="aq-row">${tap(tile(T('1-hr PM2.5'), avg, T(label), PSI_FG[lv]), 'pm')}${tap(tile(T('24-hr PSI'), pa, T(plabel), PSI_FG[plv]), 'psi')}${jbT}</div>
       <div class="sub aq-sub">${T('Highest right now: {r} {v}', { v: pm.max, r: T(top[0].toUpperCase() + top.slice(1)) })}</div>
@@ -1993,29 +1995,27 @@ body.measuring #wx .later{margin-top:8px!important}
   }
   function jbPop() {
     const zh = LANG === 'zh', a = window.__air || {}, v = a.ja && a.ja.aqi;
-    const cur = v == null ? -1 : v <= 50 ? 0 : v <= 100 ? 1 : v <= 150 ? 2 : v <= 200 ? 3 : v <= 300 ? 4 : 5;
+    const cur = v == null ? -1 : psiBandOf(v)[0];
     const now = v == null ? '' : zh ? `现在是${v}。` : `Right now it is ${v}.`;
     return guideHTML(zh ? {
       title: '什么是柔佛AQI', src: 'Open-Meteo', cur, nowTag: '现在 ' + v,
       intro: ['这是新山的空气质量，采用美国空气质量指数（AQI）。如果你要过长堤，或住在长堤附近，可以参考。', '和新加坡的读数不同，这是Open-Meteo根据天气和卫星资料推算的估计值，不是实地监测站的读数。' + now],
       rows: [row('0–50', 0, '良好', '所有人都适合户外活动。'),
         row('51–100', 1, '中等', '大多数人没有影响。特别敏感的人可减少长时间户外运动。'),
-        row('101–150', 2, '敏感人群不健康', '儿童、年长者及心肺病患者应减少长时间户外活动。'),
-        row('151–200', 2, '不健康', '所有人都可能受影响。减少长时间或剧烈的户外活动。'),
-        row('201–300', 3, '非常不健康', '健康警报。避免长时间户外活动。'),
+        row('101–200', 2, '不健康', '儿童、年长者及心肺病患者最先受影响，应减少长时间户外活动。其他人也应减少长时间或剧烈的户外活动。'),
+        row('201–300', 3, '非常不健康', '健康警报。所有人都应避免长时间户外活动。'),
         row('301+', 4, '危险', '尽量留在室内。')],
-      after: ['<b>可以和PSI比较吗？</b><br>不能直接比较。美国AQI和新加坡PSI的计算方法不同，同样的空气可能得出不同的数字。请看级别和颜色来比较，而不是数字本身。'],
+      after: ['<b>可以和PSI比较吗？</b><br>不能直接比较。美国AQI和新加坡PSI的计算方法不同，同样的空气可能得出不同的数字。请看级别和颜色来比较，而不是数字本身。', '<b>为什么级别和PSI一样？</b><br>为了简单易懂，yay.sg 对两者使用相同的五个级别。美国官方标准中，101至150称为“对敏感人群不健康”，这里归入“不健康”。'],
       note: '这是模型估计值，可能和马来西亚环境局的官方API读数不同。',
     } : {
       title: 'What the Johor AQI means', src: 'Open-Meteo', cur, nowTag: 'Now ' + v,
       intro: ['This is the air in Johor Bahru, on the US Air Quality Index (AQI) scale. Handy if you are crossing over or live near the Causeway.', 'Unlike the Singapore readings, it is a modelled estimate from Open-Meteo, worked out from weather and satellite data, not a ground station. ' + now],
       rows: [row('0–50', 0, 'Good', 'The air is fine for everyone.'),
         row('51–100', 1, 'Moderate', 'Fine for most people. Very sensitive people may want to limit long outdoor exercise.'),
-        row('101–150', 2, 'Unhealthy for sensitive groups', 'Children, the elderly and people with heart or lung conditions should cut down on long outdoor activity.'),
-        row('151–200', 2, 'Unhealthy', 'Everyone may start to feel it. Cut down on long or hard outdoor activity.'),
-        row('201–300', 3, 'Very unhealthy', 'Health alert. Avoid long outdoor activity.'),
+        row('101–200', 2, 'Unhealthy', 'Children, the elderly and people with heart or lung conditions feel it first and should cut down on long outdoor activity. Everyone else should cut down on long or hard outdoor activity.'),
+        row('201–300', 3, 'Very unhealthy', 'Health alert. Everyone should avoid long outdoor activity.'),
         row('301+', 4, 'Hazardous', 'Stay indoors where you can.')],
-      after: ['<b>Can I compare it with the PSI?</b><br>Not directly. The US AQI and Singapore\'s PSI use different formulas, so the same air can give different numbers. Compare the levels and colours, not the numbers.'],
+      after: ['<b>Can I compare it with the PSI?</b><br>Not directly. The US AQI and Singapore\'s PSI use different formulas, so the same air can give different numbers. Compare the levels and colours, not the numbers.', '<b>Why the levels match the PSI</b><br>To keep things simple, yay.sg uses the same five levels for both. On the official US scale, 101 to 150 is called "Unhealthy for sensitive groups", which we include under Unhealthy.'],
       note: "This is a modelled estimate, so it can differ from the official readings by Malaysia's Department of Environment.",
     });
   }
