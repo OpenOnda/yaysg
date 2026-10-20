@@ -123,6 +123,8 @@ async function weather() {
   const f2 = now2h?.items?.[0] || {};
   const forecasts = f2.forecasts || [];
   const rainAreas = forecasts.filter((f) => RAINY.test(f.forecast)).map((f) => f.area);
+  // Same areas with their forecast (e.g. "Thundery Showers"), for the rain pop-up on the page
+  const rainDetail = forecasts.filter((f) => RAINY.test(f.forecast)).map((f) => ({ area: f.area, forecast: f.forecast }));
   // Most common 2-hour forecast word = the headline condition
   const counts = {};
   forecasts.forEach((f) => (counts[f.forecast] = (counts[f.forecast] || 0) + 1));
@@ -153,6 +155,7 @@ async function weather() {
     humidity,
     nowCondition,
     rainAreas,
+    rainDetail,
     areaCount: forecasts.length,
     validUntil: f2.valid_period?.end || null,
     uv,
