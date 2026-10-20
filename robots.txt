@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /stats
+Disallow: /stats.html
+Disallow: /api/
+
+Sitemap: https://yay.sg/sitemap.xml

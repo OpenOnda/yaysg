@@ -12,6 +12,25 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:title" content="yay.sg | Singapore At A Glance">
 <meta property="og:description" content="Start your day with a yay. Weather, haze, Causeway and Second Link times, traffic, exchange rates, COE, 4D and TOTO on one screen.">
+<link rel="canonical" href="https://yay.sg/">
+<meta property="og:url" content="https://yay.sg/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="yay.sg">
+<meta property="og:locale" content="en_SG">
+<meta property="og:image" content="https://yay.sg/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="yay.sg, Singapore at a glance">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="yay.sg | Singapore At A Glance">
+<meta name="twitter:description" content="Weather, haze, Causeway and Second Link times, traffic, exchange rates, COE, 4D and TOTO on one screen.">
+<meta name="twitter:image" content="https://yay.sg/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebSite","@id":"https://yay.sg/#website","url":"https://yay.sg/","name":"yay.sg","alternateName":"yay.sg Singapore at a glance","description":"Singapore at a glance: weather, haze and PSI, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.","inLanguage":["en-SG","zh-SG"],"publisher":{"@id":"https://yay.sg/#org"}},
+ {"@type":"Organization","@id":"https://yay.sg/#org","name":"OpenOnda Pte. Ltd.","url":"https://yay.sg/","logo":"https://yay.sg/icon-1024.png"}
+]}
+</script>
 <script>
 (function(){var t;try{t=localStorage.getItem('yay-theme')}catch(e){}
 if(t!=='dark'&&t!=='paper'){t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'paper'}
@@ -790,23 +809,23 @@ body.measuring #wx .later{margin-top:8px!important}
 
     <section class="card now" id="now"><h2>Weather &amp; air</h2><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card" id="wx"><h2>Weather</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="wx"><h2>Weather</h2><p class="muted" data-i18n="LD_WX">Live Singapore weather: temperature, feels like, UV index, rain areas for the next 2 hours and the forecast for the rest of the day, from NEA.</p><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card" id="air"><h2>Air quality</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="air"><h2>Air quality</h2><p class="muted" data-i18n="LD_AIR">Singapore air quality now: 1-hour PM2.5, 24-hour PSI by region, and the Johor Bahru AQI.</p><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card wide" id="cp"><h2>Causeway &amp; Second Link <small>Live LTA cameras</small></h2><div class="cams"><span class="skel" style="height:160px"></span><span class="skel" style="height:160px"></span></div></section>
+    <section class="card wide" id="cp"><h2>Causeway &amp; Second Link <small>Live LTA cameras</small></h2><p class="muted" data-i18n="LD_CP">Live Woodlands Causeway and Tuas Second Link traffic camera photos, with driving times to Johor Bahru and back to Singapore.</p><div class="cams"><span class="skel" style="height:160px"></span><span class="skel" style="height:160px"></span></div></section>
 
     <section class="card" id="mv" hidden><h2>Traffic incidents</h2></section>
 
-    <section class="card" id="fxc"><h2>Exchange rate · 1 SGD buys</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="fxc"><h2>Exchange rate · 1 SGD buys</h2><p class="muted" data-i18n="LD_FX">Today's SGD exchange rates for the Malaysian ringgit, US dollar, Chinese yuan, Thai baht, Japanese yen and more.</p><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card coe" id="coe"><h2>COE prices</h2><span class="skel"></span><span class="skel"></span></section>
+    <section class="card coe" id="coe"><h2>COE prices</h2><p class="muted" data-i18n="LD_COE">Latest COE prices for Categories A to E, and the change from the last bidding round.</p><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card tall" id="d4"><h2>Huat Corner</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="d4"><h2>Huat Corner</h2><p class="muted" data-i18n="LD_D4">Latest 4D and TOTO results from Singapore Pools, the next TOTO jackpot, and today's Chinese almanac.</p><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card tall" id="toto"><h2>Major events</h2><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
+    <section class="card tall" id="toto"><h2>Major events</h2><p class="muted" data-i18n="LD_EV">Major concerts, sports and events coming up in Singapore.</p><span class="skel"></span><span class="skel"></span><span class="skel"></span></section>
 
-    <section class="card" id="td"><h2>Holidays</h2><span class="skel"></span><span class="skel"></span></section>
+    <section class="card" id="td"><h2>Holidays</h2><p class="muted" data-i18n="LD_TD">Singapore public holidays, days off in lieu and MOE school holidays.</p><span class="skel"></span><span class="skel"></span></section>
 
 
 
@@ -919,9 +938,11 @@ body.measuring #wx .later{margin-top:8px!important}
     'Live · {t}': '实时 · {t}',
     'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'round {n}': '第{n}轮', 'Updated {t}': '{t}更新', 'See all': '查看全部', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
     'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气', 'See all {n} areas': '查看全部{n}个地区',
+    LD_WX: '实时新加坡天气：气温、体感温度、紫外线指数、未来2小时降雨地区及今日天气预报，资料来自NEA。', LD_AIR: '新加坡当前空气质量：1小时PM2.5、各区24小时PSI及新山AQI。', LD_FX: '今日新元汇率：马币、美元、人民币、泰铢、日元等。', LD_COE: '最新A至E类拥车证价格，以及与上一轮的差额。', LD_D4: '新加坡博彩最新4D与多多开彩成绩、下期多多头奖，以及今日黄历。', LD_EV: '新加坡近期的大型演唱会、体育赛事及活动。', LD_TD: '新加坡公共假期、补假及教育部学校假期。', LD_CP: '兀兰长堤与大士第二通道实时交通摄像头画面，以及往新山和回新加坡的行车时间。',
   };
   // Longer English texts for the footer pop-ups
   const EN = {
+    LD_WX: 'Live Singapore weather: temperature, feels like, UV index, rain areas for the next 2 hours and the forecast for the rest of the day, from NEA.', LD_AIR: 'Singapore air quality now: 1-hour PM2.5, 24-hour PSI by region, and the Johor Bahru AQI.', LD_FX: 'Today\'s SGD exchange rates for the Malaysian ringgit, US dollar, Chinese yuan, Thai baht, Japanese yen and more.', LD_COE: 'Latest COE prices for Categories A to E, and the change from the last bidding round.', LD_D4: 'Latest 4D and TOTO results from Singapore Pools, the next TOTO jackpot, and today\'s Chinese almanac.', LD_EV: 'Major concerts, sports and events coming up in Singapore.', LD_TD: 'Singapore public holidays, days off in lieu and MOE school holidays.', LD_CP: 'Live Woodlands Causeway and Tuas Second Link traffic camera photos, with driving times to Johor Bahru and back to Singapore.',
     TOTO_NOTE: 'Each combination of 6 numbers costs $1. A System bet covers every combination of the numbers you pick, so System 8 is 28 combinations. Check singaporepools.com.sg for full rules.',
     AIR_NOTE: '1-hr PM2.5 shows the air right now (Normal up to 55, Elevated 56 to 150, High 151 to 250, Very high above 250). The 24-hr PSI is NEA\'s official daily health guide (Good up to 50, Moderate 51 to 100, Unhealthy 101 to 200). Johor Bahru uses the US AQI scale from Open-Meteo, a modelled estimate.',
     PZ4_NOTE: 'Prize for each $1 bet. A Big bet wins on all 23 numbers; a Small bet wins only on the top 3 but pays more. With iBet, every order of your 4 digits is covered and the prize is shared. Check singaporepools.com.sg for full rules.',
@@ -1949,21 +1970,21 @@ body.measuring #wx .later{margin-top:8px!important}
       : `Right now the Singapore average is ${v}${top ? `, and the highest is the ${regName(top[0])} at ${top[1]}` : ''}.`;
     return guideHTML(zh ? {
       title: '什么是1小时PM2.5', src: 'NEA', cur, nowTag: '现在 ' + v,
-      intro: ['PM2.5是空气中直径小于2.5微米的微小颗粒，来自烟霾、车辆废气和燃烧。颗粒很小，能深入肺部。', '这里显示的是NEA过去一小时在全岛测得的平均值，单位是微克/立方米。' + now],
+      intro: ['1小时PM2.5测量的是过去1小时空气中的微小颗粒。这些颗粒直径小于2.5微米，来自烟霾、车辆废气和燃烧，小到能深入肺部。', '这个数字是NEA全岛各区过去1小时读数的平均值，单位是微克/立方米。它不是PSI，所以有自己的级别，见下方。' + now],
       rows: [row('0–55', 0, '正常', '空气良好，室内外活动照常。'),
         row('56–150', 1, '偏高', '大多数人没有影响。年长者、孕妇及心肺病患者，请减少长时间或剧烈的户外运动。'),
         row('151–250', 2, '高', '所有人都应减少长时间或剧烈的户外活动。敏感人群应避免。'),
         row('251+', 3, '非常高', '避免户外活动。尽量留在室内，关好门窗。')],
-      after: ['<b>什么时候看这个数字？</b><br>想决定现在去跑步，或让孩子到楼下玩，就看这个。它每小时更新，烟霾一来，比24小时PSI反应快得多。'],
+      after: ['<b>和24小时PSI有什么不同？</b><br>24小时PSI综合六种污染物，以一整天计算，所以变化较慢。1小时PM2.5只看过去1小时，烟霾一来就会反映出来。想决定现在去跑步，或让孩子到楼下玩，就看这个。'],
       note: '级别依据NEA的1小时PM2.5指引，读数每小时更新。',
     } : {
-      title: 'What 1-hr PM2.5 means', src: 'NEA', cur, nowTag: 'Now ' + v,
-      intro: ['PM2.5 are tiny particles in the air, smaller than 2.5 micrometres. They come from haze, vehicle exhaust and burning, and are small enough to get deep into your lungs.', "This number is the average of NEA's readings across Singapore over the past hour, in µg/m³. " + now],
+      title: 'What the 1-hr PM2.5 means', src: 'NEA', cur, nowTag: 'Now ' + v,
+      intro: ['The 1-hr PM2.5 measures tiny particles in the air over the past 1 hour. These particles are smaller than 2.5 micrometres, come from haze, vehicle exhaust and burning, and are small enough to get deep into your lungs.', "The number is the average of NEA's 1-hour readings across Singapore's regions, in µg/m³. It is not a PSI number, so it has its own levels below. " + now],
       rows: [row('0–55', 0, 'Normal', 'The air is fine. Carry on as usual, indoors and out.'),
         row('56–150', 1, 'Elevated', 'Most people are fine. If you are elderly, pregnant, or have a heart or lung condition, cut down on long or hard outdoor exercise.'),
         row('151–250', 2, 'High', 'Everyone should cut down on long or hard outdoor activity. Sensitive groups should avoid it.'),
         row('251+', 3, 'Very high', 'Avoid outdoor activity. Stay indoors with the windows closed if you can.')],
-      after: ['<b>When to check it</b><br>Use this one to decide whether to go for a run or let the kids play outside right now. It updates every hour, so it shows haze coming in much faster than the 24-hr PSI.'],
+      after: ['<b>How is it different from the 24-hr PSI?</b><br>The 24-hr PSI combines six pollutants over a whole day, so it moves slowly. The 1-hr PM2.5 looks at just the past hour, so it shows haze coming in much faster. Use this one to decide whether to go for a run or let the kids play outside right now.'],
       note: "Levels follow NEA's 1-hour PM2.5 guide. Readings are updated every hour.",
     });
   }
