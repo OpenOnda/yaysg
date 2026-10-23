@@ -27,8 +27,8 @@
 <meta name="twitter:image" content="https://yay.sg/og-image.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
- {"@type":"WebSite","@id":"https://yay.sg/#website","url":"https://yay.sg/","name":"yay.sg","alternateName":"yay.sg Singapore at a glance","description":"Singapore at a glance: weather, haze and PSI, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.","inLanguage":["en-SG","zh-SG"],"publisher":{"@id":"https://yay.sg/#org"}},
- {"@type":"Organization","@id":"https://yay.sg/#org","name":"OpenOnda Pte. Ltd.","url":"https://yay.sg/","logo":"https://yay.sg/icon-1024.png"}
+ {"@type":"WebSite","@id":"https://yay.sg/#website","url":"https://yay.sg/","name":"yay.sg","alternateName":"yay.sg Singapore at a glance","description":"Singapore at a glance: weather, haze and PSI, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.","inLanguage":["en-SG","zh-SG"],"publisher":{"@id":"https://yay.sg/#roy"}},
+ {"@type":"Person","@id":"https://yay.sg/#roy","name":"Roy Tan","url":"https://yay.sg/"}
 ]}
 </script>
 <script>
@@ -755,6 +755,20 @@ body.measuring #wx .later{margin-top:8px!important}
 .hol-tap{cursor:pointer}
 .hol-tap:hover b,.row.hol-tap:hover>span:first-child{text-decoration:underline;text-decoration-color:rgba(127,127,127,.5)}
 .hol-yr{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);margin:8px 0 0;padding-top:6px;border-top:1px dashed var(--hair)}
+/* Support link and pop-up */
+.hlinks .sup,.flinks .sup{color:#FF8A80!important;font-weight:700}
+.flinks .sup{color:var(--red)!important}
+.sup-pop{width:min(620px,100%)}
+.sup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 4px}
+.sup-c{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--soft);display:flex;flex-direction:column;gap:8px}
+.sup-c small{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.sup-c b{font-size:17px;color:var(--ink)}
+.sup-qr{display:block;width:100%;max-width:240px;min-width:220px;aspect-ratio:1/1;margin:4px auto;border-radius:10px;background:#fff;padding:6px;box-sizing:border-box}
+.pop-sheet .pop-body .sup-c p{margin:0;font-size:13px;line-height:1.5}
+.sup-pp{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin:6px 0 2px;padding:11px 16px;border-radius:999px;background:#0070BA;color:#fff!important;font-weight:800;font-size:14px;text-decoration:none}
+.sup-pp:hover{background:#005EA6;text-decoration:none}
+@media (max-width:600px){.sup-grid{grid-template-columns:1fr}}
+.sup-grid.one{grid-template-columns:1fr;max-width:360px;margin-left:auto;margin-right:auto}
 /* Rain: "See all areas" link under the rain line, and the pop-up it opens */
 .rain-tap{cursor:pointer}
 .rain-more-row{display:flex;justify-content:flex-end;margin:-6px 0 8px}
@@ -783,7 +797,8 @@ body.measuring #wx .later{margin-top:8px!important}
       <button type="button" data-pop="advertise" data-i18n="Advertise">Advertise</button><i>·</i>
       <button type="button" data-pop="feedback" data-i18n="Feedback">Feedback</button><i>·</i>
       <button type="button" data-pop="disclaimer" data-i18n="Disclaimer">Disclaimer</button><i>·</i>
-      <a href="https://wa.me/6588224466?text=Hi%20yay.sg" target="_blank" rel="noopener" data-i18n="Contact">Contact</a>
+      <a href="https://wa.me/6588224466?text=Hi%20yay.sg" target="_blank" rel="noopener" data-i18n="Contact">Contact</a><i>·</i>
+      <button type="button" class="sup" data-pop="support" data-i18n="SUP_LINK">♥ Support</button>
     </nav>
     </div>
     <div class="clock">
@@ -846,7 +861,8 @@ body.measuring #wx .later{margin-top:8px!important}
     <button type="button" data-pop="advertise" data-i18n="Advertise">Advertise</button><i>·</i>
     <button type="button" data-pop="feedback" data-i18n="Feedback">Feedback</button><i>·</i>
     <button type="button" data-pop="disclaimer" data-i18n="Disclaimer">Disclaimer</button><i>·</i>
-    <a href="https://wa.me/6588224466?text=Hi%20yay.sg" target="_blank" rel="noopener" data-i18n="Contact">Contact</a>
+    <a href="https://wa.me/6588224466?text=Hi%20yay.sg" target="_blank" rel="noopener" data-i18n="Contact">Contact</a><i>·</i>
+    <button type="button" class="sup" data-pop="support" data-i18n="SUP_LINK">♥ Support</button>
   </nav>
     <span class="copy">© 2026 yay.sg</span>
 </footer>
@@ -879,7 +895,7 @@ body.measuring #wx .later{margin-top:8px!important}
     'Keep yay.sg handy': '把 yay.sg 放在手边', 'Add it to your home screen. iPhone: Share, then "Add to Home Screen". Android: menu, then "Add to Home screen".': '加到手机主屏幕。iPhone：点“分享”，再选“添加到主屏幕”。Android：点菜单，再选“添加到主屏幕”。',
     'Share yay.sg': '分享 yay.sg', 'Enjoying yay.sg? Tell your friends about it!': '喜欢 yay.sg？告诉你的朋友吧！', 'Disclaimer': '免责声明', 'About': '关于我们', 'Feedback': '意见反馈', 'Contact': '联系我们', 'Send feedback on WhatsApp': '用 WhatsApp 发送反馈',
     "Start your day with a yay. Here's Singapore at a glance.": '每天从一声 yay 开始。新加坡一览，尽在这里。',
-    POP_ABOUT: '<p>yay.sg 把新加坡每天最常查的资讯放在一个页面：天气、空气质量、长堤与第二通道的通关时间、交通状况、汇率、拥车证价格、4D与多多成绩，以及公共假期。</p><p>打开一次，就知道今天该怎么安排。</p><p>yay.sg 是新加坡公司 OpenOnda Pte. Ltd. 的项目。</p>',
+    POP_ABOUT: '<p>yay.sg 把新加坡每天最常查的资讯放在一个页面：天气、空气质量、长堤与第二通道的通关时间、交通状况、汇率、拥车证价格、4D与多多成绩，以及公共假期。</p><p>打开一次，就知道今天该怎么安排。</p><p>yay.sg 是新加坡 Roy Tan 的个人项目。</p>',
     POP_DISCLAIMER: '<p>yay.sg 不是政府官方服务，与所列的任何政府机构或媒体均无关联。</p><p><b>资料来源</b><br>NEA与LTA（data.gov.sg）、LTA DataMall、PUB、欧洲央行参考汇率、open.er-api.com、Yahoo Finance与CNBC（股市指数，延迟约15分钟）、新加坡博彩公司、Google交通资料及各媒体RSS。</p><p><b>准确性</b><br>资料可能有延迟或误差。换汇请以兑换商报价为准，开彩成绩请以新加坡博彩公司为准，出行前请留意官方通告。</p><p><b>4D与多多</b><br>成绩仅供参考。博彩仅限18岁及以上人士。如您或身边的人受赌博问题困扰，请拨打NCPG求助热线 1800-6-668-668。</p><p><b>黄历</b><br>黄历为传统文化资讯，仅供参考，并非建议。</p>',
     POP_ADVERTISE: '<p>每天都有新加坡人打开 yay.sg 查看重要资讯。</p><p>想让他们看到您的品牌？欢迎通过 WhatsApp 联系我们。</p>',
     POP_FEEDBACK: '<p>发现错误、资料不对，或有任何意见和建议？</p><p>请通过 WhatsApp 告诉我们，我们会尽快处理。</p>', 'Markets': '股市', 'Start your day with a yay.': '每天从一声 yay 开始。', 'Here\'s Singapore at a glance.': '新加坡一览，尽在这里。', 'Weather': '天气', 'Air quality': '空气质量',
@@ -937,16 +953,17 @@ body.measuring #wx .later{margin-top:8px!important}
     'All MRT &amp; LRT lines running normally': '所有地铁与轻轨线路运作正常', 'No major road incidents': '无重大道路事故',
     'Live · {t}': '实时 · {t}',
     'Traffic incidents': '交通状况', 'MRT &amp; LRT': '地铁与轻轨', 'running normally': '运行正常', 'to': '往', 'Accidents': '事故', 'Breakdowns': '故障车', 'Obstacles': '障碍物', '+{n} more': '另有{n}宗', 'round {n}': '第{n}轮', 'Updated {t}': '{t}更新', 'See all': '查看全部', '+{n} more, see all': '另有{n}宗，查看全部', '+{n} more not shown': '另有{n}宗未显示', 'MRT &amp; LRT: running normally': '地铁与轻轨：运作正常', 'No jams or accidents reported right now.': '目前没有塞车或事故报告。', 'Road incidents not available right now.': '暂时无法获取道路状况。', '+{n} more incidents': '另有{n}宗事故或状况', 'Heavy traffic': '塞车', 'Accident': '事故', 'Breakdown': '故障车', 'Obstacle': '障碍物', 'Road block': '封路', 'Diversion': '改道', 'Roadwork': '道路工程',
-    'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气', 'See all {n} areas': '查看全部{n}个地区',
+    'Johor Bahru': '新山', 'Johor Bahru · US AQI': '新山 · 美国AQI', 'Unhealthy for sensitive groups': '对敏感人群不健康', 'Weather &amp; air': '天气与空气', 'See all {n} areas': '查看全部{n}个地区', SUP_LINK: '♥ 支持',
     LD_WX: '实时新加坡天气：气温、体感温度、紫外线指数、未来2小时降雨地区及今日天气预报，资料来自NEA。', LD_AIR: '新加坡当前空气质量：1小时PM2.5、各区24小时PSI及新山AQI。', LD_FX: '今日新元汇率：马币、美元、人民币、泰铢、日元等。', LD_COE: '最新A至E类拥车证价格，以及与上一轮的差额。', LD_D4: '新加坡博彩最新4D与多多开彩成绩、下期多多头奖，以及今日黄历。', LD_EV: '新加坡近期的大型演唱会、体育赛事及活动。', LD_TD: '新加坡公共假期、补假及教育部学校假期。', LD_CP: '兀兰长堤与大士第二通道实时交通摄像头画面，以及往新山和回新加坡的行车时间。',
   };
   // Longer English texts for the footer pop-ups
   const EN = {
+    SUP_LINK: '♥ Support',
     LD_WX: 'Live Singapore weather: temperature, feels like, UV index, rain areas for the next 2 hours and the forecast for the rest of the day, from NEA.', LD_AIR: 'Singapore air quality now: 1-hour PM2.5, 24-hour PSI by region, and the Johor Bahru AQI.', LD_FX: 'Today\'s SGD exchange rates for the Malaysian ringgit, US dollar, Chinese yuan, Thai baht, Japanese yen and more.', LD_COE: 'Latest COE prices for Categories A to E, and the change from the last bidding round.', LD_D4: 'Latest 4D and TOTO results from Singapore Pools, the next TOTO jackpot, and today\'s Chinese almanac.', LD_EV: 'Major concerts, sports and events coming up in Singapore.', LD_TD: 'Singapore public holidays, days off in lieu and MOE school holidays.', LD_CP: 'Live Woodlands Causeway and Tuas Second Link traffic camera photos, with driving times to Johor Bahru and back to Singapore.',
     TOTO_NOTE: 'Each combination of 6 numbers costs $1. A System bet covers every combination of the numbers you pick, so System 8 is 28 combinations. Check singaporepools.com.sg for full rules.',
     AIR_NOTE: '1-hr PM2.5 shows the air right now (Normal up to 55, Elevated 56 to 150, High 151 to 250, Very high above 250). The 24-hr PSI is NEA\'s official daily health guide (Good up to 50, Moderate 51 to 100, Unhealthy 101 to 200). Johor Bahru uses the US AQI scale from Open-Meteo, a modelled estimate.',
     PZ4_NOTE: 'Prize for each $1 bet. A Big bet wins on all 23 numbers; a Small bet wins only on the top 3 but pays more. With iBet, every order of your 4 digits is covered and the prize is shared. Check singaporepools.com.sg for full rules.',
-    POP_ABOUT: '<p>yay.sg puts the things Singaporeans check every day on one page: weather, air quality, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.</p><p>One glance, and you know how to plan your day.</p><p>yay.sg is a project by OpenOnda Pte. Ltd., Singapore.</p>',
+    POP_ABOUT: '<p>yay.sg puts the things Singaporeans check every day on one page: weather, air quality, Causeway and Second Link crossing times, traffic, exchange rates, COE prices, 4D and TOTO results, and public holidays.</p><p>One glance, and you know how to plan your day.</p><p>yay.sg is a personal project by Roy Tan, Singapore.</p>',
     POP_DISCLAIMER: '<p>yay.sg is not an official government service and is not affiliated with any of the agencies or publishers listed.</p><p><b>Where the data comes from</b><br>NEA and LTA via data.gov.sg, LTA DataMall, PUB, ECB reference rates, open.er-api.com, Yahoo Finance and CNBC (indexes, about 15 min delayed), Singapore Pools, Google traffic data and publisher RSS feeds.</p><p><b>Accuracy</b><br>Information may be delayed or inaccurate. Check rates with your money changer before you exchange, verify results with Singapore Pools, and follow official advisories before you travel.</p><p><b>4D and TOTO</b><br>Results are shown for information only. Gambling is only for those aged 18 and above. If gambling is becoming a problem for you or someone you know, call the NCPG Helpline at 1800-6-668-668.</p><p><b>Chinese almanac</b><br>The almanac is traditional cultural information, shown for interest only, not advice.</p>',
     POP_ADVERTISE: '<p>Singaporeans open yay.sg every day to check for important information.</p><p>Want them to see your brand? WhatsApp us and we\'ll get back to you.</p>',
     POP_FEEDBACK: '<p>Spotted a bug, wrong information, or have a complaint or idea?</p><p>Tell us on WhatsApp and we\'ll look into it as soon as we can.</p>',
@@ -2042,7 +2059,24 @@ body.measuring #wx .later{margin-top:8px!important}
   }
   const POPS = {
     uv: uvPop, feel: feelPop, temp: tempPop, pm: pmPop, psi: psiPop, jbaqi: jbPop,
-    about: () => `<h2>${T('About')}</h2><div class="pop-body">${T('POP_ABOUT')}<p class="pop-copy">© ${new Date().getFullYear()} yay.sg · OpenOnda Pte. Ltd.</p></div>`,
+    support: () => {
+      const zh = LANG === 'zh';
+      // Paste your PayPal.me link between the quotes, e.g. 'https://paypal.me/yourname'. Leave empty to hide the PayPal card.
+      const PAYPAL = 'https://paypal.me/ROYWEILIANG';
+      return `<h2>${zh ? '支持 yay.sg' : 'Support yay.sg'}</h2><div class="pop-body">
+        <p>${zh ? 'yay.sg 是 Roy 的免费个人项目。如果它让你的每一天更方便一点，欢迎随意支持服务器、实时数据和域名等运营费用。' : 'yay.sg is a free, personal project by Roy. If it makes your day a little easier, you can chip in towards the running costs, like the servers, live data and the domain.'}</p>
+        <div class="sup-grid${PAYPAL ? '' : ' one'}">
+          <div class="sup-c"><small>${zh ? '新加坡用户' : 'In Singapore'}</small><b>PayNow</b>
+            <img class="sup-qr" src="paynow-qr.png" alt="PayNow QR code">
+            <p>${zh ? '用银行App扫码，金额随意。确认前会显示我的名字（部分隐藏）。' : "Scan with your banking app and enter any amount. You'll see my name, partly hidden, before you confirm."}</p>
+            <p class="muted">${zh ? '用手机浏览？先截图，再在银行App的PayNow扫码功能里上传。' : "On your phone? Take a screenshot, then upload it in your bank app's PayNow scanner."}</p></div>
+          ${PAYPAL ? `<div class="sup-c"><small>${zh ? '海外用户' : 'Overseas'}</small><b>PayPal</b>
+            <p>${zh ? '可用信用卡或PayPal余额，以你的货币付款。' : 'Pay by card or PayPal balance, in your own currency.'}</p>
+            <a class="sup-pp" href="${PAYPAL}" target="_blank" rel="noopener">${zh ? '用 PayPal 支持' : 'Support with PayPal'} ›</a></div>` : ''}
+        </div>
+        <p class="gd-note">${zh ? '谢谢你的支持，真的很有帮助！这是给 Roy 的个人心意，并非慈善捐款。' : 'Thank you, it really helps. This is a personal gift to Roy, not a charity donation.'}</p></div>`;
+    },
+    about: () => `<h2>${T('About')}</h2><div class="pop-body">${T('POP_ABOUT')}<p class="pop-copy">© ${new Date().getFullYear()} yay.sg · Roy Tan</p></div>`,
     disclaimer: () => `<h2>${T('Disclaimer')}</h2><div class="pop-body">${T('POP_DISCLAIMER')}</div>`,
     advertise: () => `<h2>${T('Advertise')}</h2><div class="pop-body">${T('POP_ADVERTISE')}</div>
       <a class="pop-btn" href="${WA}${encodeURIComponent("Hi, I'm interested in advertising on yay.sg")}" target="_blank" rel="noopener">${T('WhatsApp us')}</a>`,
@@ -2051,7 +2085,7 @@ body.measuring #wx .later{margin-top:8px!important}
   };
   document.addEventListener('click', (e) => {
     const b = e.target.closest('[data-pop]');
-    if (b && POPS[b.dataset.pop]) popup(POPS[b.dataset.pop](), 'pop-sheet');
+    if (b && POPS[b.dataset.pop]) popup(POPS[b.dataset.pop](), b.dataset.pop === 'support' ? 'pop-sheet sup-pop' : 'pop-sheet');
   });
   // "+N more, see all": show every incident in a pop-up, the box itself stays the same size
   window.tiMore = () => {
